@@ -86,7 +86,7 @@ export { markDispatchRequestNotified as teamMarkDispatchRequestNotified } from '
 export { markDispatchRequestDelivered as teamMarkDispatchRequestDelivered } from './state.js';
 
 // === Events ===
-export { appendTeamEvent as teamAppendEvent, teamEventLogPath as teamEventLogPath } from './state.js';
+export { appendTeamEvent as teamAppendEvent } from './state.js';
 
 // === Approvals ===
 export { readTaskApproval as teamReadTaskApproval } from './state.js';
