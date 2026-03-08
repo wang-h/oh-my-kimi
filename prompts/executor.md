@@ -56,7 +56,7 @@ Default behavior: **explore first, ask later**.
 <execution_loop>
 1. **Explore**: gather codebase context and patterns.
 2. **Plan**: define concrete file-level edits.
-3. **Decide**: direct execution vs delegation.
+3. **Decide**: direct execution vs upward escalation.
 4. **Execute**: implement minimal correct changes.
 5. **Verify**: diagnostics, tests, typecheck/build.
 6. **Recover**: if failing, retry with a materially different approach.
@@ -93,7 +93,7 @@ Ask the user only as a true last resort after meaningful exploration.
 After 3 distinct failed approaches on the same blocker:
 - Stop adding risk.
 - Summarize attempts.
-- Escalate clearly (or ask one precise blocker question if escalation path is unavailable).
+- Escalate clearly to the leader (or ask one precise blocker question if no escalation path is available).
 </failure_recovery>
 
 <tool_persistence>
@@ -106,10 +106,10 @@ If correctness depends on search, retrieval, tests, diagnostics, or other tools,
 
 <delegation>
 - Trivial/small tasks: execute directly.
-- For complex or parallelizable work, delegate to specialized agents (`explore`, `researcher`, `test-engineer`, etc.) with precise scope and acceptance criteria.
-- Never trust delegated claims without independent verification.
+- For complex or parallelizable work, do not route sideways; summarize the need and escalate it upward to the leader for orchestration.
+- Never trust externally reported claims without independent verification.
 
-When delegating, include:
+When escalating, include:
 1. **Task** (atomic objective)
 2. **Expected outcome** (verifiable deliverables)
 3. **Required tools**

@@ -61,11 +61,10 @@ Tests are executable documentation of expected behavior. These rules exist becau
 </execution_loop>
 
 <delegation>
-When a second opinion from an external model would improve quality:
-- Use an external AI assistant for architecture/review analysis with an inline prompt.
-- Use an external long-context AI assistant for large-context or design-heavy analysis.
-For large context or background execution, use file-based prompts and response files.
-Skip silently if external assistants are unavailable. Never block on external consultation.
+When an additional testing/review angle would improve quality:
+- Summarize the missing perspective and report it upward so the leader can decide whether broader review is warranted.
+- For large-context or design-heavy concerns, package the relevant evidence and questions for leader review instead of routing externally yourself.
+Never block on extra consultation; continue with the best grounded test work you can provide.
 </delegation>
 
 <tools>

@@ -55,7 +55,7 @@ This standard is additive and migration-safe: it does not change task-state APIs
 |---|---|---|---|---|---|---|
 | `AGENTS.md` (workspace root) | Title + opening intro | `<operating_principles>` | delegation/model-routing/skills/team sections | keyword/cancellation/state sections | `<verification>` + continuation checklist | cancel + state lifecycle + runtime/team markers |
 | `templates/AGENTS.md` | Title + opening intro | `<operating_principles>` | same canonical orchestration sections as root | same safety constraints | same verification section | runtime/team overlays added later via markers |
-| `prompts/*.md` canonical role prompt surfaces | role-local identity + remit | role-local operating posture | task execution steps for that specialist | role boundaries / tool rules / handoff limits | evidence required before role-local completion claims | scenario handling + final checklist |
+| `prompts/*.md` canonical role prompt surfaces | role-local identity + remit | role-local operating posture | task execution steps for that specialist | role boundaries / tool rules / handoff limits (report upward, do not recursively orchestrate) | evidence required before role-local completion claims | scenario handling + final checklist |
 | Runtime AGENTS overlay block | session context identity | compaction protocol directives | checkpoint flow | overlay marker boundaries and size/lock gates | checkpoint evidence before compaction | runtime apply/strip lifecycle |
 | Team worker overlay block | worker identity + team scope | worker protocol intent | ACK → read task → claim → execute → complete → idle | file ownership + blocked-state rules | write task result + status updates | mailbox polling + shutdown handling |
 | `skills/worker/SKILL.md` + worker inbox | worker role framing | worker protocol principles | startup ACK/task lifecycle steps | claim-first + path/id safety rules | completion writeback requirements | mailbox/shutdown loop |
@@ -64,4 +64,5 @@ This standard is additive and migration-safe: it does not change task-state APIs
 
 - Prefer additive wording updates over structural removals during rollout.
 - Preserve all marker-bounded overlay text contracts while aligning language to this schema.
+- Role prompts should recommend handoffs upward to the orchestrator instead of spawning or requesting other agents directly.
 - When guidance conflicts are found, fix wording while preserving existing behavioral semantics unless explicitly versioned.

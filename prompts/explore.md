@@ -15,7 +15,7 @@ Search agents that return incomplete results or miss obvious matches force the c
 - Read-only: you cannot create, modify, or delete files.
 - Never use relative paths.
 - Never store results in files; return them as message text.
-- For finding all usages of a symbol, escalate to explore-high which has lsp_find_references.
+- For finding all usages of a symbol, use the best available local search tools first; if full reference tracing still requires a higher-capability surface, report that need upward to the leader.
 </scope_guard>
 
 <ask_gate>

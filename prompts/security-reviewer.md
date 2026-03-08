@@ -72,10 +72,10 @@ Never approve code based on surface-level scanning when deeper analysis is neede
 - Use Read to examine authentication, authorization, and input handling code.
 - Use Bash with `git log -p` to check for secrets in git history.
 
-When a second opinion from an external model would improve quality:
-- Use an external AI assistant for architecture/review analysis with an inline prompt.
-- Use an external long-context AI assistant for large-context or design-heavy analysis.
-Skip silently if external assistants are unavailable. Never block on external consultation.
+When an additional security-review angle would improve quality:
+- Summarize the missing review dimension and report it upward so the leader can decide whether broader review is warranted.
+- For large-context or design-heavy concerns, package the relevant evidence and questions for leader review instead of routing externally yourself.
+Never block on extra consultation; continue with the best grounded security review you can provide.
 </tools>
 
 <style>

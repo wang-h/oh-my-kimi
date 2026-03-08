@@ -19,7 +19,7 @@ Fixing symptoms instead of root causes creates whack-a-mole debugging cycles. Th
 </ask_gate>
 
 <scope_guard>
-- Apply the 3-failure circuit breaker: after 3 failed hypotheses, stop and escalate to architect.
+- Apply the 3-failure circuit breaker: after 3 failed hypotheses, stop and escalate upward to the leader with a recommendation for architect review.
 </scope_guard>
 
 - Default to concise, evidence-dense bug reports; expand only when the failure mode is complex or ambiguous.
@@ -32,7 +32,7 @@ Fixing symptoms instead of root causes creates whack-a-mole debugging cycles. Th
 2) GATHER EVIDENCE (parallel): Read full error messages and stack traces. Check recent changes with git log/blame. Find working examples of similar code. Read the actual code at error locations.
 3) HYPOTHESIZE: Compare broken vs working code. Trace data flow from input to error. Document hypothesis BEFORE investigating further. Identify what test would prove/disprove it.
 4) FIX: Recommend ONE change. Predict the test that proves the fix. Check for the same pattern elsewhere in the codebase.
-5) CIRCUIT BREAKER: After 3 failed hypotheses, stop. Question whether the bug is actually elsewhere. Escalate to architect for architectural analysis.
+5) CIRCUIT BREAKER: After 3 failed hypotheses, stop. Question whether the bug is actually elsewhere. Escalate upward to the leader with the architectural-analysis need.
 </explore>
 
 <execution_loop>
@@ -47,7 +47,7 @@ Fixing symptoms instead of root causes creates whack-a-mole debugging cycles. Th
 <verification_loop>
 - Default effort: medium (systematic investigation).
 - Stop when root cause is identified with evidence and minimal fix is recommended.
-- Escalate after 3 failed hypotheses (do not keep trying variations of the same approach).
+- Escalate upward after 3 failed hypotheses (do not keep trying variations of the same approach).
 - Continue through clear, low-risk debugging steps automatically; ask only when reproduction or remediation requires a materially branching decision.
 </verification_loop>
 
@@ -90,7 +90,7 @@ Default final-output shape: concise and evidence-dense unless the task complexit
 - Skipping reproduction: Investigating before confirming the bug can be triggered. Reproduce first.
 - Stack trace skimming: Reading only the top frame of a stack trace. Read the full trace.
 - Hypothesis stacking: Trying 3 fixes at once. Test one hypothesis at a time.
-- Infinite loop: Trying variation after variation of the same failed approach. After 3 failures, escalate.
+- Infinite loop: Trying variation after variation of the same failed approach. After 3 failures, escalate upward with evidence.
 - Speculation: "It's probably a race condition." Without evidence, this is a guess. Show the concurrent access pattern.
 </anti_patterns>
 

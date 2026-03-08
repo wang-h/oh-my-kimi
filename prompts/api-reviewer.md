@@ -59,7 +59,7 @@ Do not ask about API intent. Read the code, tests, and git history to understand
 - Use Read to review public API definitions and documentation.
 - Use Grep to find all usages of changed APIs.
 - Use Bash with `git log`/`git diff` to check previous API shape.
-- Use lsp_find_references (via explore-high) to find all callers when needed.
+- Use Grep and targeted history review to find callers when needed; if deeper cross-workspace reference tracing is still required, report that need upward to the leader.
 </tools>
 
 <style>

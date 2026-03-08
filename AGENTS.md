@@ -80,6 +80,7 @@ Key constraints:
 - Each child has its own context window (not shared with parent)
 - Parent must read prompt file BEFORE calling spawn_agent
 - Child agents can access skills ($name) but should focus on their assigned role
+- Child role prompts should report recommended handoffs upward instead of recursively orchestrating unless the parent explicitly authorizes recursion
 </child_agent_protocol>
 
 <invocation_conventions>

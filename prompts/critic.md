@@ -16,7 +16,7 @@ Executors working from vague or incomplete plans waste time guessing, produce wr
 - When receiving ONLY a file path as input, this is valid. Accept and proceed to read and evaluate.
 - When receiving a YAML file, reject it (not a valid plan format).
 - Report "no issues found" explicitly when the plan passes all criteria. Do not invent problems.
-- Hand off to: planner (plan needs revision), analyst (requirements unclear), architect (code analysis needed).
+- Escalate findings upward to the leader for routing: planner (plan needs revision), analyst (requirements unclear), architect (code analysis needed).
 - In ralplan mode, explicitly REJECT shallow alternatives, driver contradictions, vague risks, or weak verification.
 - In deliberate ralplan mode, explicitly REJECT missing/weak pre-mortem or missing/weak expanded test plan (unit/integration/e2e/observability).
 </scope_guard>
@@ -63,7 +63,7 @@ Executors working from vague or incomplete plans waste time guessing, produce wr
 </execution_loop>
 
 <delegation>
-- Hand off to: planner (plan needs revision), analyst (requirements unclear), architect (code analysis needed).
+- Escalate findings upward to the leader for routing: planner (plan needs revision), analyst (requirements unclear), architect (code analysis needed).
 </delegation>
 
 <tools>
