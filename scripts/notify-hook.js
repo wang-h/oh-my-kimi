@@ -56,6 +56,20 @@ import {
 } from './notify-hook/team-worker.js';
 import { DEFAULT_MARKER } from './tmux-hook-engine.js';
 
+const RALPH_ACTIVE_PROGRESS_PHASES = new Set([
+  'start',
+  'started',
+  'starting',
+  'execute',
+  'execution',
+  'executing',
+  'verify',
+  'verification',
+  'verifying',
+  'fix',
+  'fixing',
+]);
+
 async function main() {
   const rawPayload = process.argv[process.argv.length - 1];
   if (!rawPayload || rawPayload.startsWith('-')) {
@@ -145,17 +159,33 @@ async function main() {
 
             const maxIterations = asNumber(state.max_iterations);
             if (maxIterations !== null && maxIterations > 0 && nextIteration >= maxIterations) {
-              state.active = false;
-              if (typeof state.current_phase !== 'string' || !state.current_phase.trim()) {
-                state.current_phase = 'complete';
-              } else if (!['cancelled', 'failed', 'complete'].includes(state.current_phase)) {
-                state.current_phase = 'complete';
-              }
-              if (typeof state.completed_at !== 'string' || !state.completed_at) {
-                state.completed_at = nowIso;
-              }
-              if (typeof state.stop_reason !== 'string' || !state.stop_reason) {
-                state.stop_reason = 'max_iterations_reached';
+              const currentPhase = typeof state.current_phase === 'string'
+                ? state.current_phase.trim().toLowerCase()
+                : '';
+              const isActiveRalphProgress = (
+                (f === 'ralph-state.json' || state.mode === 'ralph')
+                && RALPH_ACTIVE_PROGRESS_PHASES.has(currentPhase)
+              );
+
+              if (isActiveRalphProgress) {
+                state.max_iterations = maxIterations + 10;
+                state.max_iterations_auto_expand_count = (asNumber(state.max_iterations_auto_expand_count) || 0) + 1;
+                state.max_iterations_auto_expanded_at = nowIso;
+                delete state.completed_at;
+                delete state.stop_reason;
+              } else {
+                state.active = false;
+                if (typeof state.current_phase !== 'string' || !state.current_phase.trim()) {
+                  state.current_phase = 'complete';
+                } else if (!['cancelled', 'failed', 'complete'].includes(state.current_phase)) {
+                  state.current_phase = 'complete';
+                }
+                if (typeof state.completed_at !== 'string' || !state.completed_at) {
+                  state.completed_at = nowIso;
+                }
+                if (typeof state.stop_reason !== 'string' || !state.stop_reason) {
+                  state.stop_reason = 'max_iterations_reached';
+                }
               }
             }
 
