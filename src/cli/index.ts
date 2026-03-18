@@ -51,7 +51,6 @@ import {
 import { readModeState, updateModeState } from "../modes/base.js";
 import {
   readSessionState,
-  isSessionStale,
   writeSessionStart,
   writeSessionEnd,
   resetSessionMetrics,
@@ -1569,32 +1568,19 @@ export function buildNotifyTempStartupMessages(
 
 /**
  * preLaunch: Prepare environment before Codex starts.
- * 1. Orphan cleanup (stale session from a crashed launch)
- * 2. Generate runtime overlay + write session-scoped model instructions file
- * 3. Write session.json
+ * 1. Generate runtime overlay + write session-scoped model instructions file
+ * 2. Write session.json
+ *
+ * Automatic stale-session cleanup is intentionally disabled here. Destructive
+ * cleanup must be explicit via `omx cleanup` so normal launches never reap
+ * files or processes from other OMX sessions.
  */
 async function preLaunch(
   cwd: string,
   sessionId: string,
   notifyTempContract?: NotifyTempContract,
 ): Promise<void> {
-  // 1. Orphan cleanup
-  const existingSession = await readSessionState(cwd);
-  if (existingSession && isSessionStale(existingSession)) {
-    try {
-      await removeSessionModelInstructionsFile(cwd, existingSession.session_id);
-    } catch (err) {
-      process.stderr.write(`[cli/index] operation failed: ${err}\n`);
-    }
-    const { unlink } = await import("fs/promises");
-    try {
-      await unlink(join(cwd, ".omx", "state", "session.json"));
-    } catch (err) {
-      process.stderr.write(`[cli/index] operation failed: ${err}\n`);
-    }
-  }
-
-  // 2. Generate runtime overlay + write session-scoped model instructions file
+  // 1. Generate runtime overlay + write session-scoped model instructions file
   const orchestrationMode = await resolveSessionOrchestrationMode(
     cwd,
     sessionId,
@@ -1609,11 +1595,11 @@ ${launchAppendix}`
       : overlay;
   await writeSessionModelInstructionsFile(cwd, sessionId, sessionInstructions);
 
-  // 3. Write session state
+  // 2. Write session state
   await resetSessionMetrics(cwd);
   await writeSessionStart(cwd, sessionId);
 
-  // 4. Start notify fallback watcher (best effort)
+  // 3. Start notify fallback watcher (best effort)
   try {
     await startNotifyFallbackWatcher(cwd);
   } catch (err) {
@@ -1621,7 +1607,7 @@ ${launchAppendix}`
     // Non-fatal
   }
 
-  // 5. Start derived watcher (best effort, opt-in)
+  // 4. Start derived watcher (best effort, opt-in)
   try {
     await startHookDerivedWatcher(cwd);
   } catch (err) {
@@ -1629,7 +1615,7 @@ ${launchAppendix}`
     // Non-fatal
   }
 
-  // 6. Emit temp notification startup summary + warnings, then send session-start lifecycle notification (best effort)
+  // 5. Emit temp notification startup summary + warnings, then send session-start lifecycle notification (best effort)
   try {
     if (notifyTempContract?.active) {
       process.env[OMX_NOTIFY_TEMP_CONTRACT_ENV] =
@@ -1661,7 +1647,7 @@ ${launchAppendix}`
     // Non-fatal: notification failures must never block launch
   }
 
-  // 7. Dispatch native hook event (best effort)
+  // 6. Dispatch native hook event (best effort)
   try {
     await emitNativeHookEvent(cwd, "session-start", {
       session_id: sessionId,
