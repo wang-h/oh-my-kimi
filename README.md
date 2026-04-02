@@ -14,6 +14,8 @@
 **Website:** https://yeachan-heo.github.io/oh-my-codex-website/  
 **Docs:** [Getting Started](./docs/getting-started.html) · [Agents](./docs/agents.html) · [Skills](./docs/skills.html) · [Integrations](./docs/integrations.html) · [Demo](./DEMO.md) · [OpenClaw guide](./docs/openclaw-integration.md)
 
+> **Kimi port status:** Kimi-first package and provider-path work has landed, but README/install wording and some repository metadata still lag. For the current migration boundary, supported/adapted targets, and unsupported disclosures, use the [oh-my-kimi v1 compatibility and review guide](./docs/oh-my-kimi-v1-compatibility.md).
+
 OMX is a workflow layer for [OpenAI Codex CLI](https://github.com/openai/codex).
 
 It keeps Codex as the execution engine and makes it easier to:
