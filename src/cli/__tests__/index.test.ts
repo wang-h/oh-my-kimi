@@ -255,13 +255,14 @@ describe("watcher script path resolution", () => {
 });
 
 describe("buildNotifyFallbackWatcherEnv", () => {
-  it("enables watcher authority and propagates CODEX_HOME override when requested", () => {
+  it("enables watcher authority and propagates CLI home overrides when requested", () => {
     const env = buildNotifyFallbackWatcherEnv(
       { HOME: "/tmp/home", OMX_HUD_AUTHORITY: "0", TMUX: "sock,1,0", TMUX_PANE: "%2" },
       { codexHomeOverride: "/tmp/codex-home", enableAuthority: true },
     );
     assert.equal(env.OMX_HUD_AUTHORITY, "1");
     assert.equal(env.CODEX_HOME, "/tmp/codex-home");
+    assert.equal(env.KIMI_HOME, undefined);
     assert.equal(env.HOME, "/tmp/home");
     assert.equal(env.TMUX, undefined);
     assert.equal(env.TMUX_PANE, undefined);
@@ -619,7 +620,7 @@ describe("project launch scope helpers", () => {
     }
   });
 
-  it("uses project CODEX_HOME when persisted scope is project", async () => {
+  it("uses project CLI home when persisted scope is project", async () => {
     const wd = await mkdtemp(join(tmpdir(), "omx-launch-scope-"));
     try {
       await mkdir(join(wd, ".omx"), { recursive: true });
@@ -628,6 +629,26 @@ describe("project launch scope helpers", () => {
         JSON.stringify({ scope: "project" }),
       );
       assert.equal(resolveCodexHomeForLaunch(wd, {}), join(wd, ".codex"));
+    } finally {
+      await rm(wd, { recursive: true, force: true });
+    }
+  });
+
+  it("prefers explicit CODEX_HOME override from env even when KIMI_HOME is also present", async () => {
+    const wd = await mkdtemp(join(tmpdir(), "omx-launch-scope-"));
+    try {
+      await mkdir(join(wd, ".omx"), { recursive: true });
+      await writeFile(
+        join(wd, ".omx", "setup-scope.json"),
+        JSON.stringify({ scope: "project" }),
+      );
+      assert.equal(
+        resolveCodexHomeForLaunch(wd, {
+          KIMI_HOME: "/tmp/explicit-kimi-home",
+          CODEX_HOME: "/tmp/explicit-codex-home",
+        }),
+        "/tmp/explicit-codex-home",
+      );
     } finally {
       await rm(wd, { recursive: true, force: true });
     }
@@ -666,7 +687,7 @@ describe("project launch scope helpers", () => {
     }
   });
 
-  it('resolves CODEX_HOME for legacy "project-local" persisted scope', async () => {
+  it('resolves project CLI home for legacy "project-local" persisted scope', async () => {
     const wd = await mkdtemp(join(tmpdir(), "omx-launch-scope-"));
     try {
       await mkdir(join(wd, ".omx"), { recursive: true });

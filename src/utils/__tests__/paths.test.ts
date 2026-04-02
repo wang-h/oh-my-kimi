@@ -5,6 +5,9 @@ import { homedir, tmpdir } from "os";
 import { existsSync } from "fs";
 import { mkdtemp, mkdir, rm, symlink, writeFile } from "fs/promises";
 import {
+  providerHome,
+  providerUserSkillsDir,
+  projectProviderSkillsDir,
   codexHome,
   codexConfigPath,
   codexPromptsDir,
@@ -21,16 +24,24 @@ import {
   packageRoot,
 } from "../paths.js";
 
-describe("codexHome", () => {
+describe("providerHome", () => {
+  let originalKimiHome: string | undefined;
   let originalCodexHome: string | undefined;
   let originalUserProfile: string | undefined;
 
   beforeEach(() => {
+    originalKimiHome = process.env.KIMI_HOME;
     originalCodexHome = process.env.CODEX_HOME;
     originalUserProfile = process.env.USERPROFILE;
   });
 
   afterEach(() => {
+    if (typeof originalKimiHome === "string") {
+      process.env.KIMI_HOME = originalKimiHome;
+    } else {
+      delete process.env.KIMI_HOME;
+    }
+
     if (typeof originalCodexHome === "string") {
       process.env.CODEX_HOME = originalCodexHome;
     } else {
@@ -41,6 +52,40 @@ describe("codexHome", () => {
       process.env.USERPROFILE = originalUserProfile;
     } else {
       delete process.env.USERPROFILE;
+    }
+  });
+
+  it("prefers KIMI_HOME env var when set", () => {
+    process.env.KIMI_HOME = "/tmp/custom-kimi";
+    process.env.CODEX_HOME = "/tmp/custom-codex";
+    assert.equal(providerHome(), "/tmp/custom-kimi");
+  });
+
+  it("falls back to CODEX_HOME env var when KIMI_HOME is not set", () => {
+    delete process.env.KIMI_HOME;
+    process.env.CODEX_HOME = "/tmp/custom-codex";
+    assert.equal(providerHome(), "/tmp/custom-codex");
+  });
+
+  it("defaults to ~/.kimi when no explicit CLI home env var is set", () => {
+    delete process.env.KIMI_HOME;
+    delete process.env.CODEX_HOME;
+    assert.equal(providerHome(), join(homedir(), ".kimi"));
+  });
+});
+
+describe("codexHome", () => {
+  let originalCodexHome: string | undefined;
+
+  beforeEach(() => {
+    originalCodexHome = process.env.CODEX_HOME;
+  });
+
+  afterEach(() => {
+    if (typeof originalCodexHome === "string") {
+      process.env.CODEX_HOME = originalCodexHome;
+    } else {
+      delete process.env.CODEX_HOME;
     }
   });
 
@@ -56,16 +101,24 @@ describe("codexHome", () => {
 });
 
 describe("codexConfigPath", () => {
+  let originalKimiHome: string | undefined;
   let originalCodexHome: string | undefined;
   let originalUserProfile: string | undefined;
 
   beforeEach(() => {
+    originalKimiHome = process.env.KIMI_HOME;
     originalCodexHome = process.env.CODEX_HOME;
     originalUserProfile = process.env.USERPROFILE;
     process.env.CODEX_HOME = "/tmp/test-codex";
   });
 
   afterEach(() => {
+    if (typeof originalKimiHome === "string") {
+      process.env.KIMI_HOME = originalKimiHome;
+    } else {
+      delete process.env.KIMI_HOME;
+    }
+
     if (typeof originalCodexHome === "string") {
       process.env.CODEX_HOME = originalCodexHome;
     } else {
@@ -85,16 +138,24 @@ describe("codexConfigPath", () => {
 });
 
 describe("codexPromptsDir", () => {
+  let originalKimiHome: string | undefined;
   let originalCodexHome: string | undefined;
   let originalUserProfile: string | undefined;
 
   beforeEach(() => {
+    originalKimiHome = process.env.KIMI_HOME;
     originalCodexHome = process.env.CODEX_HOME;
     originalUserProfile = process.env.USERPROFILE;
     process.env.CODEX_HOME = "/tmp/test-codex";
   });
 
   afterEach(() => {
+    if (typeof originalKimiHome === "string") {
+      process.env.KIMI_HOME = originalKimiHome;
+    } else {
+      delete process.env.KIMI_HOME;
+    }
+
     if (typeof originalCodexHome === "string") {
       process.env.CODEX_HOME = originalCodexHome;
     } else {
@@ -114,16 +175,24 @@ describe("codexPromptsDir", () => {
 });
 
 describe("userSkillsDir", () => {
+  let originalKimiHome: string | undefined;
   let originalCodexHome: string | undefined;
   let originalUserProfile: string | undefined;
 
   beforeEach(() => {
+    originalKimiHome = process.env.KIMI_HOME;
     originalCodexHome = process.env.CODEX_HOME;
     originalUserProfile = process.env.USERPROFILE;
     process.env.CODEX_HOME = "/tmp/test-codex";
   });
 
   afterEach(() => {
+    if (typeof originalKimiHome === "string") {
+      process.env.KIMI_HOME = originalKimiHome;
+    } else {
+      delete process.env.KIMI_HOME;
+    }
+
     if (typeof originalCodexHome === "string") {
       process.env.CODEX_HOME = originalCodexHome;
     } else {
@@ -142,6 +211,27 @@ describe("userSkillsDir", () => {
   });
 });
 
+describe("providerUserSkillsDir", () => {
+  let originalKimiHome: string | undefined;
+
+  beforeEach(() => {
+    originalKimiHome = process.env.KIMI_HOME;
+    process.env.KIMI_HOME = "/tmp/test-kimi";
+  });
+
+  afterEach(() => {
+    if (typeof originalKimiHome === "string") {
+      process.env.KIMI_HOME = originalKimiHome;
+    } else {
+      delete process.env.KIMI_HOME;
+    }
+  });
+
+  it("returns KIMI_HOME/skills", () => {
+    assert.equal(providerUserSkillsDir(), join("/tmp/test-kimi", "skills"));
+  });
+});
+
 describe("projectSkillsDir", () => {
   it("uses provided projectRoot", () => {
     assert.equal(projectSkillsDir("/my/project"), join("/my/project", ".codex", "skills"));
@@ -149,6 +239,16 @@ describe("projectSkillsDir", () => {
 
   it("defaults to cwd when no projectRoot given", () => {
     assert.equal(projectSkillsDir(), join(process.cwd(), ".codex", "skills"));
+  });
+});
+
+describe("projectProviderSkillsDir", () => {
+  it("uses provided projectRoot", () => {
+    assert.equal(projectProviderSkillsDir("/my/project"), join("/my/project", ".kimi", "skills"));
+  });
+
+  it("defaults to cwd when no projectRoot given", () => {
+    assert.equal(projectProviderSkillsDir(), join(process.cwd(), ".kimi", "skills"));
   });
 });
 
@@ -183,17 +283,25 @@ describe("legacyUserSkillsDir", () => {
 });
 
 describe("listInstalledSkillDirectories", () => {
+  let originalKimiHome: string | undefined;
   let originalCodexHome: string | undefined;
   let originalHome: string | undefined;
   let originalUserProfile: string | undefined;
 
   beforeEach(() => {
+    originalKimiHome = process.env.KIMI_HOME;
     originalCodexHome = process.env.CODEX_HOME;
     originalHome = process.env.HOME;
     originalUserProfile = process.env.USERPROFILE;
   });
 
   afterEach(() => {
+    if (typeof originalKimiHome === "string") {
+      process.env.KIMI_HOME = originalKimiHome;
+    } else {
+      delete process.env.KIMI_HOME;
+    }
+
     if (typeof originalCodexHome === "string") {
       process.env.CODEX_HOME = originalCodexHome;
     } else {

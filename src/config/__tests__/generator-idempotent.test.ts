@@ -17,12 +17,12 @@ function count(text: string, pattern: RegExp): number {
 /** Assert the OMX block appears exactly once */
 function assertSingleOmxBlock(toml: string): void {
   assert.equal(
-    count(toml, /# oh-my-codex \(OMX\) Configuration/g),
+    count(toml, /# oh-my-kimi \(OMK\) Configuration/g),
     1,
     "OMX marker should appear once",
   );
   assert.equal(
-    count(toml, /# End oh-my-codex/g),
+    count(toml, /# End oh-my-kimi/g),
     1,
     "End marker should appear once",
   );
@@ -191,7 +191,7 @@ describe("config generator idempotency (#384)", () => {
         'name = "kept"',
         "",
         "# ============================================================",
-        "# oh-my-codex (OMX) Configuration",
+        "# oh-my-kimi (OMK) Configuration",
         "# Managed by omx setup",
         "# ============================================================",
         "",
@@ -201,7 +201,7 @@ describe("config generator idempotency (#384)", () => {
         "enabled = true",
         "",
         "# ============================================================",
-        "# End oh-my-codex",
+        "# End oh-my-kimi",
         "",
       ].join("\n");
       await writeFile(configPath, mixed);
@@ -259,7 +259,7 @@ describe("config generator idempotency (#384)", () => {
         "[features]",
         "multi_agent = true",
         "",
-        "# OMX Native Agent Roles (Codex multi-agent)",
+        "# OMK Native Agent Roles (Kimi multi-agent)",
         "",
         "[agents.executor]",
         'description = "old executor"',
@@ -543,15 +543,15 @@ describe("config generator idempotency (#384)", () => {
         '[mcp_servers.figma]',
         'url = "https://mcp.figma.com/mcp"',
         '',
-        '# OMX TUI StatusLine (Codex CLI v0.101.0+)',
+        '# OMK TUI StatusLine (Kimi Code CLI)',
         '[tui]',
         'status_line = ["git-branch"]',
         '',
         '# ============================================================',
-        '# End oh-my-codex',
+        '# End oh-my-kimi',
         '',
         '# ============================================================',
-        '# oh-my-codex (OMX) Configuration',
+        '# oh-my-kimi (OMK) Configuration',
         '# Managed by omx setup - manual edits preserved on next setup',
         '# ============================================================',
         '',
@@ -560,12 +560,12 @@ describe("config generator idempotency (#384)", () => {
         `args = ["${join(wd, "dist/mcp/state-server.js")}"]`,
         'enabled = true',
         '',
-        '# OMX TUI StatusLine (Codex CLI v0.101.0+)',
+        '# OMK TUI StatusLine (Kimi Code CLI)',
         '[tui]',
         'status_line = ["model-with-reasoning", "git-branch"]',
         '',
         '# ============================================================',
-        '# End oh-my-codex',
+        '# End oh-my-kimi',
         '',
       ].join("\n");
       await writeFile(configPath, broken);
@@ -574,7 +574,7 @@ describe("config generator idempotency (#384)", () => {
       const toml = buildMergedConfig(broken, wd);
       assert.equal(count(toml, /^\[tui\]$/gm), 1, "[tui] should appear once");
       assert.equal(
-        count(toml, /# End oh-my-codex/g),
+        count(toml, /# End oh-my-kimi/g),
         1,
         "End marker should appear once",
       );
@@ -645,7 +645,7 @@ describe("config generator idempotency (#384)", () => {
       });
 
       assert.equal(
-        count(second, /oh-my-codex \(OMX\) Shared MCP Registry Sync/g),
+        count(second, /oh-my-kimi \(OMK\) Shared MCP Registry Sync/g),
         1,
         "shared MCP sync block should appear once",
       );

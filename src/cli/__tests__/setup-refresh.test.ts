@@ -53,7 +53,7 @@ describe("omx setup refresh summary and dry-run behavior", () => {
       await mkdir(join(wd, ".omx", "state"), { recursive: true });
       await runSetupInTempDir(wd, { scope: "project" });
 
-      const skillPath = join(wd, ".codex", "skills", "help", "SKILL.md");
+      const skillPath = join(wd, ".kimi", "skills", "help", "SKILL.md");
       await writeFile(skillPath, "# locally modified help\n");
 
       const output = await runSetupWithCapturedLogs(wd, {
@@ -78,7 +78,7 @@ describe("omx setup refresh summary and dry-run behavior", () => {
       await mkdir(join(wd, ".omx", "state"), { recursive: true });
       await runSetupInTempDir(wd, { scope: "project" });
 
-      const skillPath = join(wd, ".codex", "skills", "help", "SKILL.md");
+      const skillPath = join(wd, ".kimi", "skills", "help", "SKILL.md");
       const customized = "# locally modified help\n";
       await writeFile(skillPath, customized);
 
@@ -129,7 +129,7 @@ describe("omx setup refresh summary and dry-run behavior", () => {
       await mkdir(join(wd, ".omx", "state"), { recursive: true });
       await runSetupInTempDir(wd, { scope: "project" });
 
-      const promptPath = join(wd, ".codex", "prompts", "executor.md");
+      const promptPath = join(wd, ".kimi", "prompts", "executor.md");
       const oldPrompt = "# local prompt\n";
       await writeFile(promptPath, oldPrompt);
 
@@ -142,7 +142,7 @@ describe("omx setup refresh summary and dry-run behavior", () => {
       const latestBackup = join(
         backupsRoot,
         timestamps.sort().at(-1)!,
-        ".codex",
+        ".kimi",
         "prompts",
         "executor.md",
       );
@@ -157,9 +157,9 @@ describe("omx setup refresh summary and dry-run behavior", () => {
     const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
     try {
       await mkdir(join(wd, ".omx", "state"), { recursive: true });
-      await mkdir(join(wd, ".codex"), { recursive: true });
+      await mkdir(join(wd, ".kimi"), { recursive: true });
       await writeFile(
-        join(wd, ".codex", "config.toml"),
+        join(wd, ".kimi", "config.toml"),
         'model = \"gpt-5.3-codex\"\n',
       );
 
@@ -174,7 +174,7 @@ describe("omx setup refresh summary and dry-run behavior", () => {
         },
       });
 
-      const config = await readFile(join(wd, ".codex", "config.toml"), "utf-8");
+      const config = await readFile(join(wd, ".kimi", "config.toml"), "utf-8");
       assert.equal(promptCalls, 1);
       assert.match(config, /^model = "gpt-5\.4"$/m);
       assert.doesNotMatch(config, /^model = "gpt-5\.3-codex"$/m);
@@ -189,9 +189,9 @@ describe("omx setup refresh summary and dry-run behavior", () => {
     const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
     try {
       await mkdir(join(wd, ".omx", "state"), { recursive: true });
-      await mkdir(join(wd, ".codex"), { recursive: true });
+      await mkdir(join(wd, ".kimi"), { recursive: true });
       await writeFile(
-        join(wd, ".codex", "config.toml"),
+        join(wd, ".kimi", "config.toml"),
         'model = \"gpt-5.3-codex\"\n',
       );
 
@@ -200,7 +200,7 @@ describe("omx setup refresh summary and dry-run behavior", () => {
         modelUpgradePrompt: async () => false,
       });
 
-      const config = await readFile(join(wd, ".codex", "config.toml"), "utf-8");
+      const config = await readFile(join(wd, ".kimi", "config.toml"), "utf-8");
       assert.match(config, /^model = "gpt-5\.3-codex"$/m);
       assert.doesNotMatch(config, /^model = "gpt-5\.4"$/m);
       assert.doesNotMatch(config, /^model_context_window = 1000000$/m);
@@ -214,15 +214,15 @@ describe("omx setup refresh summary and dry-run behavior", () => {
     const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
     try {
       await mkdir(join(wd, ".omx", "state"), { recursive: true });
-      await mkdir(join(wd, ".codex"), { recursive: true });
+      await mkdir(join(wd, ".kimi"), { recursive: true });
       await writeFile(
-        join(wd, ".codex", "config.toml"),
+        join(wd, ".kimi", "config.toml"),
         'model = \"gpt-5.3-codex\"\n',
       );
 
       await runSetupInTempDir(wd, { scope: "project" });
 
-      const config = await readFile(join(wd, ".codex", "config.toml"), "utf-8");
+      const config = await readFile(join(wd, ".kimi", "config.toml"), "utf-8");
       assert.match(config, /^model = "gpt-5\.3-codex"$/m);
       assert.doesNotMatch(config, /^model = "gpt-5\.4"$/m);
       assert.doesNotMatch(config, /^model_context_window = 1000000$/m);
@@ -236,9 +236,9 @@ describe("omx setup refresh summary and dry-run behavior", () => {
     const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
     try {
       await mkdir(join(wd, ".omx", "state"), { recursive: true });
-      await mkdir(join(wd, ".codex"), { recursive: true });
+      await mkdir(join(wd, ".kimi"), { recursive: true });
       await writeFile(
-        join(wd, ".codex", "config.toml"),
+        join(wd, ".kimi", "config.toml"),
         ['model = "gpt-5.4"', "", "[tui]", 'theme = "night"', 'status_line = ["git-branch"]', ""].join("\n"),
       );
 
@@ -247,13 +247,13 @@ describe("omx setup refresh summary and dry-run behavior", () => {
         codexVersionProbe: () => "codex-cli 0.107.0",
       });
 
-      const config = await readFile(join(wd, ".codex", "config.toml"), "utf-8");
+      const config = await readFile(join(wd, ".kimi", "config.toml"), "utf-8");
       assert.equal(config.match(/^\[tui\]$/gm)?.length ?? 0, 1);
       assert.match(config, /^theme = "night"$/m);
       assert.match(config, /^status_line = \["git-branch"\]$/m);
       assert.match(
         output,
-        /Codex CLI >= 0\.107\.0 manages \[tui\]; OMX left that section untouched\./,
+        /Kimi Code CLI manages \[tui\]; OMK left that section untouched\./,
       );
     } finally {
       await rm(wd, { recursive: true, force: true });
@@ -270,9 +270,9 @@ describe("omx setup refresh summary and dry-run behavior", () => {
         codexVersionProbe: () => "codex-cli 0.106.0",
       });
 
-      const config = await readFile(join(wd, ".codex", "config.toml"), "utf-8");
+      const config = await readFile(join(wd, ".kimi", "config.toml"), "utf-8");
       assert.match(config, /^\[tui\]$/m);
-      assert.match(output, /StatusLine configured in config\.toml via \[tui\] section\./);
+      assert.match(output, /StatusLine configured in config\.toml via \[tui\] section for Kimi Code CLI\./);
     } finally {
       await rm(wd, { recursive: true, force: true });
     }
@@ -295,8 +295,8 @@ describe("omx setup refresh summary and dry-run behavior", () => {
         mcpRegistryCandidates: [registryPath],
       });
 
-      const config = await readFile(join(wd, ".codex", "config.toml"), "utf-8");
-      assert.match(config, /oh-my-codex \(OMX\) Shared MCP Registry Sync/);
+      const config = await readFile(join(wd, ".kimi", "config.toml"), "utf-8");
+      assert.match(config, /oh-my-kimi \(OMK\) Shared MCP Registry Sync/);
       assert.match(config, /^\[mcp_servers\.eslint\]$/m);
       assert.match(config, /^command = "npx"$/m);
       assert.match(config, /^startup_timeout_sec = 9$/m);
@@ -422,7 +422,7 @@ describe("omx setup refresh summary and dry-run behavior", () => {
 
       await runSetupInTempDir(wd, { scope: "project" });
 
-      const config = await readFile(join(wd, ".codex", "config.toml"), "utf-8");
+      const config = await readFile(join(wd, ".kimi", "config.toml"), "utf-8");
       assert.doesNotMatch(config, /^\[mcp_servers\.gitnexus\]$/m);
       assert.doesNotMatch(config, /Shared MCP Server: gitnexus/);
 

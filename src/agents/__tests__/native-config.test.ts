@@ -25,7 +25,7 @@ afterEach(() => {
 });
 
 describe("agents/native-config", () => {
-  it("generates TOML with stripped frontmatter and escaped triple quotes", () => {
+  it("generates Kimi agent-file YAML with companion prompt reference", () => {
     const agent: AgentDefinition = {
       name: "executor",
       description: "Code implementation",
@@ -40,20 +40,14 @@ describe("agents/native-config", () => {
     const prompt = `---\ntitle: demo\n---\n\nInstruction line\n\"\"\"danger\"\"\"`;
     const toml = generateAgentToml(agent, prompt);
 
-    assert.match(toml, /# oh-my-codex agent: executor/);
-    assert.match(toml, /model = "gpt-5\.4"/);
-    assert.match(toml, /model_reasoning_effort = "medium"/);
-    assert.ok(!toml.includes("title: demo"));
-    assert.ok(toml.includes("Instruction line"));
-    assert.ok(toml.includes("You are operating in the deep-worker posture."));
-    assert.ok(toml.includes("- posture: deep-worker"));
-
-    const tripleQuoteBlocks = toml.match(/"""/g) || [];
-    assert.equal(
-      tripleQuoteBlocks.length,
-      2,
-      "only TOML delimiters should remain as raw triple quotes",
-    );
+    assert.match(toml, /# oh-my-kimi agent file: executor/);
+    assert.match(toml, /# resolved_model: gpt-5\.4/);
+    assert.match(toml, /# reasoning_effort: medium/);
+    assert.match(toml, /^version: 1$/m);
+    assert.match(toml, /^agent:$/m);
+    assert.match(toml, /system_prompt_path: \.\/executor\.md/);
+    assert.doesNotMatch(toml, /title: demo/);
+    assert.doesNotMatch(toml, /Instruction line/);
   });
 
   it("applies exact-model mini guidance only for resolved gpt-5.4-mini standard roles", () => {
@@ -69,21 +63,20 @@ describe("agents/native-config", () => {
     };
 
     const prompt = "Instruction line";
-    const exactMiniToml = generateAgentToml(agent, prompt, {
+    const exactMiniYaml = generateAgentToml(agent, prompt, {
       env: { OMX_DEFAULT_STANDARD_MODEL: "gpt-5.4-mini" } as NodeJS.ProcessEnv,
     });
-    const frontierToml = generateAgentToml(agent, prompt, {
+    const frontierYaml = generateAgentToml(agent, prompt, {
       env: { OMX_DEFAULT_STANDARD_MODEL: "gpt-5.4" } as NodeJS.ProcessEnv,
     });
-    const tunedToml = generateAgentToml(agent, prompt, {
+    const tunedYaml = generateAgentToml(agent, prompt, {
       env: { OMX_DEFAULT_STANDARD_MODEL: "gpt-5.4-mini-tuned" } as NodeJS.ProcessEnv,
     });
 
-    assert.match(exactMiniToml, /exact gpt-5\.4-mini model/);
-    assert.match(exactMiniToml, /strict execution order: inspect -> plan -> act -> verify/);
-    assert.match(exactMiniToml, /resolved_model: gpt-5\.4-mini/);
-    assert.doesNotMatch(frontierToml, /exact gpt-5\.4-mini model/);
-    assert.doesNotMatch(tunedToml, /exact gpt-5\.4-mini model/);
+    assert.match(exactMiniYaml, /# resolved_model: gpt-5\.4-mini/);
+    assert.doesNotMatch(exactMiniYaml, /exact gpt-5\.4-mini model/);
+    assert.match(frontierYaml, /# resolved_model: gpt-5\.4/);
+    assert.match(tunedYaml, /# resolved_model: gpt-5\.4-mini-tuned/);
   });
 
   it("installs only agents with prompt files and skips existing files without force", async () => {
@@ -101,14 +94,18 @@ describe("agents/native-config", () => {
       });
       assert.equal(created, 2);
       assert.equal(existsSync(join(outDir, "executor.toml")), true);
+      assert.equal(existsSync(join(outDir, "executor.md")), true);
       assert.equal(existsSync(join(outDir, "planner.toml")), true);
+      assert.equal(existsSync(join(outDir, "planner.md")), true);
 
       const executorToml = await readFile(
         join(outDir, "executor.toml"),
         "utf8",
       );
-      assert.match(executorToml, /model = "gpt-5\.4"/);
-      assert.match(executorToml, /model_reasoning_effort = "high"/);
+      const executorPrompt = await readFile(join(outDir, "executor.md"), "utf8");
+      assert.match(executorToml, /# resolved_model: gpt-5\.4/);
+      assert.match(executorToml, /system_prompt_path: \.\/executor\.md/);
+      assert.match(executorPrompt, /executor prompt/);
 
       const skipped = await installNativeAgentConfigs(root, {
         agentsDir: outDir,
@@ -136,8 +133,8 @@ describe("agents/native-config", () => {
 
       await installNativeAgentConfigs(root, { agentsDir: outDir });
       const debuggerToml = await readFile(join(outDir, "debugger.toml"), "utf8");
-      assert.match(debuggerToml, /model = "gpt-5\.4-mini"/);
-      assert.doesNotMatch(debuggerToml, /model = "gpt-5\.2"/);
+      assert.match(debuggerToml, /# resolved_model: gpt-5\.4-mini/);
+      assert.doesNotMatch(debuggerToml, /# resolved_model: gpt-5\.2/);
     } finally {
       if (typeof previousCodexHome === "string") process.env.CODEX_HOME = previousCodexHome;
       else delete process.env.CODEX_HOME;
@@ -163,7 +160,7 @@ describe("agents/native-config", () => {
 
       await installNativeAgentConfigs(root, { agentsDir: outDir });
       const executorToml = await readFile(join(outDir, "executor.toml"), "utf8");
-      assert.match(executorToml, /model = "gpt-5\.2"/);
+      assert.match(executorToml, /# resolved_model: gpt-5\.2/);
     } finally {
       if (typeof previousCodexHome === "string") process.env.CODEX_HOME = previousCodexHome;
       else delete process.env.CODEX_HOME;

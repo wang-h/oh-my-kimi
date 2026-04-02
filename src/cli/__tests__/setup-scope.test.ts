@@ -28,8 +28,8 @@ function runOmx(
     encoding: "utf-8",
     env: {
       ...process.env,
-      ...(resolvedHome && !envOverrides.CODEX_HOME
-        ? { CODEX_HOME: join(resolvedHome, ".codex") }
+      ...(resolvedHome && !envOverrides.KIMI_HOME && !envOverrides.CODEX_HOME
+        ? { KIMI_HOME: join(resolvedHome, ".kimi") }
         : {}),
       ...envOverrides,
     },
@@ -177,10 +177,10 @@ describe("omx setup scope behavior", () => {
       if (shouldSkipForSpawnPermissions(res.error)) return;
       assert.equal(res.status, 0, res.stderr || res.stdout);
 
-      const localPrompts = join(wd, ".codex", "prompts");
-      const localSkills = join(wd, ".codex", "skills");
-      const localConfig = join(wd, ".codex", "config.toml");
-      const localAgents = join(wd, ".codex", "agents");
+      const localPrompts = join(wd, ".kimi", "prompts");
+      const localSkills = join(wd, ".kimi", "skills");
+      const localConfig = join(wd, ".kimi", "config.toml");
+      const localAgents = join(wd, ".kimi", "agents");
       const scopeFile = join(wd, ".omx", "setup-scope.json");
       const agentsMdPath = join(wd, "AGENTS.md");
 
@@ -215,7 +215,7 @@ describe("omx setup scope behavior", () => {
       assert.match(configToml, /^USE_OMX_EXPLORE_CMD = "1"$/m);
       const agentsMd = await readFile(agentsMdPath, "utf-8");
       assert.match(agentsMd, /prompts\/\*\.md/);
-      assert.match(agentsMd, /\.\/\.codex\/skills/);
+      assert.match(agentsMd, /\.\/\.kimi\/skills/);
       const persistedScope = JSON.parse(await readFile(scopeFile, "utf-8")) as {
         scope: string;
       };
@@ -241,20 +241,20 @@ describe("omx setup scope behavior", () => {
         /User scope leaves project AGENTS\.md unchanged\./,
       );
 
-      assert.equal(existsSync(join(home, ".codex", "prompts")), true);
-      assert.equal(existsSync(join(home, ".codex", "skills")), true);
-      assert.equal(existsSync(join(home, ".codex", "agents")), true);
-      assert.equal(existsSync(join(home, ".codex", "AGENTS.md")), true);
+      assert.equal(existsSync(join(home, ".kimi", "prompts")), true);
+      assert.equal(existsSync(join(home, ".kimi", "skills")), true);
+      assert.equal(existsSync(join(home, ".kimi", "agents")), true);
+      assert.equal(existsSync(join(home, ".kimi", "AGENTS.md")), true);
       assert.equal(existsSync(join(wd, ".omx", "setup-scope.json")), true);
       const persistedScope = JSON.parse(
         await readFile(join(wd, ".omx", "setup-scope.json"), "utf-8"),
       ) as { scope: string };
       assert.equal(persistedScope.scope, "user");
       const agentsMd = await readFile(
-        join(home, ".codex", "AGENTS.md"),
+        join(home, ".kimi", "AGENTS.md"),
         "utf-8",
       );
-      assert.match(agentsMd, /~\/\.codex\/skills/);
+      assert.match(agentsMd, /~\/\.kimi\/skills/);
       assert.equal(
         await readFile(join(wd, "AGENTS.md"), "utf-8"),
         existingAgents,
