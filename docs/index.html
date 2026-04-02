@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>oh-my-codex Docs</title>
+    <title>oh-my-kimi Docs</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
     <header>
       <nav class="container nav" aria-label="Primary">
-        <a class="brand" href="./index.html">oh-my-codex</a>
+        <a class="brand" href="./index.html">oh-my-kimi</a>
         <a class="active" href="./index.html">Home</a>
         <a href="./getting-started.html">Getting Started</a>
         <a href="./agents.html">Agents</a>
@@ -21,9 +21,17 @@
     <main class="container">
       <section class="hero">
         <span class="badge">GitHub Pages</span>
-        <h1>oh-my-codex</h1>
-        <p>Multi-agent orchestration for OpenAI Codex CLI.</p>
-        <pre><code>npm install -g oh-my-codex</code></pre>
+        <h1>oh-my-kimi</h1>
+        <p>Multi-agent orchestration for Kimi Code CLI.</p>
+        <pre><code>npm install -g oh-my-kimi</code></pre>
+      </section>
+
+      <section class="card" aria-labelledby="kimi-port-status">
+        <h2 id="kimi-port-status">Kimi port status</h2>
+        <p>
+          Kimi-first package naming and provider-path work have landed, but some docs and metadata still lag.
+          Use the <a href="./oh-my-kimi-v1-compatibility.md">compatibility and review guide</a> before assuming full parity.
+        </p>
       </section>
 
       <section aria-labelledby="whats-new-060">
@@ -67,10 +75,10 @@
 
       <h2>Quick Start</h2>
       <ol>
-        <li><code>npm install -g oh-my-codex</code></li>
-        <li><code>omx setup</code></li>
-        <li><code>omx doctor</code></li>
-        <li><code>omx --xhigh --madmax</code> (trusted environments) or <code>omx</code></li>
+        <li><code>npm install -g oh-my-kimi</code></li>
+        <li><code>omk setup</code> <span class="muted">(temporary <code>omx</code> alias also works)</span></li>
+        <li><code>omk doctor</code></li>
+        <li><code>omk --xhigh --madmax</code> (trusted environments) or <code>omk</code></li>
       </ol>
 
       <h2>Integration Guides</h2>
@@ -94,11 +102,11 @@
 
       <h2>Architecture</h2>
       <pre><code>User
-  -> Codex CLI
+  -> Kimi Code CLI
      -> AGENTS.md (orchestration brain)
-     -> ~/.codex/prompts/*.md (installable active/internal agent prompt catalog)
-     -> ~/.codex/skills/*/SKILL.md (skill catalog)
-     -> ~/.codex/config.toml (features, notify, MCP)
+     -> ~/.kimi/prompts/*.md (installable active/internal agent prompt catalog)
+     -> ~/.kimi/skills/*/SKILL.md (skill catalog)
+     -> ~/.kimi/config.toml (features, notify, MCP)
      -> .omx/ (runtime state, memory, plans, logs)</code></pre>
     </main>
 

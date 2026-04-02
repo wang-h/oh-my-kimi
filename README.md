@@ -1,7 +1,7 @@
-# oh-my-codex (OMX)
+# oh-my-kimi (OMK)
 
 <p align="center">
-  <img src="https://yeachan-heo.github.io/oh-my-codex-website/omx-character-nobg.png" alt="oh-my-codex character" width="280">
+  <img src="https://yeachan-heo.github.io/oh-my-codex-website/omx-character-nobg.png" alt="oh-my-kimi character" width="280">
   <br>
   <em>Start Codex stronger, then let OMX add better prompts, workflows, and runtime help when the work grows.</em>
 </p>
@@ -16,25 +16,25 @@
 
 > **Kimi port status:** Kimi-first package and provider-path work has landed, but README/install wording and some repository metadata still lag. For the current migration boundary, supported/adapted targets, and unsupported disclosures, use the [oh-my-kimi v1 compatibility and review guide](./docs/oh-my-kimi-v1-compatibility.md).
 
-OMX is a workflow layer for [OpenAI Codex CLI](https://github.com/openai/codex).
+OMK is a workflow layer for Kimi Code CLI, with `omx` retained as a temporary compatibility alias during the port.
 
-It keeps Codex as the execution engine and makes it easier to:
-- start a stronger Codex session by default
+It keeps Kimi Code CLI as the execution engine and makes it easier to:
+- start a stronger Kimi session by default
 - run one consistent workflow from clarification to completion
 - invoke the canonical skills with `$deep-interview`, `$ralplan`, `$team`, and `$ralph`
 - keep project guidance, plans, logs, and state in `.omx/`
 
 ## Recommended default flow
 
-If you want the default OMX experience, start here:
+If you want the default OMK experience, start here:
 
 ```bash
-npm install -g @openai/codex oh-my-codex
-omx setup
-omx --madmax --high
+npm install -g oh-my-kimi
+omk setup
+omk --madmax --high
 ```
 
-Then work normally inside Codex:
+Then work normally inside Kimi Code CLI:
 
 ```text
 $deep-interview "clarify the authentication change"
@@ -44,34 +44,34 @@ $team 3:executor "execute the approved plan in parallel"
 ```
 
 That is the main path.
-Start OMX strongly, clarify first when needed, approve the plan, then choose `$team` for coordinated parallel execution or `$ralph` for the persistent completion loop.
+Start OMK strongly, clarify first when needed, approve the plan, then choose `$team` for coordinated parallel execution or `$ralph` for the persistent completion loop.
 
 ## What OMX is for
 
-Use OMX if you already like Codex and want a better day-to-day runtime around it:
+Use OMK if you already like Kimi Code and want a better day-to-day runtime around it:
 - a standard workflow built around `$deep-interview`, `$ralplan`, `$team`, and `$ralph`
 - specialist roles and supporting skills when the task needs them
 - project guidance through scoped `AGENTS.md`
 - durable state under `.omx/` for plans, logs, memory, and mode tracking
 
-If you want plain Codex with no extra workflow layer, you probably do not need OMX.
+If you want plain Kimi Code CLI with no extra workflow layer, you probably do not need OMK.
 
 ## Quick start
 
 ### Requirements
 
 - Node.js 20+
-- Codex CLI installed: `npm install -g @openai/codex`
-- Codex auth configured
+- Kimi Code CLI installed
+- Kimi authentication configured
 - `tmux` on macOS/Linux if you later want the durable team runtime
 - `psmux` on native Windows if you later want Windows team mode
 
 ### A good first session
 
-Launch OMX the recommended way:
+Launch OMK the recommended way:
 
 ```bash
-omx --madmax --high
+omk --madmax --high
 ```
 
 Then try the canonical workflow:
@@ -87,20 +87,20 @@ Use `$team` when the approved plan needs coordinated parallel work, or `$ralph` 
 
 ## A simple mental model
 
-OMX does **not** replace Codex.
+OMK does **not** replace Kimi Code CLI.
 
 It adds a better working layer around it:
-- **Codex** does the actual agent work
-- **OMX role keywords** make useful roles reusable
-- **OMX skills** make common workflows reusable
+- **Kimi Code CLI** does the actual agent work
+- **OMK role keywords** make useful roles reusable
+- **OMK skills** make common workflows reusable
 - **`.omx/`** stores plans, logs, memory, and runtime state
 
-Most users should think of OMX as **better task routing + better workflow + better runtime**, not as a command surface to operate manually all day.
+Most users should think of OMK as **better task routing + better workflow + better runtime**, not as a command surface to operate manually all day.
 
 ## Start here if you are new
 
-1. Run `omx setup`
-2. Launch with `omx --madmax --high`
+1. Run `omk setup`
+2. Launch with `omk --madmax --high`
 3. Use `$deep-interview "..."` when the request or boundaries are still unclear
 4. Use `$ralplan "..."` to approve the plan and review tradeoffs
 5. Choose `$team` for coordinated parallel execution or `$ralph` for persistent completion loops
