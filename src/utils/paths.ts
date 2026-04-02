@@ -1,6 +1,6 @@
 /**
- * Path utilities for oh-my-codex
- * Resolves Codex CLI config, skills, prompts, and state directories
+ * Path utilities for oh-my-kimi.
+ * Resolves provider home/config, skills, prompts, agents, and OMX state.
  */
 
 import { createHash } from "crypto";
@@ -10,45 +10,77 @@ import { dirname, join } from "path";
 import { homedir } from "os";
 import { fileURLToPath } from "url";
 
-/** Codex CLI home directory (~/.codex/) */
-export function codexHome(): string {
-  return process.env.CODEX_HOME || join(homedir(), ".codex");
+export const PRIMARY_PROVIDER_NAME = "kimi";
+export const PRIMARY_PROVIDER_DISPLAY_NAME = "Kimi Code CLI";
+export const PRIMARY_PROVIDER_HOME_ENV = "KIMI_HOME";
+export const PRIMARY_PROVIDER_HOME_DIRNAME = ".kimi";
+export const PRIMARY_PROVIDER_PROJECT_DIRNAME = ".kimi";
+
+export const LEGACY_PROVIDER_NAME = "codex";
+export const LEGACY_PROVIDER_HOME_ENV = "CODEX_HOME";
+export const LEGACY_PROVIDER_HOME_DIRNAME = ".codex";
+
+/** Canonical provider home directory (~/.kimi/) with legacy CODEX_HOME fallback. */
+export function providerHome(): string {
+  return process.env[PRIMARY_PROVIDER_HOME_ENV]
+    || process.env[LEGACY_PROVIDER_HOME_ENV]
+    || join(homedir(), PRIMARY_PROVIDER_HOME_DIRNAME);
 }
 
-/** Codex config file path (~/.codex/config.toml) */
-export function codexConfigPath(): string {
-  return join(codexHome(), "config.toml");
+/** Legacy Codex home directory (~/.codex/) or CODEX_HOME. */
+export function legacyCodexHome(): string {
+  return process.env[LEGACY_PROVIDER_HOME_ENV] || join(homedir(), LEGACY_PROVIDER_HOME_DIRNAME);
 }
 
-/** Codex prompts directory (~/.codex/prompts/) */
-export function codexPromptsDir(): string {
-  return join(codexHome(), "prompts");
+/** Canonical provider config file path (~/.kimi/config.toml). */
+export function providerConfigPath(): string {
+  return join(providerHome(), "config.toml");
 }
 
-/** Codex native agents directory (~/.codex/agents/) */
-export function codexAgentsDir(codexHomeDir?: string): string {
-  return join(codexHomeDir || codexHome(), "agents");
+/** Canonical provider prompts directory (~/.kimi/prompts/). */
+export function providerPromptsDir(): string {
+  return join(providerHome(), "prompts");
 }
 
-/** Project-level Codex native agents directory (.codex/agents/) */
-export function projectCodexAgentsDir(projectRoot?: string): string {
-  return join(projectRoot || process.cwd(), ".codex", "agents");
+/** Canonical provider native agents directory (~/.kimi/agents/). */
+export function providerAgentsDir(providerHomeDir?: string): string {
+  return join(providerHomeDir || providerHome(), "agents");
 }
 
-/** User-level skills directory ($CODEX_HOME/skills, defaults to ~/.codex/skills/) */
+/** Project-level provider root (.kimi/). */
+export function projectProviderRootDir(projectRoot?: string): string {
+  return join(projectRoot || process.cwd(), PRIMARY_PROVIDER_PROJECT_DIRNAME);
+}
+
+/** Project-level provider native agents directory (.kimi/agents/). */
+export function projectProviderAgentsDir(projectRoot?: string): string {
+  return join(projectProviderRootDir(projectRoot), "agents");
+}
+
+/** User-level skills directory ($KIMI_HOME/skills, defaults to ~/.kimi/skills/). */
 export function userSkillsDir(): string {
-  return join(codexHome(), "skills");
+  return join(providerHome(), "skills");
 }
 
-/** Project-level skills directory (.codex/skills/) */
+/** Project-level skills directory (.kimi/skills/). */
 export function projectSkillsDir(projectRoot?: string): string {
-  return join(projectRoot || process.cwd(), ".codex", "skills");
+  return join(projectProviderRootDir(projectRoot), "skills");
 }
 
-/** Historical legacy user-level skills directory (~/.agents/skills/) */
+/** Historical legacy user-level skills directory (~/.agents/skills/). */
 export function legacyUserSkillsDir(): string {
   return join(homedir(), ".agents", "skills");
 }
+
+/**
+ * Backward-compatible aliases retained while the rest of the codebase
+ * migrates off Codex-specific helper names.
+ */
+export const codexHome = providerHome;
+export const codexConfigPath = providerConfigPath;
+export const codexPromptsDir = providerPromptsDir;
+export const codexAgentsDir = providerAgentsDir;
+export const projectCodexAgentsDir = projectProviderAgentsDir;
 
 export type InstalledSkillScope = "project" | "user";
 
@@ -177,27 +209,27 @@ async function hashSkillDirectory(
   return hashes;
 }
 
-/** oh-my-codex state directory (.omx/state/) */
+/** oh-my-kimi state directory (.omx/state/) */
 export function omxStateDir(projectRoot?: string): string {
   return join(projectRoot || process.cwd(), ".omx", "state");
 }
 
-/** oh-my-codex project memory file (.omx/project-memory.json) */
+/** oh-my-kimi project memory file (.omx/project-memory.json) */
 export function omxProjectMemoryPath(projectRoot?: string): string {
   return join(projectRoot || process.cwd(), ".omx", "project-memory.json");
 }
 
-/** oh-my-codex notepad file (.omx/notepad.md) */
+/** oh-my-kimi notepad file (.omx/notepad.md) */
 export function omxNotepadPath(projectRoot?: string): string {
   return join(projectRoot || process.cwd(), ".omx", "notepad.md");
 }
 
-/** oh-my-codex plans directory (.omx/plans/) */
+/** oh-my-kimi plans directory (.omx/plans/) */
 export function omxPlansDir(projectRoot?: string): string {
   return join(projectRoot || process.cwd(), ".omx", "plans");
 }
 
-/** oh-my-codex logs directory (.omx/logs/) */
+/** oh-my-kimi logs directory (.omx/logs/) */
 export function omxLogsDir(projectRoot?: string): string {
   return join(projectRoot || process.cwd(), ".omx", "logs");
 }
@@ -218,5 +250,6 @@ export function packageRoot(): string {
   } catch {
     // fall through to cwd fallback
   }
+
   return process.cwd();
 }

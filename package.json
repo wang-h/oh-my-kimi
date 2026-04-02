@@ -1,10 +1,11 @@
 {
-  "name": "oh-my-codex",
+  "name": "oh-my-kimi",
   "version": "0.11.12",
-  "description": "Multi-agent orchestration layer for OpenAI Codex CLI",
+  "description": "Multi-agent orchestration layer for Kimi Code CLI",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
+    "omk": "dist/cli/omx.js",
     "omx": "dist/cli/omx.js"
   },
   "scripts": {

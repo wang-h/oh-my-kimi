@@ -27,6 +27,7 @@ import {
   detectLegacySkillRootOverlap,
   omxPlansDir,
   omxLogsDir,
+  PRIMARY_PROVIDER_HOME_DIRNAME,
 } from "../utils/paths.js";
 import { buildMergedConfig, getRootModelName } from "../config/generator.js";
 import {
@@ -128,8 +129,9 @@ function applyScopePathRewritesToAgentsTemplate(
   content: string,
   scope: SetupScope,
 ): string {
-  if (scope !== "project") return content;
-  return content.replaceAll("~/.codex", "./.codex");
+  const userScoped = content.replaceAll("~/.codex", `~/${PRIMARY_PROVIDER_HOME_DIRNAME}`);
+  if (scope !== "project") return userScoped;
+  return userScoped.replaceAll(`~/${PRIMARY_PROVIDER_HOME_DIRNAME}`, `./${PRIMARY_PROVIDER_HOME_DIRNAME}`);
 }
 
 interface PersistedSetupScope {
@@ -369,7 +371,7 @@ export function resolveScopeDirectories(
   projectRoot: string,
 ): ScopeDirectories {
   if (scope === "project") {
-    const codexHomeDir = join(projectRoot, ".codex");
+    const codexHomeDir = join(projectRoot, PRIMARY_PROVIDER_HOME_DIRNAME);
     return {
       codexConfigFile: join(codexHomeDir, "config.toml"),
       codexHomeDir,
@@ -431,9 +433,9 @@ async function promptForSetupScope(
   try {
     console.log("Select setup scope:");
     console.log(
-      `  1) user (default) — installs to ~/.codex (skills default to ~/.codex/skills)`,
+      `  1) user (default) — installs to ~/${PRIMARY_PROVIDER_HOME_DIRNAME} (skills default to ~/${PRIMARY_PROVIDER_HOME_DIRNAME}/skills)`,
     );
-    console.log("  2) project — installs to ./.codex (local to project)");
+    console.log(`  2) project — installs to ./${PRIMARY_PROVIDER_HOME_DIRNAME} (local to project)`);
     const answer = (await rl.question("Scope [1-2] (default: 1): "))
       .trim()
       .toLowerCase();
@@ -620,7 +622,7 @@ export async function setup(options: SetupOptions = {}): Promise<void> {
     resolvedScope.source === "persisted" ? " (from .omx/setup-scope.json)" : "";
   const backupContext = getBackupContext(resolvedScope.scope, projectRoot);
 
-  console.log("oh-my-codex setup");
+  console.log("oh-my-kimi setup");
   console.log("=================\n");
   console.log(
     `Using setup scope: ${resolvedScope.scope}${scopeSourceMessage}\n`,
@@ -934,9 +936,9 @@ export async function setup(options: SetupOptions = {}): Promise<void> {
     console.log("  HUD config already exists (use --force to overwrite).");
   }
   if (managedConfig.omxManagesTui) {
-    console.log("  StatusLine configured in config.toml via [tui] section.");
+    console.log("  StatusLine configured in config.toml via [tui] section for Kimi Code CLI.");
   } else {
-    console.log("  Codex CLI >= 0.107.0 manages [tui]; OMX left that section untouched.");
+    console.log("  Kimi Code CLI manages [tui]; OMK left that section untouched.");
   }
   console.log();
 
@@ -963,14 +965,14 @@ export async function setup(options: SetupOptions = {}): Promise<void> {
 
   console.log('Setup complete! Run "omx doctor" to verify installation.');
   console.log("\nNext steps:");
-  console.log("  1. Start Codex CLI in your project directory");
+  console.log("  1. Start Kimi Code CLI in your project directory");
   console.log(
-    "  2. Use role/workflow keywords like $architect, $executor, and $plan in Codex",
+    "  2. Use role/workflow keywords like $architect, $executor, and $plan in Kimi",
   );
   console.log("  3. Browse skills with /skills; AGENTS keyword routing can also activate them implicitly");
   console.log("  4. The AGENTS.md orchestration brain is loaded automatically");
   console.log(
-    "  5. Native agent defaults configured in config.toml [agents] and TOML files written to .codex/agents/",
+    "  5. Native agent defaults configured in config.toml [agents] and Kimi agent files written to .kimi/agents/",
   );
   console.log(
     '  6. "omx explore" and "omx sparkshell" can hydrate native release binaries on first use; source installs still allow repo-local fallbacks and OMX_EXPLORE_BIN / OMX_SPARKSHELL_BIN overrides',

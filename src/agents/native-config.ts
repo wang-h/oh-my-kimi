@@ -1,6 +1,8 @@
 /**
- * Native agent config generators for Codex CLI.
- * Writes standalone TOML files under ~/.codex/agents/ or ./.codex/agents/.
+ * Native agent config generators for Kimi Code CLI.
+ * Emits Kimi agent-file YAML plus companion markdown prompts under ~/.kimi/agents/
+ * or ./.kimi/agents/. File names intentionally retain the historical `.toml`
+ * suffix as a temporary migration aid for existing OMX tooling.
  */
 
 import { existsSync, readFileSync } from "fs";
@@ -247,49 +249,32 @@ export function stripFrontmatter(content: string): string {
   return content.trim();
 }
 
-/**
- * Escape content for TOML triple-quoted strings.
- * TOML """ strings only need to escape sequences of 3+ consecutive quotes.
- */
-function escapeTomlMultiline(s: string): string {
-  return s.replace(/"{3,}/g, (match) => match.split("").join("\\"));
-}
-
-function escapeTomlBasicString(s: string): string {
-  return s.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+function escapeYamlSingleQuotedString(value: string): string {
+  return value.replace(/'/g, "''");
 }
 
 export function generateStandaloneAgentToml(
   config: GeneratedNativeAgentConfig,
 ): string {
+  const promptFileName = `${config.name}.md`;
   const lines = [
-    `# oh-my-codex agent: ${config.name}`,
-    `name = "${escapeTomlBasicString(config.name)}"`,
-    `description = "${escapeTomlBasicString(config.description)}"`,
-  ];
+    `# oh-my-kimi agent file: ${config.name}`,
+    config.description ? `# description: ${config.description}` : "",
+    config.model ? `# resolved_model: ${config.model}` : "",
+    config.reasoningEffort ? `# reasoning_effort: ${config.reasoningEffort}` : "",
+    "version: 1",
+    "agent:",
+    "  extend: default",
+    `  name: '${escapeYamlSingleQuotedString(config.name)}'`,
+    `  system_prompt_path: ./${promptFileName}`,
+    "",
+  ].filter(Boolean);
 
-  if (config.model) {
-    lines.push(`model = "${escapeTomlBasicString(config.model)}"`);
-  }
-  if (config.reasoningEffort) {
-    lines.push(`model_reasoning_effort = "${config.reasoningEffort}"`);
-  }
-  if (
-    typeof config.developerInstructions === "string" &&
-    config.developerInstructions.trim().length > 0
-  ) {
-    const escapedInstructions = escapeTomlMultiline(
-      config.developerInstructions,
-    );
-    lines.push('developer_instructions = """', escapedInstructions, '"""');
-  }
-
-  lines.push("");
   return lines.join("\n");
 }
 
 /**
- * Generate TOML content for a prompt-backed OMX role agent.
+ * Generate Kimi agent-file YAML content for a prompt-backed OMX role agent.
  */
 export function generateAgentToml(
   agent: AgentDefinition,
@@ -307,8 +292,8 @@ export function generateAgentToml(
 }
 
 /**
- * Install prompt-backed native agent config .toml files to ~/.codex/agents/
- * Returns the number of agent files written.
+ * Install prompt-backed native agent config files to ~/.kimi/agents/
+ * Returns the number of agent config files written.
  */
 export async function installNativeAgentConfigs(
   pkgRoot: string,
@@ -347,12 +332,26 @@ export async function installNativeAgentConfigs(
     }
 
     const promptContent = await readFile(promptPath, "utf-8");
-    const toml = generateAgentToml(agent, promptContent, { codexHomeOverride });
+    const resolvedModel = resolveAgentModel(agent, { codexHomeOverride });
+    const generatedPrompt = composeRoleInstructions(
+      promptContent,
+      agent,
+      resolvedModel,
+    );
+    const toml = generateStandaloneAgentToml({
+      name: agent.name,
+      description: agent.description,
+      developerInstructions: generatedPrompt,
+      model: resolvedModel,
+      reasoningEffort: agent.reasoningEffort,
+    });
+    const promptDst = join(agentsDir, `${name}.md`);
 
     if (!dryRun) {
       await writeFile(dst, toml);
+      await writeFile(promptDst, generatedPrompt);
     }
-    if (verbose) console.log(`  ${name}.toml`);
+    if (verbose) console.log(`  ${name}.toml (+ ${name}.md)`);
     count += 1;
   }
 

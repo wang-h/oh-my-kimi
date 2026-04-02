@@ -1,5 +1,5 @@
 /**
- * Config.toml generator/merger for oh-my-codex
+ * Config.toml generator/merger for oh-my-kimi
  * Merges OMX MCP server entries and feature flags into existing config.toml
  *
  * TOML structure reminder: bare key=value pairs after a [table] header belong
@@ -43,9 +43,9 @@ const OMX_TOP_LEVEL_KEYS = [
 const DEFAULT_SETUP_MODEL = DEFAULT_FRONTIER_MODEL;
 const DEFAULT_SETUP_MODEL_CONTEXT_WINDOW = 1000000;
 const DEFAULT_SETUP_MODEL_AUTO_COMPACT_TOKEN_LIMIT = 900000;
-const SHARED_MCP_REGISTRY_MARKER = "oh-my-codex (OMX) Shared MCP Registry Sync";
+const SHARED_MCP_REGISTRY_MARKER = "oh-my-kimi (OMK) Shared MCP Registry Sync";
 const SHARED_MCP_REGISTRY_END_MARKER =
-  "# End oh-my-codex shared MCP registry sync";
+  "# End oh-my-kimi shared MCP registry sync";
 const OMX_AGENTS_MAX_THREADS = 6;
 const OMX_AGENTS_MAX_DEPTH = 2;
 const OMX_EXPLORE_ROUTING_DEFAULT = '1';
@@ -83,10 +83,10 @@ function getOmxTopLevelLines(
   const rootValues = parseRootKeyValues(existingConfig);
 
   const lines = [
-    "# oh-my-codex top-level settings (must be before any [table])",
+    "# oh-my-kimi top-level settings (must be before any [table])",
     `notify = ["node", "${escapedPath}"]`,
     'model_reasoning_effort = "high"',
-    `developer_instructions = "You have oh-my-codex installed. AGENTS.md is your orchestration brain and the main orchestration surface. Use skill/keyword routing like $name plus spawned role-specialized subagents for specialized work. Codex native subagents are available via .codex/agents and may be used for independent parallel subtasks within a single session or team pane. Skills are loaded from installed SKILL.md files under .codex/skills, not from native agent TOMLs. Use workflow skills via $name when explicitly invoked or clearly routed by AGENTS.md. Treat installed prompts as narrower internal execution surfaces under AGENTS.md authority, even when user-facing docs prefer $name keywords."`,
+    `developer_instructions = "You have oh-my-kimi installed. AGENTS.md is your orchestration brain and the main orchestration surface. Use skill/keyword routing like $name plus spawned role-specialized subagents for specialized work. Kimi custom agents are available via .kimi/agents and may be used for independent parallel subtasks within a single session or team pane. Skills are loaded from installed SKILL.md files under .kimi/skills. Use workflow skills via $name when explicitly invoked or clearly routed by AGENTS.md. Treat installed prompts as narrower internal execution surfaces under AGENTS.md authority, even when user-facing docs prefer $name keywords."`,
   ];
 
   const existingModel = rootValues.get("model");
@@ -124,7 +124,7 @@ function stripRootLevelKeys(config: string, keys: readonly string[]): string {
     lines = lines.filter(
       (l) =>
         l.trim() !==
-        "# oh-my-codex top-level settings (must be before any [table])",
+        "# oh-my-kimi top-level settings (must be before any [table])",
     );
   }
 
@@ -460,7 +460,7 @@ function stripOrphanedOmxSections(config: string): string {
         // Remove preceding OMX comment lines and blank lines
         while (result.length > 0) {
           const last = result[result.length - 1];
-          if (last.trim() === "" || /^#\s*(OMX|oh-my-codex)/i.test(last)) {
+          if (last.trim() === "" || /^#\s*(OMK|oh-my-kimi)/i.test(last)) {
             result.pop();
           } else {
             break;
@@ -562,8 +562,8 @@ export function stripExistingOmxBlocks(config: string): {
   cleaned: string;
   removed: number;
 } {
-  const marker = "oh-my-codex (OMX) Configuration";
-  const endMarker = "# End oh-my-codex";
+  const marker = "oh-my-kimi (OMK) Configuration";
+  const endMarker = "# End oh-my-kimi";
   let cleaned = config;
   let removed = 0;
 
@@ -728,7 +728,7 @@ function getOmxTablesBlock(pkgRoot: string, includeTui = true): string {
   return [
     "",
     "# ============================================================",
-    "# oh-my-codex (OMX) Configuration",
+    "# oh-my-kimi (OMK) Configuration",
     "# Managed by omx setup - manual edits preserved on next setup",
     "# ============================================================",
     "",
@@ -769,14 +769,14 @@ function getOmxTablesBlock(pkgRoot: string, includeTui = true): string {
     ...(includeTui
       ? [
           "",
-          "# OMX TUI StatusLine (Codex CLI v0.101.0+)",
+          "# OMK TUI StatusLine (Kimi Code CLI)",
           "[tui]",
           OMX_TUI_STATUS_LINE,
           "",
         ]
       : []),
     "# ============================================================",
-    "# End oh-my-codex",
+    "# End oh-my-kimi",
     "",
   ].join("\n");
 }
@@ -804,7 +804,7 @@ export function buildMergedConfig(
   let existing = existingConfig;
   const includeTui = options.includeTui !== false;
 
-  if (existing.includes("oh-my-codex (OMX) Configuration")) {
+  if (existing.includes("oh-my-kimi (OMK) Configuration")) {
     const stripped = stripExistingOmxBlocks(existing);
     existing = stripped.cleaned;
   }
@@ -854,7 +854,7 @@ export function buildMergedConfig(
  * Detect and repair duplicate TOML table headers (e.g. [tui]) in config.toml.
  *
  * After an omx version upgrade the OLD setup code (still loaded in memory)
- * may write a config with duplicate [tui] sections.  The Codex CLI TOML
+ * may write a config with duplicate [tui] sections. The Kimi Code CLI TOML
  * parser rejects duplicates, so we must fix them before the CLI is spawned.
  *
  * Returns `true` if a repair was performed.
@@ -887,7 +887,7 @@ export async function mergeConfig(
     existing = await readFile(configPath, "utf-8");
   }
 
-  if (existing.includes("oh-my-codex (OMX) Configuration")) {
+  if (existing.includes("oh-my-kimi (OMK) Configuration")) {
     const stripped = stripExistingOmxBlocks(existing);
     if (options.verbose && stripped.removed > 0) {
       console.log("  Updating existing OMX config block.");
