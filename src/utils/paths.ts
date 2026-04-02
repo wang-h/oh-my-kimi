@@ -57,13 +57,13 @@ export function projectProviderAgentsDir(projectRoot?: string): string {
   return join(projectProviderRootDir(projectRoot), "agents");
 }
 
-/** User-level skills directory ($KIMI_HOME/skills, defaults to ~/.kimi/skills/). */
-export function userSkillsDir(): string {
+/** User-level provider skills directory ($KIMI_HOME/skills, defaults to ~/.kimi/skills/). */
+export function providerUserSkillsDir(): string {
   return join(providerHome(), "skills");
 }
 
-/** Project-level skills directory (.kimi/skills/). */
-export function projectSkillsDir(projectRoot?: string): string {
+/** Project-level provider skills directory (.kimi/skills/). */
+export function projectProviderSkillsDir(projectRoot?: string): string {
   return join(projectProviderRootDir(projectRoot), "skills");
 }
 
@@ -76,11 +76,35 @@ export function legacyUserSkillsDir(): string {
  * Backward-compatible aliases retained while the rest of the codebase
  * migrates off Codex-specific helper names.
  */
-export const codexHome = providerHome;
-export const codexConfigPath = providerConfigPath;
-export const codexPromptsDir = providerPromptsDir;
-export const codexAgentsDir = providerAgentsDir;
-export const projectCodexAgentsDir = projectProviderAgentsDir;
+export function codexHome(): string {
+  return legacyCodexHome();
+}
+
+export function codexConfigPath(): string {
+  return join(codexHome(), "config.toml");
+}
+
+export function codexPromptsDir(): string {
+  return join(codexHome(), "prompts");
+}
+
+export function codexAgentsDir(codexHomeDir?: string): string {
+  return join(codexHomeDir || codexHome(), "agents");
+}
+
+export function projectCodexAgentsDir(projectRoot?: string): string {
+  return join(projectRoot || process.cwd(), LEGACY_PROVIDER_HOME_DIRNAME, "agents");
+}
+
+/** Legacy user-level skills directory ($CODEX_HOME/skills, defaults to ~/.codex/skills/). */
+export function userSkillsDir(): string {
+  return join(codexHome(), "skills");
+}
+
+/** Legacy project-level skills directory (.codex/skills/). */
+export function projectSkillsDir(projectRoot?: string): string {
+  return join(projectRoot || process.cwd(), LEGACY_PROVIDER_HOME_DIRNAME, "skills");
+}
 
 export type InstalledSkillScope = "project" | "user";
 

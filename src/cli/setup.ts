@@ -18,11 +18,11 @@ import { spawnSync } from "child_process";
 import { createInterface } from "readline/promises";
 import { homedir } from "os";
 import {
-  codexHome,
-  codexConfigPath,
-  codexPromptsDir,
-  codexAgentsDir,
-  userSkillsDir,
+  providerHome,
+  providerConfigPath,
+  providerPromptsDir,
+  providerAgentsDir,
+  providerUserSkillsDir,
   omxStateDir,
   detectLegacySkillRootOverlap,
   omxPlansDir,
@@ -381,11 +381,11 @@ export function resolveScopeDirectories(
     };
   }
   return {
-    codexConfigFile: codexConfigPath(),
-    codexHomeDir: codexHome(),
-    nativeAgentsDir: codexAgentsDir(),
-    promptsDir: codexPromptsDir(),
-    skillsDir: userSkillsDir(),
+    codexConfigFile: providerConfigPath(),
+    codexHomeDir: providerHome(),
+    nativeAgentsDir: providerAgentsDir(),
+    promptsDir: providerPromptsDir(),
+    skillsDir: providerUserSkillsDir(),
   };
 }
 
