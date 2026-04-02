@@ -1,22 +1,23 @@
 # oh-my-kimi (OMK)
 
 <p align="center">
-  <img src="https://yeachan-heo.github.io/oh-my-codex-website/omx-character-nobg.png" alt="oh-my-kimi character" width="280">
+  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omx-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
   <br>
-  <em>Start Codex stronger, then let OMX add better prompts, workflows, and runtime help when the work grows.</em>
+  <em>Start Kimi stronger, then let OMK add better prompts, workflows, and runtime help when the work grows.</em>
 </p>
 
-[![npm version](https://img.shields.io/npm/v/oh-my-codex)](https://www.npmjs.com/package/oh-my-codex)
+[![GitHub repo](https://img.shields.io/badge/GitHub-wang--h%2Foh--my--kimi-black)](https://github.com/wang-h/oh-my-kimi)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
 [![Discord](https://img.shields.io/discord/1452487457085063218?color=5865F2&logo=discord&logoColor=white&label=Discord)](https://discord.gg/PUwSMR9XNk)
 
-**Website:** https://yeachan-heo.github.io/oh-my-codex-website/  
+**GitHub:** https://github.com/wang-h/oh-my-kimi  
 **Docs:** [Getting Started](./docs/getting-started.html) · [Agents](./docs/agents.html) · [Skills](./docs/skills.html) · [Integrations](./docs/integrations.html) · [Demo](./DEMO.md) · [OpenClaw guide](./docs/openclaw-integration.md)
 
-> **Kimi port status:** Kimi-first package and provider-path work has landed, but README/install wording and some repository metadata still lag. For the current migration boundary, supported/adapted targets, and unsupported disclosures, use the [oh-my-kimi v1 compatibility and review guide](./docs/oh-my-kimi-v1-compatibility.md).
+> **Port status:** this repository is now the Kimi-first fork. The main runtime, setup path, and focused verification suite have been moved to Kimi-first behavior. For the current compatibility boundary and unsupported disclosures, see the [oh-my-kimi v1 compatibility guide](./docs/oh-my-kimi-v1-compatibility.md).
 
-OMK is a workflow layer for Kimi Code CLI, with `omx` retained as a temporary compatibility alias during the port.
+OMK is a workflow layer for Kimi Code CLI.
+`omk` is the primary command name; `omx` is currently kept as a compatibility alias during migration.
 
 It keeps Kimi Code CLI as the execution engine and makes it easier to:
 - start a stronger Kimi session by default
@@ -46,7 +47,7 @@ $team 3:executor "execute the approved plan in parallel"
 That is the main path.
 Start OMK strongly, clarify first when needed, approve the plan, then choose `$team` for coordinated parallel execution or `$ralph` for the persistent completion loop.
 
-## What OMX is for
+## What OMK is for
 
 Use OMK if you already like Kimi Code and want a better day-to-day runtime around it:
 - a standard workflow built around `$deep-interview`, `$ralplan`, `$team`, and `$ralph`
@@ -127,38 +128,39 @@ These are useful, but they are not the main onboarding path.
 
 ### Team runtime
 
-Use the team runtime when you specifically need durable tmux/worktree coordination, not as the default way to begin using OMX.
+Use the team runtime when you specifically need durable tmux/worktree coordination, not as the default way to begin using OMK.
 
 ```bash
-omx team 3:executor "fix the failing tests with verification"
-omx team status <team-name>
-omx team resume <team-name>
-omx team shutdown <team-name>
+omk team 3:executor "fix the failing tests with verification"
+omk team status <team-name>
+omk team resume <team-name>
+omk team shutdown <team-name>
 ```
 
 ### Setup, doctor, and HUD
 
 These are operator/support surfaces:
-- `omx setup` installs prompts, skills, config, and AGENTS scaffolding
-- `omx doctor` verifies the install when something seems wrong
-- `omx hud --watch` is a monitoring/status surface, not the primary user workflow
+- `omk setup` installs prompts, skills, config, and AGENTS scaffolding
+- `omk doctor` verifies the install when something seems wrong
+- `omk hud --watch` is a monitoring/status surface, not the primary user workflow
+- `omx ...` still works as a temporary alias while the port is being cleaned up
 
 ### Explore and sparkshell
 
-- `omx explore --prompt "..."` is for read-only repository lookup
-- `omx sparkshell <command>` is for shell-native inspection and bounded verification
+- `omk explore --prompt "..."` is for read-only repository lookup
+- `omk sparkshell <command>` is for shell-native inspection and bounded verification
 
 Examples:
 
 ```bash
-omx explore --prompt "find where team state is written"
-omx sparkshell git status
-omx sparkshell --tmux-pane %12 --tail-lines 400
+omk explore --prompt "find where team state is written"
+omk sparkshell git status
+omk sparkshell --tmux-pane %12 --tail-lines 400
 ```
 
 ### Platform notes for team mode
 
-`omx team` needs a tmux-compatible backend:
+`omk team` needs a tmux-compatible backend:
 
 | Platform | Install |
 | --- | --- |
@@ -173,10 +175,10 @@ omx sparkshell --tmux-pane %12 --tail-lines 400
 
 ### Intel Mac: high `syspolicyd` / `trustd` CPU during startup
 
-On some Intel Macs, OMX startup — especially with `--madmax --high` — can spike `syspolicyd` / `trustd` CPU usage while macOS Gatekeeper validates many concurrent process launches.
+On some Intel Macs, OMK startup — especially with `--madmax --high` — can spike `syspolicyd` / `trustd` CPU usage while macOS Gatekeeper validates many concurrent process launches.
 
 If this happens, try:
-- `xattr -dr com.apple.quarantine $(which omx)`
+- `xattr -dr com.apple.quarantine $(which omk)`
 - adding your terminal app to the Developer Tools allowlist in macOS Security settings
 - using lower concurrency (for example, avoid `--madmax --high`)
 
@@ -213,12 +215,12 @@ If this happens, try:
 
 | Role | Name | GitHub |
 | --- | --- | --- |
-| Creator & Lead | Yeachan Heo | [@Yeachan-Heo](https://github.com/Yeachan-Heo) |
-| Maintainer | HaD0Yun | [@HaD0Yun](https://github.com/HaD0Yun) |
+| Original creator | Yeachan Heo | [@Yeachan-Heo](https://github.com/Yeachan-Heo) |
+| Kimi fork maintainer | wang-h | [@wang-h](https://github.com/wang-h) |
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Yeachan-Heo/oh-my-codex&type=date&legend=top-left)](https://www.star-history.com/#Yeachan-Heo/oh-my-codex&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=wang-h/oh-my-kimi&type=date&legend=top-left)](https://www.star-history.com/#wang-h/oh-my-kimi&type=date&legend=top-left)
 
 ## License
 
