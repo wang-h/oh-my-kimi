@@ -1,6 +1,6 @@
 {
   "name": "oh-my-kimi",
-  "version": "0.11.14",
+  "version": "0.11.15",
   "description": "Multi-agent orchestration layer for Kimi Code CLI",
   "type": "module",
   "main": "dist/index.js",

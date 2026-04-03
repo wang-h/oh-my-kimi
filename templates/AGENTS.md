@@ -169,6 +169,22 @@ Rules:
 - `/prompts:name` — advanced specialist role surface when the task already needs a specific agent
 </invocation_conventions>
 
+<workflow_shim_bridge>
+Explicit `$name` workflow tokens are command shims, not prose.
+
+Rules:
+- Never say `$ralplan`, `$deep-interview`, `$team`, `$ralph`, or other mapped `$name` workflow tokens are unsupported just because `$...` is not a native Kimi slash command.
+- When a user message contains one or more explicit `$name` tokens, immediately treat them as direct workflow invocations in left-to-right order.
+- For each explicit `$name`, load the matching `~/.kimi/skills/<name>/SKILL.md` workflow (with `swarm` normalized to `team`) and execute it exactly as if the user had invoked the corresponding workflow command.
+- Use the remaining text after the explicit `$name` token block as the task description / arguments for that workflow.
+- If a workflow skill file is missing, briefly state that the shim target is missing and fall back to the closest installed workflow, but do not claim the `$name` syntax itself is unsupported.
+
+Examples:
+- `$ralplan "add auth"` => run the ralplan workflow with task `add auth`
+- `$deep-interview foo; $ralplan bar` => execute the explicit workflow invocations left-to-right
+- `$team 3:executor "ship it"` => run team workflow semantics, not a plain chat response
+</workflow_shim_bridge>
+
 <model_routing>
 Match role to task shape:
 - Low complexity: `explore`, `style-reviewer`, `writer`

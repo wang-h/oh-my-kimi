@@ -20,8 +20,8 @@ const CTRL_O_RE = /ctrl\+o to expand/i;
 /** Lines composed entirely of box-drawing characters and whitespace */
 const BOX_DRAWING_RE = /^[\s─═│║┌┐└┘┬┴├┤╔╗╚╝╠╣╦╩╬╟╢╤╧╪━┃┏┓┗┛┣┫┳┻╋┠┨┯┷┿╂]+$/;
 
-/** OMX HUD status lines: [OMX#...] or [OMX] (unversioned) */
-const OMK_HUD_RE = /\[OMX[#\]]/;
+/** OMK HUD status lines: [OMK#...] or [OMK] (unversioned) */
+const OMK_HUD_RE = /\[OMK[#\]]/;
 
 /** Bypass-permissions indicator lines starting with ⏵ */
 const BYPASS_PERM_RE = /^⏵/;
@@ -49,7 +49,7 @@ const MAX_TAIL_CHARS = 1200;
  * - Removes UI chrome lines (spinner/progress characters: ●⎿✻·◼)
  * - Removes "ctrl+o to expand" hint lines
  * - Removes box-drawing character lines
- * - Removes OMX HUD status lines
+ * - Removes OMK HUD status lines
  * - Removes bypass-permissions indicator lines
  * - Removes bare shell prompt lines
  * - Drops lines with < 15% Unicode letter/number density (for lines >= 8 chars)

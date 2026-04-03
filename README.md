@@ -24,6 +24,8 @@
 OMK is a workflow layer for Kimi Code CLI.
 `omk` is the primary command name; `omk` is currently kept as a compatibility alias during migration.
 
+> **Kimi CLI command note:** Kimi Code CLI does not natively guarantee the `$ralplan` / `$deep-interview` / `$team` / `$ralph` shorthand syntax. In practice, the most reliable way to invoke OMK workflows inside Kimi is with explicit skill commands such as `/skill:ralplan ...`, `/skill:deep-interview ...`, `/skill:team ...`, and `/skill:ralph ...`. Use `$name` shorthands only when your current Kimi environment explicitly supports them.
+
 It keeps Kimi Code CLI as the execution engine and makes it easier to:
 - start a stronger Kimi session by default
 - run one consistent workflow from clarification to completion
@@ -40,13 +42,13 @@ omk setup
 omk --madmax --high
 ```
 
-Then work normally inside Kimi Code CLI:
+Then work inside Kimi Code CLI using the reliable explicit skill entrypoints:
 
 ```text
-$deep-interview "clarify the authentication change"
-$ralplan "approve the auth plan and review tradeoffs"
-$ralph "carry the approved plan to completion"
-$team 3:executor "execute the approved plan in parallel"
+/skill:deep-interview clarify the authentication change
+/skill:ralplan approve the auth plan and review tradeoffs
+/skill:ralph carry the approved plan to completion
+/skill:team 3:executor "execute the approved plan in parallel"
 ```
 
 That is the main path.
@@ -80,13 +82,13 @@ Launch OMK the recommended way:
 omk --madmax --high
 ```
 
-Then try the canonical workflow:
+Then try the canonical workflow via explicit skill calls:
 
 ```text
-$deep-interview "clarify the authentication change"
-$ralplan "approve the safest implementation path"
-$ralph "carry the approved plan to completion"
-$team 3:executor "execute the approved plan in parallel"
+/skill:deep-interview clarify the authentication change
+/skill:ralplan approve the safest implementation path
+/skill:ralph carry the approved plan to completion
+/skill:team 3:executor "execute the approved plan in parallel"
 ```
 
 Use `$team` when the approved plan needs coordinated parallel work, or `$ralph` when one persistent owner should keep pushing to completion.
@@ -107,24 +109,24 @@ Most users should think of OMK as **better task routing + better workflow + bett
 
 1. Run `omk setup`
 2. Launch with `omk --madmax --high`
-3. Use `$deep-interview "..."` when the request or boundaries are still unclear
-4. Use `$ralplan "..."` to approve the plan and review tradeoffs
-5. Choose `$team` for coordinated parallel execution or `$ralph` for persistent completion loops
+3. Use `/skill:deep-interview ...` when the request or boundaries are still unclear
+4. Use `/skill:ralplan ...` to approve the plan and review tradeoffs
+5. Choose `/skill:team ...` for coordinated parallel execution or `/skill:ralph ...` for persistent completion loops
 
 ## Recommended workflow
 
-1. `$deep-interview` — clarify scope when the request or boundaries are still vague.
-2. `$ralplan` — turn that clarified scope into an approved architecture and implementation plan.
-3. `$team` or `$ralph` — use `$team` for coordinated parallel execution, or `$ralph` when you want a persistent completion loop with one owner.
+1. `/skill:deep-interview` — clarify scope when the request or boundaries are still vague.
+2. `/skill:ralplan` — turn that clarified scope into an approved architecture and implementation plan.
+3. `/skill:team` or `/skill:ralph` — use `/skill:team` for coordinated parallel execution, or `/skill:ralph` when you want a persistent completion loop with one owner.
 
 ## Common in-session surfaces
 
 | Surface | Use it for |
 | --- | --- |
-| `$deep-interview "..."` | clarifying intent, boundaries, and non-goals |
-| `$ralplan "..."` | approving the implementation plan and tradeoffs |
-| `$ralph "..."` | persistent completion and verification loops |
-| `$team "..."` | coordinated parallel execution when the work is big enough |
+| `/skill:deep-interview ...` | clarifying intent, boundaries, and non-goals |
+| `/skill:ralplan ...` | approving the implementation plan and tradeoffs |
+| `/skill:ralph ...` | persistent completion and verification loops |
+| `/skill:team ...` | coordinated parallel execution when the work is big enough |
 | `/skills` | browsing installed skills and supporting helpers |
 
 ## Advanced / operator surfaces

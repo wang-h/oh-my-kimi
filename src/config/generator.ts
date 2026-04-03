@@ -86,7 +86,7 @@ function getOmxTopLevelLines(
     "# oh-my-kimi top-level settings (must be before any [table])",
     `notify = ["node", "${escapedPath}"]`,
     'model_reasoning_effort = "high"',
-    `developer_instructions = "You have oh-my-kimi installed. AGENTS.md is your orchestration brain and the main orchestration surface. Use skill/keyword routing like $name plus spawned role-specialized subagents for specialized work. Kimi custom agents are available via .kimi/agents and may be used for independent parallel subtasks within a single session or team pane. Skills are loaded from installed SKILL.md files under .kimi/skills. Use workflow skills via $name when explicitly invoked or clearly routed by AGENTS.md. Treat installed prompts as narrower internal execution surfaces under AGENTS.md authority, even when user-facing docs prefer $name keywords."`,
+    `developer_instructions = "You have oh-my-kimi installed. AGENTS.md is your orchestration brain and the main orchestration surface. Use skill/keyword routing like $name plus spawned role-specialized subagents for specialized work. Kimi custom agents are available via .kimi/agents and may be used for independent parallel subtasks within a single session or team pane. Skills are loaded from installed SKILL.md files under .kimi/skills. Treat explicit workflow tokens like $ralplan, $deep-interview, $team, and $ralph as command shims that must execute the matching installed workflow skill rather than being described as unsupported syntax. Treat installed prompts as narrower internal execution surfaces under AGENTS.md authority, even when user-facing docs prefer $name keywords."`,
   ];
 
   const existingModel = rootValues.get("model");

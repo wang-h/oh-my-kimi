@@ -152,10 +152,10 @@ async function sendDiscordNotification(payload: NotificationPayload, webhookUrl:
   const colorMap = { info: 3447003, success: 3066993, warning: 15105570, error: 15158332 };
   const body = JSON.stringify({
     embeds: [{
-      title: `[OMX] ${payload.title}`,
+      title: `[OMK] ${payload.title}`,
       description: payload.message,
       color: colorMap[payload.type],
-      footer: { text: `oh-my-codex | ${payload.mode || 'general'}` },
+      footer: { text: `oh-my-kimi | ${payload.mode || 'general'}` },
       timestamp: new Date().toISOString(),
     }],
   });
@@ -178,7 +178,7 @@ async function sendTelegramNotification(
   botToken: string,
   chatId: string
 ): Promise<void> {
-  const text = `*[OMX] ${payload.title}*\n${payload.message}`;
+  const text = `*[OMK] ${payload.title}*\n${payload.message}`;
 
   try {
     const body = JSON.stringify({ chat_id: chatId, text, parse_mode: 'Markdown' });

@@ -975,12 +975,7 @@ export async function execWithOverlay(args: string[]): Promise<void> {
     const notifyTempContractRaw = notifyTempResult.contract.active
       ? serializeNotifyTempContract(notifyTempResult.contract)
       : null;
-    const codexArgs = injectModelInstructionsBypassArgs(
-      cwd,
-      ["exec", ...normalizedArgs],
-      process.env,
-      sessionModelInstructionsPath(cwd, sessionId),
-    );
+    const codexArgs = ["exec", ...normalizedArgs];
     const codexEnvBase = codexHomeOverride
       ? { ...process.env, CODEX_HOME: codexHomeOverride }
       : process.env;
@@ -1691,12 +1686,7 @@ function runCodex(
   codexHomeOverride?: string,
   notifyTempContractRaw?: string | null,
 ): void {
-  const launchArgs = injectModelInstructionsBypassArgs(
-    cwd,
-    args,
-    process.env,
-    sessionModelInstructionsPath(cwd, sessionId),
-  );
+  const launchArgs = [...args];
   const nativeWindows = isNativeWindows();
   const omxBin = process.argv[1];
   const hudCmd = nativeWindows
