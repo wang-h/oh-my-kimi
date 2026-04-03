@@ -37,7 +37,7 @@ describe('nested help routing', () => {
         const result = runOmx(cwd, argv);
         assert.equal(result.status, 0, result.stderr || result.stdout);
         assert.match(result.stdout, expectedUsage);
-        assert.doesNotMatch(result.stdout, /oh-my-codex \(omx\) - Multi-agent orchestration for Codex CLI/i);
+        assert.doesNotMatch(result.stdout, /oh-my-kimi \(omk\/omx\) - Multi-agent orchestration for Kimi Code CLI/i);
       } finally {
         await rm(cwd, { recursive: true, force: true });
       }

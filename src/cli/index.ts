@@ -1,6 +1,6 @@
 /**
- * oh-my-codex CLI
- * Multi-agent orchestration for OpenAI Codex CLI
+ * oh-my-kimi CLI
+ * Multi-agent orchestration for Kimi Code CLI
  */
 
 import { execFileSync, spawn } from "child_process";
@@ -108,50 +108,51 @@ export function resolveNotifyHookScript(pkgRoot = getPackageRoot()): string {
 }
 
 const HELP = `
-oh-my-codex (omx) - Multi-agent orchestration for Codex CLI
+oh-my-kimi (omk/omx) - Multi-agent orchestration for Kimi Code CLI
 
 Usage:
-  omx           Launch Codex CLI (HUD auto-attaches only when already inside tmux)
-  omx exec      Run codex exec non-interactively with OMX AGENTS/overlay injection
-  omx setup     Install skills, prompts, MCP servers, and scope-specific AGENTS.md
-  omx uninstall Remove OMX configuration and clean up installed artifacts
-  omx doctor    Check installation health
-  omx cleanup   Kill orphaned OMX MCP server processes and remove stale OMX /tmp directories
-  omx doctor --team  Check team/swarm runtime health diagnostics
-  omx ask       Ask local provider CLI (claude|gemini) and write artifact output
-  omx resume    Resume a previous interactive Codex session
-  omx explore   Default read-only exploration entrypoint (may adaptively use sparkshell backend)
-  omx session   Search prior local session transcripts and history artifacts
-  omx agents-init [path]
+  omk           Launch Kimi Code CLI (HUD auto-attaches only when already inside tmux)
+  omx           Compatibility alias for omk during migration
+  omk exec      Run kimi/codex-compatible exec non-interactively with OMK AGENTS/overlay injection
+  omk setup     Install skills, prompts, MCP servers, and scope-specific AGENTS.md
+  omk uninstall Remove OMK configuration and clean up installed artifacts
+  omk doctor    Check installation health
+  omk cleanup   Kill orphaned OMK MCP server processes and remove stale OMK /tmp directories
+  omk doctor --team  Check team/swarm runtime health diagnostics
+  omk ask       Ask local provider CLI (kimi|claude|gemini) and write artifact output
+  omk resume    Resume a previous interactive Kimi-compatible session
+  omk explore   Default read-only exploration entrypoint (may adaptively use sparkshell backend)
+  omk session   Search prior local session transcripts and history artifacts
+  omk agents-init [path]
                 Bootstrap lightweight AGENTS.md files for a repo/subtree
-  omx agents    Manage Codex native agent TOML files
-  omx deepinit [path]
+  omk agents    Manage Kimi/compat native agent configs
+  omk deepinit [path]
                 Alias for agents-init (lightweight AGENTS bootstrap only)
-  omx team      Spawn parallel worker panes in tmux and bootstrap inbox/task state
-  omx ralph     Launch Codex with ralph persistence mode active
-  omx autoresearch Launch thin-supervisor autoresearch with keep/discard/reset parity
-  omx version   Show version information
-  omx tmux-hook Manage tmux prompt injection workaround (init|status|validate|test)
-  omx hooks     Manage hook plugins (init|status|validate|test)
-  omx hud       Show HUD statusline (--watch, --json, --preset=NAME)
-  omx sparkshell <command> [args...]
-  omx sparkshell --tmux-pane <pane-id> [--tail-lines <100-1000>]
+  omk team      Spawn parallel worker panes in tmux and bootstrap inbox/task state
+  omk ralph     Launch Kimi with ralph persistence mode active
+  omk autoresearch Launch thin-supervisor autoresearch with keep/discard/reset parity
+  omk version   Show version information
+  omk tmux-hook Manage tmux prompt injection workaround (init|status|validate|test)
+  omk hooks     Manage hook plugins (init|status|validate|test)
+  omk hud       Show HUD statusline (--watch, --json, --preset=NAME)
+  omk sparkshell <command> [args...]
+  omk sparkshell --tmux-pane <pane-id> [--tail-lines <100-1000>]
                 Run native sparkshell sidecar for direct command execution or explicit tmux-pane summarization
                 (also used as an adaptive backend for qualifying read-only explore tasks)
-  omx help      Show this help message
-  omx status    Show active modes and state
-  omx cancel    Cancel active execution modes
-  omx reasoning Show or set model reasoning effort (low|medium|high|xhigh)
+  omk help      Show this help message
+  omk status    Show active modes and state
+  omk cancel    Cancel active execution modes
+  omk reasoning Show or set model reasoning effort (low|medium|high|xhigh)
 
 Options:
-  --yolo        Launch Codex in yolo mode (shorthand for: omx launch --yolo)
-  --high        Launch Codex with high reasoning effort
+  --yolo        Launch Kimi in yolo mode (shorthand for: omk launch --yolo)
+  --high        Launch Kimi with high reasoning effort
                 (shorthand for: -c model_reasoning_effort="high")
-  --xhigh       Launch Codex with xhigh reasoning effort
+  --xhigh       Launch Kimi with xhigh reasoning effort
                 (shorthand for: -c model_reasoning_effort="xhigh")
-  --madmax      DANGEROUS: bypass Codex approvals and sandbox
+  --madmax      DANGEROUS: bypass Kimi approvals and sandbox
                 (alias for --dangerously-bypass-approvals-and-sandbox)
-  --spark       Use the Codex spark model (~1.3x faster) for team workers only
+  --spark       Use the low-complexity spark model (~1.3x faster) for team workers only
                 Workers get the configured low-complexity team model; leader model unchanged
   --madmax-spark  spark model for workers + bypass approvals for leader and workers
                 (shorthand for: --spark --madmax)
@@ -171,7 +172,7 @@ Options:
   --scope       Setup scope for "omx setup" only:
                 user | project
   --skill-target
-                User-scope skills target for "omx setup" only:
+                User-scope skills target for "omk setup" only:
                 codex-home
 `;
 
@@ -188,7 +189,7 @@ const OMX_AUTORESEARCH_APPEND_INSTRUCTIONS_FILE_ENV =
 const REASONING_MODES = ["low", "medium", "high", "xhigh"] as const;
 type ReasoningMode = (typeof REASONING_MODES)[number];
 const REASONING_MODE_SET = new Set<string>(REASONING_MODES);
-const REASONING_USAGE = "Usage: omx reasoning <low|medium|high|xhigh>";
+const REASONING_USAGE = "Usage: omk reasoning <low|medium|high|xhigh>";
 const ALLOWED_SHELLS = new Set([
   "/bin/sh",
   "/bin/bash",
@@ -1680,7 +1681,7 @@ ${launchAppendix}`
 }
 
 /**
- * runCodex: Launch Codex CLI (blocks until exit).
+ * runCodex: Launch the provider CLI (Kimi-first, compatibility-aware) and block until exit.
  * All 3 paths (new tmux, existing tmux, no tmux) block via execSync/execFileSync.
  */
 function runCodex(

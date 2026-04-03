@@ -74,7 +74,7 @@ describe('omx autoresearch', () => {
     try {
       const result = runOmx(cwd, ['--help']);
       assert.equal(result.status, 0, result.stderr || result.stdout);
-      assert.match(result.stdout, /omx autoresearch\s+Launch thin-supervisor autoresearch with keep\/discard\/reset parity/i);
+      assert.match(result.stdout, /om[kkx] autoresearch\s+Launch thin-supervisor autoresearch with keep\/discard\/reset parity/i);
     } finally {
       await rm(cwd, { recursive: true, force: true });
     }
@@ -90,7 +90,7 @@ describe('omx autoresearch', () => {
       assert.match(result.stdout, /--topic\/\.\.\./i);
       assert.match(result.stdout, /deep-interview/i);
       assert.match(result.stdout, /human entrypoint/i);
-      assert.doesNotMatch(result.stdout, /oh-my-codex \(omx\) - Multi-agent orchestration for Codex CLI/i);
+      assert.doesNotMatch(result.stdout, /oh-my-kimi \(omk\/omx\) - Multi-agent orchestration for Kimi Code CLI/i);
     } finally {
       await rm(cwd, { recursive: true, force: true });
     }
@@ -113,7 +113,7 @@ describe('omx autoresearch', () => {
     try {
       const result = runOmx(cwd, ['autoresearch']);
       assert.notEqual(result.status, 0, result.stderr || result.stdout);
-      assert.match(`${result.stderr}\n${result.stdout}`, /mission-dir|Usage:\s*omx autoresearch <mission-dir>/i);
+      assert.match(`${result.stderr}\n${result.stdout}`, /mission-dir|Usage:\s*om[kx] autoresearch <mission-dir>/i);
     } finally {
       await rm(cwd, { recursive: true, force: true });
     }

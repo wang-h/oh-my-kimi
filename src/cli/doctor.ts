@@ -1,5 +1,5 @@
 /**
- * omx doctor - Validate oh-my-codex installation
+ * omk doctor - Validate oh-my-kimi installation
  */
 
 import { existsSync } from 'fs';
@@ -109,13 +109,13 @@ export async function doctor(options: DoctorOptions = {}): Promise<void> {
     ? ' (from .omx/setup-scope.json)'
     : '';
 
-  console.log('oh-my-codex doctor');
+  console.log('oh-my-kimi doctor');
   console.log('==================\n');
   console.log(`Resolved setup scope: ${scopeResolution.scope}${scopeSourceMessage}\n`);
 
   const checks: Check[] = [];
 
-  // Check 1: Codex CLI installed
+  // Check 1: provider CLI installed
   checks.push(checkCodexCli());
 
   // Check 2: Node.js version
@@ -124,8 +124,8 @@ export async function doctor(options: DoctorOptions = {}): Promise<void> {
   // Check 2.5: Explore harness readiness
   checks.push(checkExploreHarness());
 
-  // Check 3: Codex home directory
-  checks.push(checkDirectory('Codex home', paths.codexHomeDir));
+  // Check 3: provider home directory
+  checks.push(checkDirectory('Provider home', paths.codexHomeDir));
 
   // Check 4: Config file
   checks.push(await checkConfig(paths.configPath));
@@ -169,11 +169,11 @@ export async function doctor(options: DoctorOptions = {}): Promise<void> {
   console.log(`\nResults: ${passCount} passed, ${warnCount} warnings, ${failCount} failed`);
 
   if (failCount > 0) {
-    console.log('\nRun "omx setup" to fix installation issues.');
+    console.log('\nRun "omk setup" to fix installation issues.');
   } else if (warnCount > 0) {
-    console.log('\nRun "omx setup --force" to refresh all components.');
+    console.log('\nRun "omk setup --force" to refresh all components.');
   } else {
-    console.log('\nAll checks passed! oh-my-codex is ready.');
+    console.log('\nAll checks passed! oh-my-kimi is ready.');
   }
 }
 
@@ -184,7 +184,7 @@ interface TeamDoctorIssue {
 }
 
 async function doctorTeam(): Promise<void> {
-  console.log('oh-my-codex doctor --team');
+  console.log('oh-my-kimi doctor --team');
   console.log('=========================\n');
 
   const issues = await collectTeamDoctorIssues(process.cwd());
@@ -429,28 +429,28 @@ function checkCodexCli(): Check {
     const code = (result.error as NodeJS.ErrnoException).code;
     const kind = classifySpawnError(result.error as NodeJS.ErrnoException);
     if (kind === 'missing') {
-      return { name: 'Codex CLI', status: 'fail', message: 'not found - install from https://github.com/openai/codex' };
+      return { name: 'Kimi Code CLI', status: 'fail', message: 'not found - install Kimi Code CLI and ensure `kimi` is on PATH' };
     }
     if (kind === 'blocked') {
       return {
-        name: 'Codex CLI',
+        name: 'Kimi Code CLI',
         status: 'fail',
         message: `found but could not be executed in this environment (${code || 'blocked'})`,
       };
     }
     return {
-      name: 'Codex CLI',
+      name: 'Kimi Code CLI',
       status: 'fail',
       message: `probe failed - ${result.error.message}`,
     };
   }
   if (result.status === 0) {
     const version = (result.stdout || '').trim();
-    return { name: 'Codex CLI', status: 'pass', message: `installed (${version})` };
+    return { name: 'Kimi Code CLI', status: 'pass', message: `installed (${version})` };
   }
   const stderr = (result.stderr || '').trim();
   return {
-    name: 'Codex CLI',
+    name: 'Kimi Code CLI',
     status: 'fail',
     message: stderr !== '' ? `probe failed - ${stderr}` : `probe failed with exit ${result.status}`,
   };
@@ -591,7 +591,7 @@ async function checkConfig(configPath: string): Promise<Check> {
     return {
       name: 'Config',
       status: 'warn',
-      message: 'config.toml exists but no OMX entries yet (expected before first setup; run "omx setup --force" once)',
+      message: 'config.toml exists but no OMX entries yet (expected before first setup; run "omk setup --force" once)',
     };
   } catch {
     return { name: 'Config', status: 'fail', message: 'cannot read config.toml' };
@@ -733,7 +733,7 @@ function checkAgentsMd(scope: DoctorSetupScope, codexHomeDir: string): Check {
     return {
       name: 'AGENTS.md',
       status: 'warn',
-      message: `not found in ${userAgentsMd} (run omx setup --scope user)`,
+      message: `not found in ${userAgentsMd} (run omk setup --scope user)`,
     };
   }
 
@@ -744,7 +744,7 @@ function checkAgentsMd(scope: DoctorSetupScope, codexHomeDir: string): Check {
   return {
     name: 'AGENTS.md',
     status: 'warn',
-    message: 'not found in project root (run omx agents-init . or omx setup --scope project)',
+    message: 'not found in project root (run omk agents-init . or omk setup --scope project)',
   };
 }
 
@@ -763,7 +763,7 @@ async function checkMcpServers(configPath: string): Promise<Check> {
       return {
         name: 'MCP Servers',
         status: 'warn',
-        message: `${mcpCount} servers but no OMX servers yet (expected before first setup; run "omx setup --force" once)`,
+        message: `${mcpCount} servers but no OMX servers yet (expected before first setup; run "omk setup --force" once)`,
       };
     }
     return { name: 'MCP Servers', status: 'warn', message: 'no MCP servers configured' };

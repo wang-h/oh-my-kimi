@@ -55,11 +55,11 @@ command = "node"
       assert.equal(res.status, 0, res.stderr || res.stdout);
       assert.match(
         res.stdout,
-        /Config: config\.toml exists but no OMX entries yet \(expected before first setup; run "omx setup --force" once\)/,
+        /Config: config\.toml exists but no OMX entries yet \(expected before first setup; run "omk setup --force" once\)/,
       );
       assert.match(
         res.stdout,
-        /MCP Servers: 1 servers but no OMX servers yet \(expected before first setup; run "omx setup --force" once\)/,
+        /MCP Servers: 1 servers but no OMX servers yet \(expected before first setup; run "omk setup --force" once\)/,
       );
     } finally {
       await rm(wd, { recursive: true, force: true });

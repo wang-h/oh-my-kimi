@@ -117,7 +117,7 @@ describe('omx exec', () => {
 
       assert.equal(result.status, 0, result.error || result.stderr || result.stdout);
       assert.match(result.stdout, /fake-codex:exec --help\b/);
-      assert.doesNotMatch(result.stdout, /oh-my-codex \(omx\) - Multi-agent orchestration for Codex CLI/i);
+      assert.doesNotMatch(result.stdout, /oh-my-kimi \(omk\/omx\) - Multi-agent orchestration for Kimi Code CLI/i);
     } finally {
       await rm(wd, { recursive: true, force: true });
     }

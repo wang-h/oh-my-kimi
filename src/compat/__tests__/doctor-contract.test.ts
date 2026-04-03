@@ -59,7 +59,7 @@ function normalizeInstallDoctorOutput(text: string, home: string, cwd: string): 
     .replace(/\\/g, '/')
     .split('\n')
     .map((line) => {
-      if (line.startsWith('  [OK] Codex CLI:') || line.startsWith('  [XX] Codex CLI:')) {
+      if (line.startsWith('  [OK] Kimi Code CLI:') || line.startsWith('  [XX] Kimi Code CLI:')) {
         return '  [CODEX_CLI_STATUS]';
       }
       if (line.startsWith('  [OK] Node.js:')) {
@@ -71,7 +71,7 @@ function normalizeInstallDoctorOutput(text: string, home: string, cwd: string): 
       if (line.startsWith('Results: ')) {
         return 'Results: <RESULTS>';
       }
-      if (line.startsWith('Run "omx setup')) {
+      if (line.startsWith('Run "omk setup')) {
         return 'Run <SETUP_FOLLOWUP>';
       }
       return line;
