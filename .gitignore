@@ -30,3 +30,7 @@ mailbox.json
 readiness.json
 replay.json
 snapshot.json
+
+# OMK runtime state (auto-generated, do not commit)
+.omk/logs/
+.omk/state/
