@@ -1,7 +1,7 @@
 # oh-my-kimi (OMK)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omx-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
+  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omk-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
   <br>
   <em>Seu codex não está sozinho.</em>
 </p>
@@ -16,11 +16,11 @@ Camada de orquestração multiagente para [Kimi Code CLI](https://moonshotai.git
 
 ## Novidades na v0.9.0 — Spark Initiative
 
-Spark Initiative é a versão que fortalece o caminho nativo de exploração e inspeção no OMX.
+Spark Initiative é a versão que fortalece o caminho nativo de exploração e inspeção no OMK.
 
-- **Harness nativo para `omx explore`** — executa exploração de repositório somente leitura com uma via em Rust mais rápida e mais restrita.
-- **`omx sparkshell`** — superfície nativa voltada ao operador, com resumos de saídas longas e captura explícita de painéis tmux.
-- **Assets nativos multiplataforma** — o caminho de hidratação de `omx-explore-harness`, `omx-sparkshell` e `native-release-manifest.json` agora faz parte do pipeline de release.
+- **Harness nativo para `omk explore`** — executa exploração de repositório somente leitura com uma via em Rust mais rápida e mais restrita.
+- **`omk sparkshell`** — superfície nativa voltada ao operador, com resumos de saídas longas e captura explícita de painéis tmux.
+- **Assets nativos multiplataforma** — o caminho de hidratação de `omk-explore-harness`, `omk-sparkshell` e `native-release-manifest.json` agora faz parte do pipeline de release.
 - **CI/CD reforçado** — adiciona configuração explícita de Rust no job `build`, além de `cargo fmt --check` e `cargo clippy -- -D warnings`.
 
 Veja também as [notas de release da v0.9.0](./docs/release-notes-0.9.0.md) e o [corpo do release](./docs/release-body-0.9.0.md).
@@ -39,9 +39,9 @@ $team 3:executor "execute the approved plan in parallel"
 Do terminal:
 
 ```bash
-omx team 4:executor "parallelize a multi-module refactor"
-omx team status <team-name>
-omx team shutdown <team-name>
+omk team 4:executor "parallelize a multi-module refactor"
+omk team status <team-name>
+omk team shutdown <team-name>
 ```
 
 ## Fluxo recomendado
@@ -52,7 +52,7 @@ omx team shutdown <team-name>
 
 ## Modelo central
 
-OMX instala e conecta estas camadas:
+OMK instala e conecta estas camadas:
 
 ```text
 User
@@ -61,34 +61,34 @@ User
     -> ~/.codex/prompts/*.md (catálogo de prompts de agentes)
     -> ~/.codex/skills/*/SKILL.md (catálogo de skills)
     -> ~/.codex/config.toml (funcionalidades, notificações, MCP)
-    -> .omx/ (estado de execução, memória, planos, logs)
+    -> .omk/ (estado de execução, memória, planos, logs)
 ```
 
 ## Comandos principais
 
 ```bash
-omx                # Iniciar Codex (+ HUD no tmux quando disponível)
-omx setup          # Instalar prompts/skills/config por escopo + .omx do projeto + AGENTS.md específico do escopo
-omx doctor         # Diagnósticos de instalação/execução
-omx doctor --team  # Diagnósticos de Team/swarm
-omx team ...       # Iniciar/status/retomar/encerrar workers tmux da equipe
-omx status         # Mostrar modos ativos
-omx cancel         # Cancelar modos de execução ativos
-omx reasoning <mode> # low|medium|high|xhigh
-omx tmux-hook ...  # init|status|validate|test
-omx hooks ...      # init|status|validate|test (fluxo de trabalho de extensão de plugins)
-omx hud ...        # --watch|--json|--preset
-omx help
+omk                # Iniciar Codex (+ HUD no tmux quando disponível)
+omk setup          # Instalar prompts/skills/config por escopo + .omk do projeto + AGENTS.md específico do escopo
+omk doctor         # Diagnósticos de instalação/execução
+omk doctor --team  # Diagnósticos de Team/swarm
+omk team ...       # Iniciar/status/retomar/encerrar workers tmux da equipe
+omk status         # Mostrar modos ativos
+omk cancel         # Cancelar modos de execução ativos
+omk reasoning <mode> # low|medium|high|xhigh
+omk tmux-hook ...  # init|status|validate|test
+omk hooks ...      # init|status|validate|test (fluxo de trabalho de extensão de plugins)
+omk hud ...        # --watch|--json|--preset
+omk help
 ```
 
 ## Extensão de Hooks (Superfície adicional)
 
-OMX agora inclui `omx hooks` para scaffolding e validação de plugins.
+OMK agora inclui `omk hooks` para scaffolding e validação de plugins.
 
-- `omx tmux-hook` continua sendo suportado e não foi alterado.
-- `omx hooks` é aditivo e não substitui os fluxos de trabalho do tmux-hook.
-- Arquivos de plugins ficam em `.omx/hooks/*.mjs`.
-- Plugins estão desativados por padrão; ative com `OMX_HOOK_PLUGINS=1`.
+- `omk tmux-hook` continua sendo suportado e não foi alterado.
+- `omk hooks` é aditivo e não substitui os fluxos de trabalho do tmux-hook.
+- Arquivos de plugins ficam em `.omk/hooks/*.mjs`.
+- Plugins estão desativados por padrão; ative com `OMK_HOOK_PLUGINS=1`.
 
 Consulte `docs/hooks-extension.md` para o fluxo de trabalho completo de extensões e modelo de eventos.
 
@@ -114,14 +114,14 @@ Por padrão, as ferramentas MCP de state/memory/trace aceitam o `workingDirector
 Para restringir isso, defina uma lista de raízes permitidas:
 
 ```bash
-export OMX_MCP_WORKDIR_ROOTS="/path/to/project:/path/to/another-root"
+export OMK_MCP_WORKDIR_ROOTS="/path/to/project:/path/to/another-root"
 ```
 
 Quando definido, valores de `workingDirectory` fora dessas raízes são rejeitados.
 
 ## Controle de prompts Codex-First
 
-Por padrão, OMX injeta:
+Por padrão, OMK injeta:
 
 ```text
 -c model_instructions_file="<cwd>/AGENTS.md"
@@ -133,8 +133,8 @@ Estende o comportamento do Codex, mas não substitui nem contorna as políticas 
 Controles:
 
 ```bash
-OMX_BYPASS_DEFAULT_SYSTEM_PROMPT=0 omx     # desativar injeção de AGENTS.md
-OMX_MODEL_INSTRUCTIONS_FILE=/path/to/instructions.md omx
+OMK_BYPASS_DEFAULT_SYSTEM_PROMPT=0 omk     # desativar injeção de AGENTS.md
+OMK_MODEL_INSTRUCTIONS_FILE=/path/to/instructions.md omk
 ```
 
 ## Modo equipe
@@ -150,42 +150,42 @@ start -> assign scoped lanes -> monitor -> verify terminal tasks -> shutdown
 Comandos operacionais:
 
 ```bash
-omx team <args>
-omx team status <team-name>
-omx team resume <team-name>
-omx team shutdown <team-name>
+omk team <args>
+omk team status <team-name>
+omk team resume <team-name>
+omk team shutdown <team-name>
 ```
 
 Regra importante: não encerre enquanto tarefas estiverem em estado `in_progress`, a menos que esteja abortando.
 
 ### Team shutdown policy
 
-Use `omx team shutdown <team-name>` after the team reaches a terminal state.
+Use `omk team shutdown <team-name>` after the team reaches a terminal state.
 Team cleanup now follows one standalone path; legacy linked-Ralph shutdown handling is no longer a separate public workflow.
 
 Seleção de Worker CLI para workers da equipe:
 
 ```bash
-OMX_TEAM_WORKER_CLI=auto    # padrão; usa claude quando worker --model contém "claude"
-OMX_TEAM_WORKER_CLI=codex   # forçar workers Kimi Code CLI
-OMX_TEAM_WORKER_CLI=claude  # forçar workers Claude CLI
-OMX_TEAM_WORKER_CLI_MAP=codex,codex,claude,claude  # mix de CLI por worker (comprimento=1 ou quantidade de workers)
-OMX_TEAM_AUTO_INTERRUPT_RETRY=0  # opcional: desativar fallback adaptativo queue->resend
+OMK_TEAM_WORKER_CLI=auto    # padrão; usa claude quando worker --model contém "claude"
+OMK_TEAM_WORKER_CLI=codex   # forçar workers Kimi Code CLI
+OMK_TEAM_WORKER_CLI=claude  # forçar workers Claude CLI
+OMK_TEAM_WORKER_CLI_MAP=codex,codex,claude,claude  # mix de CLI por worker (comprimento=1 ou quantidade de workers)
+OMK_TEAM_AUTO_INTERRUPT_RETRY=0  # opcional: desativar fallback adaptativo queue->resend
 ```
 
 Notas:
-- Argumentos de inicialização de workers são compartilhados via `OMX_TEAM_WORKER_LAUNCH_ARGS`.
-- `OMX_TEAM_WORKER_CLI_MAP` sobrescreve `OMX_TEAM_WORKER_CLI` para seleção por worker.
+- Argumentos de inicialização de workers são compartilhados via `OMK_TEAM_WORKER_LAUNCH_ARGS`.
+- `OMK_TEAM_WORKER_CLI_MAP` sobrescreve `OMK_TEAM_WORKER_CLI` para seleção por worker.
 - O envio de triggers usa retentativas adaptativas por padrão (queue/submit, depois fallback seguro clear-line+resend quando necessário).
-- No modo Claude worker, OMX inicia workers como `claude` simples (sem argumentos extras de inicialização) e ignora substituições explícitas de `--model` / `--config` / `--effort` para que o Claude use o `settings.json` padrão.
+- No modo Claude worker, OMK inicia workers como `claude` simples (sem argumentos extras de inicialização) e ignora substituições explícitas de `--model` / `--config` / `--effort` para que o Claude use o `settings.json` padrão.
 
-## O que `omx setup` grava
+## O que `omk setup` grava
 
-- `.omx/setup-scope.json` (escopo de instalação persistido)
+- `.omk/setup-scope.json` (escopo de instalação persistido)
 - Instalações dependentes do escopo:
-  - `user`: `~/.codex/prompts/`, `~/.codex/skills/`, `~/.codex/config.toml`, `~/.omx/agents/`, `~/.codex/AGENTS.md`
-  - `project`: `./.codex/prompts/`, `./.codex/skills/`, `./.codex/config.toml`, `./.omx/agents/`, `./AGENTS.md`
-- Comportamento de inicialização: se o escopo persistido for `project`, o lançamento do `omx` usa automaticamente `CODEX_HOME=./.codex` (a menos que `CODEX_HOME` já esteja definido).
+  - `user`: `~/.codex/prompts/`, `~/.codex/skills/`, `~/.codex/config.toml`, `~/.omk/agents/`, `~/.codex/AGENTS.md`
+  - `project`: `./.codex/prompts/`, `./.codex/skills/`, `./.codex/config.toml`, `./.omk/agents/`, `./AGENTS.md`
+- Comportamento de inicialização: se o escopo persistido for `project`, o lançamento do `omk` usa automaticamente `CODEX_HOME=./.codex` (a menos que `CODEX_HOME` já esteja definido).
 - As instruções de inicialização combinam `~/.codex/AGENTS.md` (ou `CODEX_HOME/AGENTS.md`, quando sobrescrito) com o `./AGENTS.md` do projeto e depois adicionam o overlay de runtime.
 - Arquivos `AGENTS.md` existentes nunca são sobrescritos silenciosamente: em TTY interativo o setup pergunta antes de substituir; em modo não interativo a substituição é ignorada, a menos que você use `--force` (verificações de segurança de sessões ativas continuam valendo).
 - Atualizações do `config.toml` (para ambos os escopos):
@@ -196,7 +196,7 @@ Notas:
   - Entradas de servidores MCP (`omx_state`, `omx_memory`, `omx_code_intel`, `omx_trace`)
   - `[tui] status_line`
 - `AGENTS.md` específico do escopo
-- Diretórios `.omx/` de execução e configuração do HUD
+- Diretórios `.omk/` de execução e configuração do HUD
 
 ## Agentes e skills
 
@@ -211,7 +211,7 @@ Exemplos:
 
 ```text
 oh-my-kimi/
-  bin/omx.js
+  bin/omk.js
   src/
     cli/
     team/
@@ -241,7 +241,7 @@ npm test
 ## Documentação
 
 - **[Documentação completa](https://github.com/wang-h/oh-my-kimi#readme)** — Guia completo
-- **[Referência CLI](https://github.com/wang-h/oh-my-kimi#command-reference)** — Todos os comandos `omx`, flags e ferramentas
+- **[Referência CLI](https://github.com/wang-h/oh-my-kimi#command-reference)** — Todos os comandos `omk`, flags e ferramentas
 - **[Guia de notificações](https://github.com/wang-h/oh-my-kimi#notifications)** — Configuração de Discord, Telegram, Slack e webhooks
 - **[Fluxos de trabalho recomendados](https://github.com/wang-h/oh-my-kimi#recommended-workflows)** — Cadeias de skills testadas em batalha para tarefas comuns
 - **[Notas de versão](https://github.com/wang-h/oh-my-kimi#release-notes)** — Novidades em cada versão

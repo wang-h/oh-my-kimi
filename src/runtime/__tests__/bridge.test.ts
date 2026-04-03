@@ -3,20 +3,20 @@ import assert from 'node:assert/strict';
 import { resolveRuntimeBinaryPath } from '../bridge.js';
 
 describe('resolveRuntimeBinaryPath', () => {
-  it('prefers explicit OMX_RUNTIME_BINARY override', () => {
-    const previous = process.env.OMX_RUNTIME_BINARY;
+  it('prefers explicit OMK_RUNTIME_BINARY override', () => {
+    const previous = process.env.OMK_RUNTIME_BINARY;
     try {
-      process.env.OMX_RUNTIME_BINARY = '/custom/runtime';
+      process.env.OMK_RUNTIME_BINARY = '/custom/runtime';
       const actual = resolveRuntimeBinaryPath({
         debugPath: '/debug/runtime',
         releasePath: '/release/runtime',
-        fallbackBinary: 'omx-runtime',
+        fallbackBinary: 'omk-runtime',
         exists: () => false,
       });
       assert.equal(actual, '/custom/runtime');
     } finally {
-      if (typeof previous === 'string') process.env.OMX_RUNTIME_BINARY = previous;
-      else delete process.env.OMX_RUNTIME_BINARY;
+      if (typeof previous === 'string') process.env.OMK_RUNTIME_BINARY = previous;
+      else delete process.env.OMK_RUNTIME_BINARY;
     }
   });
 
@@ -24,7 +24,7 @@ describe('resolveRuntimeBinaryPath', () => {
     const actual = resolveRuntimeBinaryPath({
       debugPath: '/debug/runtime',
       releasePath: '/release/runtime',
-      fallbackBinary: 'omx-runtime',
+      fallbackBinary: 'omk-runtime',
       exists: (candidate) => candidate === '/debug/runtime' || candidate === '/release/runtime',
     });
     assert.equal(actual, '/debug/runtime');
@@ -34,7 +34,7 @@ describe('resolveRuntimeBinaryPath', () => {
     const actual = resolveRuntimeBinaryPath({
       debugPath: '/debug/runtime',
       releasePath: '/release/runtime',
-      fallbackBinary: 'omx-runtime',
+      fallbackBinary: 'omk-runtime',
       exists: (candidate) => candidate === '/release/runtime',
     });
     assert.equal(actual, '/release/runtime');
@@ -44,9 +44,9 @@ describe('resolveRuntimeBinaryPath', () => {
     const actual = resolveRuntimeBinaryPath({
       debugPath: '/debug/runtime',
       releasePath: '/release/runtime',
-      fallbackBinary: 'omx-runtime',
+      fallbackBinary: 'omk-runtime',
       exists: () => false,
     });
-    assert.equal(actual, 'omx-runtime');
+    assert.equal(actual, 'omk-runtime');
   });
 });

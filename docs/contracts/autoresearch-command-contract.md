@@ -1,18 +1,18 @@
-# `omx autoresearch` parity contract
+# `omk autoresearch` parity contract
 
-`omx autoresearch` is a thin supervisor that drives one Codex experiment session per iteration while OMX owns the durable keep/discard/reset loop.
+`omk autoresearch` is a thin supervisor that drives one Codex experiment session per iteration while OMK owns the durable keep/discard/reset loop.
 
 ## CLI
 
 ```bash
-omx autoresearch <mission-dir> [codex-args...]
-omx autoresearch --resume <run-id> [codex-args...]
-omx autoresearch --help
+omk autoresearch <mission-dir> [codex-args...]
+omk autoresearch --resume <run-id> [codex-args...]
+omk autoresearch --help
 ```
 
 - Fresh launch always creates a new run-tagged lane.
-- `--resume <run-id>` loads `.omx/logs/autoresearch/<run-id>/manifest.json`.
-- A second launch is rejected while repo-root `.omx/state/autoresearch-state.json` points at an active run.
+- `--resume <run-id>` loads `.omk/logs/autoresearch/<run-id>/manifest.json`.
+- A second launch is rejected while repo-root `.omk/state/autoresearch-state.json` points at an active run.
 
 ## Mission / sandbox contract
 
@@ -29,15 +29,15 @@ Evaluator stdout must be JSON with required boolean `pass` and optional numeric 
 
 Fresh launch creates:
 - branch `autoresearch/<mission-slug>/<run-tag>`
-- worktree `<repo>.omx-worktrees/autoresearch-<mission-slug>-<run-tag>`
-- repo-root run artifacts under `.omx/logs/autoresearch/<run-id>/`
+- worktree `<repo>.omk-worktrees/autoresearch-<mission-slug>-<run-tag>`
+- repo-root run artifacts under `.omk/logs/autoresearch/<run-id>/`
 
 Repo-root state responsibilities:
-- `.omx/state/autoresearch-state.json` = active-run pointer/lock only
-- `.omx/logs/autoresearch/<run-id>/manifest.json` = authoritative per-run state
-- `.omx/logs/autoresearch/<run-id>/candidate.json` = candidate handoff from the just-finished Codex session
-- `.omx/logs/autoresearch/<run-id>/iteration-ledger.json` = durable iteration history
-- `.omx/logs/autoresearch/<run-id>/latest-evaluator-result.json` = latest evaluator output
+- `.omk/state/autoresearch-state.json` = active-run pointer/lock only
+- `.omk/logs/autoresearch/<run-id>/manifest.json` = authoritative per-run state
+- `.omk/logs/autoresearch/<run-id>/candidate.json` = candidate handoff from the just-finished Codex session
+- `.omk/logs/autoresearch/<run-id>/iteration-ledger.json` = durable iteration history
+- `.omk/logs/autoresearch/<run-id>/latest-evaluator-result.json` = latest evaluator output
 
 Worktree-local state responsibilities:
 - `results.tsv`

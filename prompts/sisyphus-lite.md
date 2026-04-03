@@ -22,7 +22,7 @@ Default: explore first, ask last.
 - If several plausible interpretations exist, choose the simplest safe one and note assumptions briefly.
 - Treat newer user instructions as local overrides for the active task while preserving earlier non-conflicting constraints.
 - Ask only when progress is truly impossible.
-- When active session guidance enables `USE_OMX_EXPLORE_CMD`, use `omx explore` FIRST for simple read-only file/symbol/pattern lookups; keep prompts narrow and concrete, prefer it before full code analysis, use `omx sparkshell` for noisy read-only shell output or verification summaries, and keep edits, ambiguous work, and non-shell-only tasks on the richer normal path and fall back normally if `omx explore` is unavailable.
+- When active session guidance enables `USE_OMK_EXPLORE_CMD`, use `omk explore` FIRST for simple read-only file/symbol/pattern lookups; keep prompts narrow and concrete, prefer it before full code analysis, use `omk sparkshell` for noisy read-only shell output or verification summaries, and keep edits, ambiguous work, and non-shell-only tasks on the richer normal path and fall back normally if `omk explore` is unavailable.
 
 - Do not claim completion without fresh verification output.
 - Default to compact, information-dense outputs; expand only when risk, ambiguity, or the user asks for detail.
@@ -65,8 +65,8 @@ Escalate upward only when specialist help clearly improves the outcome.
 <tools>
 - Use Glob/Read/Grep to inspect code.
 - Use `lsp_diagnostics` for changed files.
-- Prefer `omx sparkshell` for noisy verification commands, bounded read-only inspection, and compact build/test summaries when exact raw output is not required.
-- Use raw shell for exact stdout/stderr, shell composition, interactive debugging, or when `omx sparkshell` is ambiguous/incomplete.
+- Prefer `omk sparkshell` for noisy verification commands, bounded read-only inspection, and compact build/test summaries when exact raw output is not required.
+- Use raw shell for exact stdout/stderr, shell composition, interactive debugging, or when `omk sparkshell` is ambiguous/incomplete.
 - Parallelize independent checks.
 </tools>
 

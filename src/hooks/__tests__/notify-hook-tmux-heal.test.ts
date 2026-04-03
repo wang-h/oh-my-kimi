@@ -8,7 +8,7 @@ import { join } from 'node:path';
 const NOTIFY_HOOK_SCRIPT = new URL('../../../dist/scripts/notify-hook.js', import.meta.url);
 
 async function withTempWorkingDir(run: (cwd: string) => Promise<void>): Promise<void> {
-  const cwd = await mkdtemp(join(tmpdir(), 'omx-notify-tmux-heal-'));
+  const cwd = await mkdtemp(join(tmpdir(), 'omk-notify-tmux-heal-'));
   try {
     await run(cwd);
   } finally {
@@ -27,10 +27,10 @@ async function readJson<T>(path: string): Promise<T> {
 describe('notify-hook tmux target healing', () => {
   it('falls back to global mode state when scoped session has no allowed active mode', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
-      const sessionId = 'omx-abc123';
+      const sessionId = 'omk-abc123';
       const sessionStateDir = join(stateDir, 'sessions', sessionId);
       const fakeBinDir = join(cwd, 'fake-bin');
       const fakeTmuxPath = join(fakeBinDir, 'tmux');
@@ -50,8 +50,8 @@ describe('notify-hook tmux target healing', () => {
         allowed_modes: ['ralph'],
         cooldown_ms: 0,
         max_injections_per_session: 10,
-        prompt_template: 'Continue [OMX_TMUX_INJECT]',
-        marker: '[OMX_TMUX_INJECT]',
+        prompt_template: 'Continue [OMK_TMUX_INJECT]',
+        marker: '[OMK_TMUX_INJECT]',
         dry_run: false,
         log_level: 'debug',
       });
@@ -109,7 +109,7 @@ exit 1
         env: {
           ...process.env,
           PATH: `${fakeBinDir}:${process.env.PATH || ''}`,
-          OMX_TEAM_WORKER: '',
+          OMK_TEAM_WORKER: '',
         },
       });
       assert.equal(result.status, 0, `notify-hook failed: ${result.stderr || result.stdout}`);
@@ -122,10 +122,10 @@ exit 1
 
   it('falls back to current tmux pane and heals stale session target', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
-      const sessionId = 'omx-abc123';
+      const sessionId = 'omk-abc123';
       const sessionStateDir = join(stateDir, 'sessions', sessionId);
       const fakeBinDir = join(cwd, 'fake-bin');
       const fakeTmuxPath = join(fakeBinDir, 'tmux');
@@ -144,8 +144,8 @@ exit 1
         allowed_modes: ['ralph'],
         cooldown_ms: 0,
         max_injections_per_session: 10,
-        prompt_template: 'Continue [OMX_TMUX_INJECT]',
-        marker: '[OMX_TMUX_INJECT]',
+        prompt_template: 'Continue [OMK_TMUX_INJECT]',
+        marker: '[OMK_TMUX_INJECT]',
         dry_run: false,
         log_level: 'debug',
       });
@@ -233,7 +233,7 @@ exit 1
         env: {
           ...process.env,
           PATH: `${fakeBinDir}:${process.env.PATH || ''}`,
-          OMX_TEAM_WORKER: '',
+          OMK_TEAM_WORKER: '',
           TMUX_PANE: '%42',
         },
       });
@@ -251,10 +251,10 @@ exit 1
 
   it('skips injection when fallback pane cwd does not match hook cwd', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
-      const sessionId = 'omx-abc123';
+      const sessionId = 'omk-abc123';
       const sessionStateDir = join(stateDir, 'sessions', sessionId);
       const fakeBinDir = join(cwd, 'fake-bin');
       const fakeTmuxPath = join(fakeBinDir, 'tmux');
@@ -273,8 +273,8 @@ exit 1
         allowed_modes: ['ralph'],
         cooldown_ms: 0,
         max_injections_per_session: 10,
-        prompt_template: 'Continue [OMX_TMUX_INJECT]',
-        marker: '[OMX_TMUX_INJECT]',
+        prompt_template: 'Continue [OMK_TMUX_INJECT]',
+        marker: '[OMK_TMUX_INJECT]',
         dry_run: false,
         log_level: 'debug',
       });
@@ -362,7 +362,7 @@ exit 1
         env: {
           ...process.env,
           PATH: `${fakeBinDir}:${process.env.PATH || ''}`,
-          OMX_TEAM_WORKER: '',
+          OMK_TEAM_WORKER: '',
           TMUX_PANE: '%42',
         },
       });
@@ -376,10 +376,10 @@ exit 1
 
   it('does not guess a pane by shared cwd when canonical codex pane is unavailable', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
-      const sessionId = 'omx-abc123';
+      const sessionId = 'omk-abc123';
       const sessionStateDir = join(stateDir, 'sessions', sessionId);
       const fakeBinDir = join(cwd, 'fake-bin');
       const fakeTmuxPath = join(fakeBinDir, 'tmux');
@@ -398,8 +398,8 @@ exit 1
         allowed_modes: ['ralph'],
         cooldown_ms: 0,
         max_injections_per_session: 10,
-        prompt_template: 'Continue [OMX_TMUX_INJECT]',
-        marker: '[OMX_TMUX_INJECT]',
+        prompt_template: 'Continue [OMK_TMUX_INJECT]',
+        marker: '[OMK_TMUX_INJECT]',
         dry_run: false,
         log_level: 'debug',
       });
@@ -478,7 +478,7 @@ exit 1
         env: {
           ...process.env,
           PATH: `${fakeBinDir}:${process.env.PATH || ''}`,
-          OMX_TEAM_WORKER: '',
+          OMK_TEAM_WORKER: '',
         },
       });
       assert.equal(result.status, 0, `notify-hook failed: ${result.stderr || result.stdout}`);
@@ -491,10 +491,10 @@ exit 1
 
   it('heals a stale HUD pane target back to the canonical codex pane', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
-      const sessionId = 'omx-hud-stale';
+      const sessionId = 'omk-hud-stale';
       const sessionStateDir = join(stateDir, 'sessions', sessionId);
       const fakeBinDir = join(cwd, 'fake-bin');
       const fakeTmuxPath = join(fakeBinDir, 'tmux');
@@ -513,8 +513,8 @@ exit 1
         allowed_modes: ['ralph'],
         cooldown_ms: 0,
         max_injections_per_session: 10,
-        prompt_template: 'Continue [OMX_TMUX_INJECT]',
-        marker: '[OMX_TMUX_INJECT]',
+        prompt_template: 'Continue [OMK_TMUX_INJECT]',
+        marker: '[OMK_TMUX_INJECT]',
         dry_run: false,
         log_level: 'debug',
       });
@@ -590,7 +590,7 @@ exit 1
         env: {
           ...process.env,
           PATH: `${fakeBinDir}:${process.env.PATH || ''}`,
-          OMX_TEAM_WORKER: '',
+          OMK_TEAM_WORKER: '',
           TMUX_PANE: '%99',
         },
       });
@@ -608,10 +608,10 @@ exit 1
 
   it('prefers active mode state tmux_pane_id when present', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
-      const sessionId = 'omx-abc123';
+      const sessionId = 'omk-abc123';
       const sessionStateDir = join(stateDir, 'sessions', sessionId);
       const fakeBinDir = join(cwd, 'fake-bin');
       const fakeTmuxPath = join(fakeBinDir, 'tmux');
@@ -634,8 +634,8 @@ exit 1
         allowed_modes: ['ralph'],
         cooldown_ms: 0,
         max_injections_per_session: 10,
-        prompt_template: 'Continue [OMX_TMUX_INJECT]',
-        marker: '[OMX_TMUX_INJECT]',
+        prompt_template: 'Continue [OMK_TMUX_INJECT]',
+        marker: '[OMK_TMUX_INJECT]',
         dry_run: false,
         log_level: 'debug',
       });
@@ -696,7 +696,7 @@ exit 1
         env: {
           ...process.env,
           PATH: `${fakeBinDir}:${process.env.PATH || ''}`,
-          OMX_TEAM_WORKER: '',
+          OMK_TEAM_WORKER: '',
         },
       });
       assert.equal(result.status, 0, `notify-hook failed: ${result.stderr || result.stdout}`);
@@ -713,10 +713,10 @@ exit 1
 
   it('prefers scoped active mode state over global mode state for tmux pane selection', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
-      const sessionId = 'omx-abc123';
+      const sessionId = 'omk-abc123';
       const sessionStateDir = join(stateDir, 'sessions', sessionId);
       const fakeBinDir = join(cwd, 'fake-bin');
       const fakeTmuxPath = join(fakeBinDir, 'tmux');
@@ -744,8 +744,8 @@ exit 1
         allowed_modes: ['ralph'],
         cooldown_ms: 0,
         max_injections_per_session: 10,
-        prompt_template: 'Continue [OMX_TMUX_INJECT]',
-        marker: '[OMX_TMUX_INJECT]',
+        prompt_template: 'Continue [OMK_TMUX_INJECT]',
+        marker: '[OMK_TMUX_INJECT]',
         dry_run: false,
         log_level: 'debug',
       });
@@ -815,7 +815,7 @@ exit 1
         env: {
           ...process.env,
           PATH: `${fakeBinDir}:${process.env.PATH || ''}`,
-          OMX_TEAM_WORKER: '',
+          OMK_TEAM_WORKER: '',
         },
       });
       assert.equal(result.status, 0, `notify-hook failed: ${result.stderr || result.stdout}`);
@@ -832,10 +832,10 @@ exit 1
 
   it('skips injection when the resolved pane is still busy', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
-      const sessionId = 'omx-busy-pane';
+      const sessionId = 'omk-busy-pane';
       const sessionStateDir = join(stateDir, 'sessions', sessionId);
       const fakeBinDir = join(cwd, 'fake-bin');
       const fakeTmuxPath = join(fakeBinDir, 'tmux');
@@ -854,8 +854,8 @@ exit 1
         allowed_modes: ['ralph'],
         cooldown_ms: 0,
         max_injections_per_session: 10,
-        prompt_template: 'Continue [OMX_TMUX_INJECT]',
-        marker: '[OMX_TMUX_INJECT]',
+        prompt_template: 'Continue [OMK_TMUX_INJECT]',
+        marker: '[OMK_TMUX_INJECT]',
         dry_run: false,
         log_level: 'debug',
       });
@@ -921,7 +921,7 @@ exit 1
         env: {
           ...process.env,
           PATH: `${fakeBinDir}:${process.env.PATH || ''}`,
-          OMX_TEAM_WORKER: '',
+          OMK_TEAM_WORKER: '',
         },
       });
       assert.equal(result.status, 0, `notify-hook failed: ${result.stderr || result.stdout}`);

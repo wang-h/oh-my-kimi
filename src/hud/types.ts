@@ -111,7 +111,7 @@ export interface HudGitConfig {
   repoLabel?: string;
 }
 
-/** HUD configuration stored in .omx/hud-config.json */
+/** HUD configuration stored in .omk/hud-config.json */
 export interface HudConfig {
   preset?: HudPreset;
   git?: HudGitConfig;

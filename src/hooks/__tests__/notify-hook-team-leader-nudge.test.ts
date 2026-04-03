@@ -10,7 +10,7 @@ import { initTeamState, enqueueDispatchRequest, readDispatchRequest } from '../.
 const NOTIFY_HOOK_SCRIPT = new URL('../../../dist/scripts/notify-hook.js', import.meta.url);
 
 async function withTempWorkingDir(run: (cwd: string) => Promise<void>): Promise<void> {
-  const cwd = await mkdtemp(join(tmpdir(), 'omx-notify-team-nudge-'));
+  const cwd = await mkdtemp(join(tmpdir(), 'omk-notify-team-nudge-'));
   try {
     await run(cwd);
   } finally {
@@ -85,12 +85,12 @@ function runNotifyHook(
     env: {
       ...process.env,
       PATH: `${fakeBinDir}:${process.env.PATH || ''}`,
-      OMX_TEAM_LEADER_NUDGE_MS: '10000',
-      OMX_TEAM_LEADER_STALE_MS: '10000',
-      OMX_TEAM_WORKER: '',
-      OMX_TEAM_STATE_ROOT: '',
-      OMX_TEAM_LEADER_CWD: '',
-      OMX_MODEL_INSTRUCTIONS_FILE: '',
+      OMK_TEAM_LEADER_NUDGE_MS: '10000',
+      OMK_TEAM_LEADER_STALE_MS: '10000',
+      OMK_TEAM_WORKER: '',
+      OMK_TEAM_STATE_ROOT: '',
+      OMK_TEAM_LEADER_CWD: '',
+      OMK_MODEL_INSTRUCTIONS_FILE: '',
       TMUX: '',
       TMUX_PANE: '',
       ...extraEnv,
@@ -101,7 +101,7 @@ function runNotifyHook(
 describe('notify-hook leader-side authority handoff', () => {
   it('does not inject leader nudge from notify-hook when team is active and stale', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'handoff-alpha';
@@ -158,7 +158,7 @@ describe('notify-hook leader-side authority handoff', () => {
       const fakeBinDir = join(cwd, 'fake-bin');
       const fakeTmuxPath = join(fakeBinDir, 'tmux');
       const tmuxLogPath = join(cwd, 'tmux.log');
-      await mkdir(join(cwd, '.omx', 'logs'), { recursive: true });
+      await mkdir(join(cwd, '.omk', 'logs'), { recursive: true });
       await mkdir(fakeBinDir, { recursive: true });
       await writeFile(fakeTmuxPath, buildFakeTmux(tmuxLogPath));
       await chmod(fakeTmuxPath, 0o755);
@@ -181,7 +181,7 @@ describe('notify-hook leader-side authority handoff', () => {
 
   it('does not nudge stale leader when recent team status activity proves the leader is active', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'beta-active-status';
@@ -202,7 +202,7 @@ describe('notify-hook leader-side authority handoff', () => {
       });
       await writeJson(join(teamDir, 'config.json'), {
         name: teamName,
-        tmux_session: 'omx-team-beta-active-status',
+        tmux_session: 'omk-team-beta-active-status',
         leader_pane_id: '%92',
         workers: [
           { name: 'worker-1', index: 1, pane_id: '%10' },
@@ -243,7 +243,7 @@ describe('notify-hook team leader nudge', () => {
 
   it('disables leader nudges when deep-interview state is active', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'deep-interview-suppressed';
@@ -292,7 +292,7 @@ describe('notify-hook team leader nudge', () => {
 
   it('sends immediate all-workers-idle nudge for active team (leader context)', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'idle-alpha';
@@ -344,8 +344,8 @@ describe('notify-hook team leader nudge', () => {
       const tmuxLog = await readFile(tmuxLogPath, 'utf-8');
       assert.match(tmuxLog, /send-keys/);
       assert.match(tmuxLog, /-t %99/, 'should target leader pane when present');
-      assert.match(tmuxLog, /\[OMX\] All 2 workers idle/, 'should emit all-workers-idle nudge');
-      assert.match(tmuxLog, /\[OMX_TMUX_INJECT\]/, 'should include injection marker');
+      assert.match(tmuxLog, /\[OMK\] All 2 workers idle/, 'should emit all-workers-idle nudge');
+      assert.match(tmuxLog, /\[OMK_TMUX_INJECT\]/, 'should include injection marker');
       const submitMatches = tmuxLog.match(/send-keys -t %99 C-m/g) || [];
       assert.equal(submitMatches.length, 2, 'leader nudge should submit with isolated double C-m');
       assert.ok(!/send-keys[^\n]*-l[^\n]*C-m/.test(tmuxLog), 'must not mix literal payload with submit keypresses');
@@ -362,7 +362,7 @@ describe('notify-hook team leader nudge', () => {
 
   it('suggests shutdown when all workers are idle and the current task set is complete', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'idle-shutdown';
@@ -420,16 +420,16 @@ describe('notify-hook team leader nudge', () => {
       assert.equal(result.status, 0, `notify-hook failed: ${result.stderr || result.stdout}`);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf-8');
-      assert.match(tmuxLog, /\[OMX\] All 2 workers idle\./);
+      assert.match(tmuxLog, /\[OMK\] All 2 workers idle\./);
       assert.match(tmuxLog, /Team idle-shutdown is complete and waiting on leader action/);
-      assert.match(tmuxLog, /Next: decide whether to reconcile\/merge results or gracefully shut down: omx team shutdown/);
+      assert.match(tmuxLog, /Next: decide whether to reconcile\/merge results or gracefully shut down: omk team shutdown/);
       assert.doesNotMatch(tmuxLog, /keep polling/);
     });
   });
 
   it('suggests reusing the team when follow-up tasks are pending and worker panes are still reusable', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'idle-followup-reuse';
@@ -486,16 +486,16 @@ describe('notify-hook team leader nudge', () => {
       assert.equal(result.status, 0, `notify-hook failed: ${result.stderr || result.stdout}`);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf-8');
-      assert.match(tmuxLog, /\[OMX\] All 2 workers idle/);
+      assert.match(tmuxLog, /\[OMK\] All 2 workers idle/);
       assert.match(tmuxLog, /Next: assign the next follow-up task to this idle team/);
       assert.doesNotMatch(tmuxLog, /launch a new team/);
-      assert.doesNotMatch(tmuxLog, /omx team shutdown/);
+      assert.doesNotMatch(tmuxLog, /omk team shutdown/);
     });
   });
 
   it('suggests launching a new team when follow-up tasks are pending but worker panes are no longer reusable', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'idle-followup-relaunch';
@@ -552,7 +552,7 @@ describe('notify-hook team leader nudge', () => {
       assert.equal(result.status, 0, `notify-hook failed: ${result.stderr || result.stdout}`);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf-8');
-      assert.match(tmuxLog, /\[OMX\] All 2 workers idle/);
+      assert.match(tmuxLog, /\[OMK\] All 2 workers idle/);
       assert.match(tmuxLog, /Next: launch a new team for the next task set/);
       assert.doesNotMatch(tmuxLog, /assign the next follow-up task to this idle team/);
     });
@@ -560,7 +560,7 @@ describe('notify-hook team leader nudge', () => {
 
   it('falls back to global team-state when session-scoped state is active but team-state.json remains global', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const sessionId = 'sess-idle-fallback';
@@ -613,13 +613,13 @@ describe('notify-hook team leader nudge', () => {
       const tmuxLog = await readFile(tmuxLogPath, 'utf-8');
       assert.match(tmuxLog, /send-keys/);
       assert.match(tmuxLog, /-t %97/, 'should still target the leader pane');
-      assert.match(tmuxLog, /\[OMX\] All 2 workers idle/, 'global team-state fallback should still fire idle nudge');
+      assert.match(tmuxLog, /\[OMK\] All 2 workers idle/, 'global team-state fallback should still fire idle nudge');
     });
   });
 
   it('nudges leader via tmux send-keys when team is active and mailbox has messages', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'alpha';
@@ -667,13 +667,13 @@ describe('notify-hook team leader nudge', () => {
       assert.match(tmuxLog, /-t %91/);
       assert.doesNotMatch(tmuxLog, /-t devsess:0/);
       assert.match(tmuxLog, /Team alpha:/);
-      assert.match(tmuxLog, /\[OMX_TMUX_INJECT\]/, 'should include injection marker');
+      assert.match(tmuxLog, /\[OMK_TMUX_INJECT\]/, 'should include injection marker');
     });
   });
 
   it('surfaces ack-like mailbox replies without work-start evidence as missing-start nudges', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'ack-missing-start';
@@ -725,7 +725,7 @@ describe('notify-hook team leader nudge', () => {
       assert.match(tmuxLog, /worker-1 said "on it"/);
       assert.match(tmuxLog, /no start evidence/);
       assert.match(tmuxLog, /status: unknown/);
-      assert.match(tmuxLog, /Next: check worker-1 msg\/output, confirm task in omx team status ack-missing-start/);
+      assert.match(tmuxLog, /Next: check worker-1 msg\/output, confirm task in omk team status ack-missing-start/);
 
       const eventsPath = join(teamDir, 'events', 'events.ndjson');
       const events = (await readFile(eventsPath, 'utf-8')).trim().split('\n').map(line => JSON.parse(line));
@@ -737,7 +737,7 @@ describe('notify-hook team leader nudge', () => {
 
   it('does not classify ack-like replies as missing-start after a worker has claimed work', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'ack-with-start';
@@ -807,7 +807,7 @@ describe('notify-hook team leader nudge', () => {
       const tmuxLog = await readFile(tmuxLogPath, 'utf-8');
       assert.doesNotMatch(tmuxLog, /no start evidence/);
       assert.match(tmuxLog, /Team ack-with-start: 1 msg\(s\) for leader/);
-      assert.match(tmuxLog, /Next: read messages; keep orchestrating; if done, gracefully shut down: omx team shutdown ack-with-start/);
+      assert.match(tmuxLog, /Next: read messages; keep orchestrating; if done, gracefully shut down: omk team shutdown ack-with-start/);
 
       const eventsPath = join(teamDir, 'events', 'events.ndjson');
       const events = (await readFile(eventsPath, 'utf-8')).trim().split('\n').map(line => JSON.parse(line));
@@ -820,7 +820,7 @@ describe('notify-hook team leader nudge', () => {
 
   it('does not re-nudge for the same fresh mailbox message on repeated notify-hook runs', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'fresh-mailbox-bounded';
@@ -867,9 +867,9 @@ describe('notify-hook team leader nudge', () => {
       await writeFile(fakeTmuxPath, buildFakeTmux(tmuxLogPath));
       await chmod(fakeTmuxPath, 0o755);
 
-      const first = runNotifyHook(cwd, fakeBinDir, { OMX_TEAM_LEADER_NUDGE_MS: '600000' });
+      const first = runNotifyHook(cwd, fakeBinDir, { OMK_TEAM_LEADER_NUDGE_MS: '600000' });
       assert.equal(first.status, 0, `notify-hook failed: ${first.stderr || first.stdout}`);
-      const second = runNotifyHook(cwd, fakeBinDir, { OMX_TEAM_LEADER_NUDGE_MS: '600000' });
+      const second = runNotifyHook(cwd, fakeBinDir, { OMK_TEAM_LEADER_NUDGE_MS: '600000' });
       assert.equal(second.status, 0, `notify-hook failed: ${second.stderr || second.stdout}`);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf-8');
@@ -880,7 +880,7 @@ describe('notify-hook team leader nudge', () => {
 
   it('does not inject leader nudge into a shell pane', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'shell-guard';
@@ -967,7 +967,7 @@ exit 0
 
   it('does not inject leader nudge while leader pane is in copy-mode', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'scroll-guard';
@@ -1058,7 +1058,7 @@ exit 0
 
   it('syncs stale root team-state to inactive when team-local phase is already terminal', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'terminal-sync';
@@ -1104,7 +1104,7 @@ exit 0
 
   it('does not nudge completed teams on reopen even when config and idle worker state still exist', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'completed-reopen';
@@ -1162,7 +1162,7 @@ exit 0
 
   it('does not nudge a team owned by another session', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'other-session-team';
@@ -1230,7 +1230,7 @@ exit 0
 
   it('nudges when worker panes are alive and leader is stale (no recent HUD turn)', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'beta';
@@ -1250,7 +1250,7 @@ exit 0
       });
       await writeJson(join(teamDir, 'config.json'), {
         name: teamName,
-        tmux_session: 'omx-team-beta',
+        tmux_session: 'omk-team-beta',
         leader_pane_id: '%92',
       });
 
@@ -1272,15 +1272,15 @@ exit 0
       assert.match(tmuxLog, /Team beta:/);
       assert.match(tmuxLog, /leader stale/);
       assert.match(tmuxLog, /pane\(s\) still active/);
-      assert.match(tmuxLog, /Next: check messages; keep orchestrating; if done, gracefully shut down: omx team shutdown beta/);
+      assert.match(tmuxLog, /Next: check messages; keep orchestrating; if done, gracefully shut down: omk team shutdown beta/);
       assert.doesNotMatch(tmuxLog, /keep polling/);
-      assert.match(tmuxLog, /\[OMX_TMUX_INJECT\]/, 'should include injection marker');
+      assert.match(tmuxLog, /\[OMK_TMUX_INJECT\]/, 'should include injection marker');
     });
   });
 
   it('nudges when team progress is stalled even if timing signals are fresh or missing (fallback threshold)', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'stalled-progress';
@@ -1304,7 +1304,7 @@ exit 0
       });
       await writeJson(join(teamDir, 'config.json'), {
         name: teamName,
-        tmux_session: 'omx-team-stalled-progress',
+        tmux_session: 'omk-team-stalled-progress',
         leader_pane_id: '%90',
         workers: [
           { name: 'worker-1', index: 1, pane_id: '%10' },
@@ -1385,16 +1385,16 @@ exit 0
       await chmod(fakeTmuxPath, 0o755);
 
       const result = runNotifyHook(cwd, fakeBinDir, {
-        OMX_TEAM_PROGRESS_STALL_MS: '60000',
-        OMX_TEAM_LEADER_NUDGE_MS: '30000',
+        OMK_TEAM_PROGRESS_STALL_MS: '60000',
+        OMK_TEAM_LEADER_NUDGE_MS: '30000',
       });
       assert.equal(result.status, 0, `notify-hook failed: ${result.stderr || result.stdout}`);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf-8');
       assert.match(tmuxLog, /Team stalled-progress: leader stale, no progress 3m/);
-      assert.match(tmuxLog, /Next: omx team status stalled-progress; read worker messages; unblock\/reassign or shutdown\./);
+      assert.match(tmuxLog, /Next: omk team status stalled-progress; read worker messages; unblock\/reassign or shutdown\./);
       assert.doesNotMatch(tmuxLog, /keep polling/);
-      assert.match(tmuxLog, /\[OMX_TMUX_INJECT\]/);
+      assert.match(tmuxLog, /\[OMK_TMUX_INJECT\]/);
 
       const eventsPath = join(teamDir, 'events', 'events.ndjson');
       const events = (await readFile(eventsPath, 'utf-8')).trim().split('\n').map(line => JSON.parse(line));
@@ -1405,7 +1405,7 @@ exit 0
 
   it('nudges when team progress is stalled before the leader becomes stale (fallback threshold)', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'stalled-before-stale';
@@ -1429,7 +1429,7 @@ exit 0
       });
       await writeJson(join(teamDir, 'config.json'), {
         name: teamName,
-        tmux_session: 'omx-team-stalled-before-stale',
+        tmux_session: 'omk-team-stalled-before-stale',
         leader_pane_id: '%89',
         workers: [
           { name: 'worker-1', index: 1, pane_id: '%10' },
@@ -1510,15 +1510,15 @@ exit 0
       await chmod(fakeTmuxPath, 0o755);
 
       const result = runNotifyHook(cwd, fakeBinDir, {
-        OMX_TEAM_PROGRESS_STALL_MS: '60000',
-        OMX_TEAM_LEADER_NUDGE_MS: '30000',
-        OMX_TEAM_LEADER_STALE_MS: '60000',
+        OMK_TEAM_PROGRESS_STALL_MS: '60000',
+        OMK_TEAM_LEADER_NUDGE_MS: '30000',
+        OMK_TEAM_LEADER_STALE_MS: '60000',
       });
       assert.equal(result.status, 0, `notify-hook failed: ${result.stderr || result.stdout}`);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf-8');
       assert.match(tmuxLog, /Team stalled-before-stale: worker panes stalled, no progress 3m/);
-      assert.match(tmuxLog, /Next: omx team status stalled-before-stale; read worker messages; unblock\/reassign or shutdown\./);
+      assert.match(tmuxLog, /Next: omk team status stalled-before-stale; read worker messages; unblock\/reassign or shutdown\./);
       assert.doesNotMatch(tmuxLog, /keep polling/);
       assert.doesNotMatch(tmuxLog, /leader stale/);
 
@@ -1533,7 +1533,7 @@ exit 0
 
   it('nudges stalled team after configurable worker turn stall window elapses (primary threshold)', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'worker-turn-stall-threshold';
@@ -1557,7 +1557,7 @@ exit 0
       });
       await writeJson(join(teamDir, 'config.json'), {
         name: teamName,
-        tmux_session: 'omx-team-worker-turn-stall-threshold',
+        tmux_session: 'omk-team-worker-turn-stall-threshold',
         leader_pane_id: '%86',
         workers: [
           { name: 'worker-1', index: 1, pane_id: '%10' },
@@ -1621,10 +1621,10 @@ exit 0
       await chmod(fakeTmuxPath, 0o755);
 
       const result = runNotifyHook(cwd, fakeBinDir, {
-        OMX_TEAM_PROGRESS_STALL_MS: '120000',
-        OMX_TEAM_WORKER_TURN_STALL_MS: '30000',
-        OMX_TEAM_LEADER_NUDGE_MS: '30000',
-        OMX_TEAM_LEADER_STALE_MS: '60000',
+        OMK_TEAM_PROGRESS_STALL_MS: '120000',
+        OMK_TEAM_WORKER_TURN_STALL_MS: '30000',
+        OMK_TEAM_LEADER_NUDGE_MS: '30000',
+        OMK_TEAM_LEADER_STALE_MS: '60000',
       });
       assert.equal(result.status, 0, `notify-hook failed: ${result.stderr || result.stdout}`);
 
@@ -1635,7 +1635,7 @@ exit 0
 
   it('does not nudge stalled team when an in-progress worker is still advancing heartbeat turns', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'active-turns-no-stall';
@@ -1659,7 +1659,7 @@ exit 0
       });
       await writeJson(join(teamDir, 'config.json'), {
         name: teamName,
-        tmux_session: 'omx-team-active-turns-no-stall',
+        tmux_session: 'omk-team-active-turns-no-stall',
         leader_pane_id: '%87',
         workers: [
           { name: 'worker-1', index: 1, pane_id: '%10' },
@@ -1740,9 +1740,9 @@ exit 0
       await chmod(fakeTmuxPath, 0o755);
 
       const result = runNotifyHook(cwd, fakeBinDir, {
-        OMX_TEAM_PROGRESS_STALL_MS: '60000',
-        OMX_TEAM_LEADER_NUDGE_MS: '30000',
-        OMX_TEAM_LEADER_STALE_MS: '60000',
+        OMK_TEAM_PROGRESS_STALL_MS: '60000',
+        OMK_TEAM_LEADER_NUDGE_MS: '30000',
+        OMK_TEAM_LEADER_STALE_MS: '60000',
       });
       assert.equal(result.status, 0, `notify-hook failed: ${result.stderr || result.stdout}`);
 
@@ -1754,7 +1754,7 @@ exit 0
 
   it('bounds repeated stalled-team nudges before leader stale by cooldown', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'stalled-before-stale-bounded';
@@ -1778,7 +1778,7 @@ exit 0
       });
       await writeJson(join(teamDir, 'config.json'), {
         name: teamName,
-        tmux_session: 'omx-team-stalled-before-stale-bounded',
+        tmux_session: 'omk-team-stalled-before-stale-bounded',
         leader_pane_id: '%88',
         workers: [
           { name: 'worker-1', index: 1, pane_id: '%10' },
@@ -1852,29 +1852,29 @@ exit 0
       await chmod(fakeTmuxPath, 0o755);
 
       const first = runNotifyHook(cwd, fakeBinDir, {
-        OMX_TEAM_PROGRESS_STALL_MS: '60000',
-        OMX_TEAM_LEADER_NUDGE_MS: '30000',
-        OMX_TEAM_LEADER_STALE_MS: '60000',
+        OMK_TEAM_PROGRESS_STALL_MS: '60000',
+        OMK_TEAM_LEADER_NUDGE_MS: '30000',
+        OMK_TEAM_LEADER_STALE_MS: '60000',
       });
       assert.equal(first.status, 0, `notify-hook failed: ${first.stderr || first.stdout}`);
 
       const second = runNotifyHook(cwd, fakeBinDir, {
-        OMX_TEAM_PROGRESS_STALL_MS: '60000',
-        OMX_TEAM_LEADER_NUDGE_MS: '30000',
-        OMX_TEAM_LEADER_STALE_MS: '60000',
+        OMK_TEAM_PROGRESS_STALL_MS: '60000',
+        OMK_TEAM_LEADER_NUDGE_MS: '30000',
+        OMK_TEAM_LEADER_STALE_MS: '60000',
       });
       assert.equal(second.status, 0, `notify-hook failed: ${second.stderr || second.stdout}`);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf-8');
       const sends = tmuxLog.match(/send-keys -t %88 -l Team stalled-before-stale-bounded: worker panes stalled, no progress/g) || [];
       assert.equal(sends.length, 1, 'cooldown should keep repeated stalled-team nudges bounded');
-      assert.match(tmuxLog, /Next: omx team status stalled-before-stale-bounded; read worker messages; unblock\/reassign or shutdown\./);
+      assert.match(tmuxLog, /Next: omk team status stalled-before-stale-bounded; read worker messages; unblock\/reassign or shutdown\./);
     });
   });
 
   it('does not treat leader and HUD panes as active worker panes when worker pane ids are known', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'stale-no-workers';
@@ -1894,7 +1894,7 @@ exit 0
       });
       await writeJson(join(teamDir, 'config.json'), {
         name: teamName,
-        tmux_session: 'omx-team-stale-no-workers',
+        tmux_session: 'omk-team-stale-no-workers',
         leader_pane_id: '%92',
         hud_pane_id: '%93',
         workers: [
@@ -1921,7 +1921,7 @@ exit 0
 
   it('does not send a generic periodic leader nudge when the leader is not stale', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'fresh-leader';
@@ -1941,7 +1941,7 @@ exit 0
       });
       await writeJson(join(teamDir, 'config.json'), {
         name: teamName,
-        tmux_session: 'omx-team-fresh',
+        tmux_session: 'omk-team-fresh',
         leader_pane_id: '%95',
       });
       await writeJson(join(stateDir, 'hud-state.json'), {
@@ -1952,7 +1952,7 @@ exit 0
       await writeFile(fakeTmuxPath, buildFakeTmux(tmuxLogPath));
       await chmod(fakeTmuxPath, 0o755);
 
-      const result = runNotifyHook(cwd, fakeBinDir, { OMX_TEAM_LEADER_NUDGE_MS: '30000' });
+      const result = runNotifyHook(cwd, fakeBinDir, { OMK_TEAM_LEADER_NUDGE_MS: '30000' });
       assert.equal(result.status, 0, `notify-hook failed: ${result.stderr || result.stdout}`);
 
       if (existsSync(tmuxLogPath)) {
@@ -1964,7 +1964,7 @@ exit 0
 
   it('uses a 30s cadence for stale leader follow-up nudges', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'stale-cadence';
@@ -1985,7 +1985,7 @@ exit 0
       });
       await writeJson(join(teamDir, 'config.json'), {
         name: teamName,
-        tmux_session: 'omx-team-stale-cadence',
+        tmux_session: 'omk-team-stale-cadence',
         leader_pane_id: '%96',
       });
 
@@ -2007,7 +2007,7 @@ exit 0
       await writeFile(fakeTmuxPath, buildFakeTmux(tmuxLogPath));
       await chmod(fakeTmuxPath, 0o755);
 
-      const blocked = runNotifyHook(cwd, fakeBinDir, { OMX_TEAM_LEADER_NUDGE_MS: '30000' });
+      const blocked = runNotifyHook(cwd, fakeBinDir, { OMK_TEAM_LEADER_NUDGE_MS: '30000' });
       assert.equal(blocked.status, 0, `notify-hook failed: ${blocked.stderr || blocked.stdout}`);
 
       if (existsSync(tmuxLogPath)) {
@@ -2025,7 +2025,7 @@ exit 0
         },
       });
 
-      const allowed = runNotifyHook(cwd, fakeBinDir, { OMX_TEAM_LEADER_NUDGE_MS: '30000' });
+      const allowed = runNotifyHook(cwd, fakeBinDir, { OMK_TEAM_LEADER_NUDGE_MS: '30000' });
       assert.equal(allowed.status, 0, `notify-hook failed: ${allowed.stderr || allowed.stdout}`);
 
       const finalLog = await readFile(tmuxLogPath, 'utf-8');
@@ -2036,7 +2036,7 @@ exit 0
 
   it('emits team_leader_nudge event to events.ndjson when nudge fires', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'gamma';
@@ -2059,7 +2059,7 @@ exit 0
       });
       await writeJson(join(teamDir, 'config.json'), {
         name: teamName,
-        tmux_session: 'omx-team-gamma',
+        tmux_session: 'omk-team-gamma',
         leader_pane_id: '%93',
       });
       await writeJson(join(mailboxDir, 'leader-fixed.json'), {
@@ -2097,7 +2097,7 @@ exit 0
 
   it('defers leader nudge when leader_pane_id is missing', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'gamma-missing-pane';
@@ -2170,7 +2170,7 @@ exit 0
 
   it('bounds repeated all-workers-idle nudges by cooldown', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'idle-bounded';
@@ -2213,20 +2213,20 @@ exit 0
       await writeFile(fakeTmuxPath, buildFakeTmux(tmuxLogPath));
       await chmod(fakeTmuxPath, 0o755);
 
-      const first = runNotifyHook(cwd, fakeBinDir, { OMX_TEAM_LEADER_ALL_IDLE_COOLDOWN_MS: '600000' });
+      const first = runNotifyHook(cwd, fakeBinDir, { OMK_TEAM_LEADER_ALL_IDLE_COOLDOWN_MS: '600000' });
       assert.equal(first.status, 0, `notify-hook failed: ${first.stderr || first.stdout}`);
-      const second = runNotifyHook(cwd, fakeBinDir, { OMX_TEAM_LEADER_ALL_IDLE_COOLDOWN_MS: '600000' });
+      const second = runNotifyHook(cwd, fakeBinDir, { OMK_TEAM_LEADER_ALL_IDLE_COOLDOWN_MS: '600000' });
       assert.equal(second.status, 0, `notify-hook failed: ${second.stderr || second.stdout}`);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf-8');
-      const sends = tmuxLog.match(/send-keys -t %98 -l \[OMX\] All 2 workers idle/g) || [];
+      const sends = tmuxLog.match(/send-keys -t %98 -l \[OMK\] All 2 workers idle/g) || [];
       assert.equal(sends.length, 1, 'cooldown should keep repeated all-workers-idle leader nudges bounded');
     });
   });
 
   it('does not nudge when no active team state exists', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const fakeBinDir = join(cwd, 'fake-bin');
@@ -2255,7 +2255,7 @@ exit 0
 
   it('includes stale_leader_with_messages reason when both conditions met', async () => {
     await withTempWorkingDir(async (cwd) => {
-      const omxDir = join(cwd, '.omx');
+      const omxDir = join(cwd, '.omk');
       const stateDir = join(omxDir, 'state');
       const logsDir = join(omxDir, 'logs');
       const teamName = 'delta';
@@ -2278,7 +2278,7 @@ exit 0
       });
       await writeJson(join(teamDir, 'config.json'), {
         name: teamName,
-        tmux_session: 'omx-team-delta',
+        tmux_session: 'omk-team-delta',
         leader_pane_id: '%94',
       });
 
@@ -2311,9 +2311,9 @@ exit 0
       const tmuxLog = await readFile(tmuxLogPath, 'utf-8');
       assert.match(tmuxLog, /leader stale/);
       assert.match(tmuxLog, /msg\(s\) pending/);
-      assert.match(tmuxLog, /Next: read messages; keep orchestrating; if done, gracefully shut down: omx team shutdown delta/);
+      assert.match(tmuxLog, /Next: read messages; keep orchestrating; if done, gracefully shut down: omk team shutdown delta/);
       assert.doesNotMatch(tmuxLog, /keep polling/);
-      assert.match(tmuxLog, /\[OMX_TMUX_INJECT\]/, 'should include injection marker');
+      assert.match(tmuxLog, /\[OMK_TMUX_INJECT\]/, 'should include injection marker');
 
       // Verify event reason
       const eventsPath = join(eventsDir, 'events.ndjson');

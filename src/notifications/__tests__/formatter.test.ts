@@ -170,15 +170,15 @@ describe('parseTmuxTail', () => {
   it('keeps wrapped Korean continuation lines in the same block', () => {
     const raw = [
       'block 9: previous context',
-      'block 10: 2. 아예 ~/.codex/.omx-config.json에서 조절 가능하',
+      'block 10: 2. 아예 ~/.codex/.omk-config.json에서 조절 가능하',
       '  게 로컬 패치하기',
     ].join('\n');
 
     const result = parseTmuxTail(raw);
-    assert.ok(result.includes('block 10: 2. 아예 ~/.codex/.omx-config.json에서 조절 가능하'));
+    assert.ok(result.includes('block 10: 2. 아예 ~/.codex/.omk-config.json에서 조절 가능하'));
     assert.ok(result.includes('  게 로컬 패치하기'));
     assert.ok(
-      result.indexOf('block 10: 2. 아예 ~/.codex/.omx-config.json에서 조절 가능하') <
+      result.indexOf('block 10: 2. 아예 ~/.codex/.omk-config.json에서 조절 가능하') <
         result.indexOf('  게 로컬 패치하기'),
     );
   });

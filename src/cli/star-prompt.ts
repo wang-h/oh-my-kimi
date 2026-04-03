@@ -1,7 +1,7 @@
 /**
  * One-time GitHub star prompt shown at OMX startup.
  * Skipped when no TTY or when gh CLI is not installed.
- * State stored globally (~/.omx/state/star-prompt.json) so it shows once per user.
+ * State stored globally (~/.omk/state/star-prompt.json) so it shows once per user.
  */
 
 import { readFile, writeFile, mkdir } from 'fs/promises';
@@ -18,7 +18,7 @@ interface StarPromptState {
 }
 
 export function starPromptStatePath(): string {
-  return join(homedir(), '.omx', 'state', 'star-prompt.json');
+  return join(homedir(), '.omk', 'state', 'star-prompt.json');
 }
 
 export async function hasBeenPrompted(): Promise<boolean> {
@@ -34,7 +34,7 @@ export async function hasBeenPrompted(): Promise<boolean> {
 }
 
 export async function markPrompted(): Promise<void> {
-  const stateDir = join(homedir(), '.omx', 'state');
+  const stateDir = join(homedir(), '.omk', 'state');
   await mkdir(stateDir, { recursive: true });
   await writeFile(
     starPromptStatePath(),

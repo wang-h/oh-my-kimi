@@ -387,7 +387,7 @@ function parseValidatedTaskIdArray(value: unknown, fieldName: string): string[] 
 
 function teamStateExists(teamName: string, candidateCwd: string): boolean {
   if (!TEAM_NAME_SAFE_PATTERN.test(teamName)) return false;
-  const teamRoot = join(candidateCwd, '.omx', 'state', 'team', teamName);
+  const teamRoot = join(candidateCwd, '.omk', 'state', 'team', teamName);
   return existsSync(join(teamRoot, 'config.json')) || existsSync(join(teamRoot, 'tasks')) || existsSync(teamRoot);
 }
 
@@ -409,7 +409,7 @@ function stateRootToWorkingDirectory(stateRoot: string): string {
 }
 
 function resolveTeamWorkingDirectoryFromMetadata(teamName: string, candidateCwd: string): string | null {
-  const teamRoot = join(candidateCwd, '.omx', 'state', 'team', teamName);
+  const teamRoot = join(candidateCwd, '.omk', 'state', 'team', teamName);
   if (!existsSync(teamRoot)) return null;
 
   const fromManifest = readTeamStateRootFromManifest(join(teamRoot, 'manifest.v2.json'));
@@ -421,7 +421,7 @@ function resolveTeamWorkingDirectoryFromMetadata(teamName: string, candidateCwd:
 function resolveTeamWorkingDirectory(teamName: string, preferredCwd: string): string {
   const normalizedTeamName = String(teamName || '').trim();
   if (!normalizedTeamName) return preferredCwd;
-  const envTeamStateRoot = process.env.OMX_TEAM_STATE_ROOT;
+  const envTeamStateRoot = process.env.OMK_TEAM_STATE_ROOT;
   if (typeof envTeamStateRoot === 'string' && envTeamStateRoot.trim() !== '') {
     return stateRootToWorkingDirectory(envTeamStateRoot.trim());
   }

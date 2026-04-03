@@ -1,7 +1,7 @@
 # oh-my-codex v0.9.1
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Yeachan-Heo/oh-my-codex/v0.9.1/docs/shared/omx-character-spark-initiative.jpg" alt="OMX character sparked for the Spark Initiative" width="720">
+  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omk-character-spark-initiative.jpg" alt="oh-my-kimi character" width="720">
 </p>
 
 `0.9.1` is a targeted Spark Initiative hotfix release.

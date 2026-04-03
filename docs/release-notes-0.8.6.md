@@ -9,13 +9,13 @@ Contributor: [@Yeachan-Heo](https://github.com/Yeachan-Heo).
 
 ### Event-aware team waiting and runtime coordination
 
-OMX team orchestration can now wait on canonical team events in addition to terminal completion.
+OMK team orchestration can now wait on canonical team events in addition to terminal completion.
 
 This release adds:
 - additive `wake_on=event` / `after_event_id` support to `omx_run_team_wait`
 - shared event reading, normalization, and cursor helpers in the team state layer
 - canonical event typing across contracts, runtime state, and API interop
-- `omx team await <team-name>` CLI support
+- `omk team await <team-name>` CLI support
 - runtime emission of `worker_state_changed` while preserving legacy `worker_idle` compatibility
 - stronger visibility into notify-fallback watcher dispatch/drain progress and deferred leader state
 
@@ -23,7 +23,7 @@ PR: [#609](https://github.com/Yeachan-Heo/oh-my-codex/pull/609)
 
 ### GPT-5.4 prompt-guidance rollout and expansion
 
-OMX's prompt and workflow surfaces were updated in two passes to better reflect OpenAI's GPT-5.4 prompt-guidance patterns.
+OMK's prompt and workflow surfaces were updated in two passes to better reflect OpenAI's GPT-5.4 prompt-guidance patterns.
 
 Core-surface pass ([#611](https://github.com/Yeachan-Heo/oh-my-codex/pull/611), addresses [#608](https://github.com/Yeachan-Heo/oh-my-codex/issues/608)):
 - root `AGENTS.md`

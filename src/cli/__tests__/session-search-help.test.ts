@@ -19,7 +19,7 @@ function runOmx(cwd: string, argv: string[]) {
 
 describe('omx session help', () => {
   it('documents the session search command in help output', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-session-help-'));
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-session-help-'));
     try {
       const mainHelp = runOmx(cwd, ['--help']);
       assert.equal(mainHelp.status, 0, mainHelp.stderr || mainHelp.stdout);

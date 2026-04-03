@@ -31,29 +31,29 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8ca58f447f06ed17d5fc4043ce1b10dd205e060fb3ce5b979b8ed8e59ff3f79"
 
 [[package]]
-name = "omx-explore-harness"
-version = "0.11.12"
+name = "omk-explore-harness"
+version = "0.11.13"
 
 [[package]]
-name = "omx-mux"
-version = "0.11.12"
+name = "omk-mux"
+version = "0.11.13"
 dependencies = [
  "serde",
  "serde_json",
 ]
 
 [[package]]
-name = "omx-runtime"
-version = "0.11.12"
+name = "omk-runtime"
+version = "0.11.13"
 dependencies = [
- "omx-mux",
- "omx-runtime-core",
+ "omk-mux",
+ "omk-runtime-core",
  "serde_json",
 ]
 
 [[package]]
-name = "omx-runtime-core"
-version = "0.11.12"
+name = "omk-runtime-core"
+version = "0.11.13"
 dependencies = [
  "fs2",
  "serde",
@@ -61,10 +61,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "omx-sparkshell"
-version = "0.11.12"
+name = "omk-sparkshell"
+version = "0.11.13"
 dependencies = [
- "omx-mux",
+ "omk-mux",
 ]
 
 [[package]]

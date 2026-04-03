@@ -49,7 +49,7 @@ return a `StageResult` with status, artifacts, and duration.
 
 ## State Management
 
-Pipeline state persists via the ModeState system at `.omx/state/pipeline-state.json`.
+Pipeline state persists via the ModeState system at `.omk/state/pipeline-state.json`.
 The HUD renders pipeline phase automatically. Resume is supported from the last incomplete stage.
 
 - **On start**: `state_write({mode: "pipeline", active: true, current_phase: "stage:ralplan"})`

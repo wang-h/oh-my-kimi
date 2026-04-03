@@ -33,7 +33,7 @@ test('resolveGitCommonDir resolves relative git common dir output against the re
 });
 
 test('hasUsableNodeModules requires the packaged build dependencies', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'omx-smoke-node-modules-'));
+  const root = await mkdtemp(join(tmpdir(), 'omk-smoke-node-modules-'));
   try {
     const nodeModules = join(root, 'node_modules');
     await mkdir(join(nodeModules, 'typescript'), { recursive: true });
@@ -55,7 +55,7 @@ test('hasUsableNodeModules requires the packaged build dependencies', async () =
 });
 
 test('resolveReusableNodeModulesSource reuses primary worktree node_modules when available', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'omx-smoke-reuse-node-modules-'));
+  const root = await mkdtemp(join(tmpdir(), 'omk-smoke-reuse-node-modules-'));
   try {
     const primaryRepo = join(root, 'primary');
     const worktreeRepo = join(root, 'worktree');
@@ -82,7 +82,7 @@ test('resolveReusableNodeModulesSource reuses primary worktree node_modules when
 });
 
 test('ensureRepoDependencies symlinks a reusable primary worktree node_modules', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'omx-smoke-symlink-node-modules-'));
+  const root = await mkdtemp(join(tmpdir(), 'omk-smoke-symlink-node-modules-'));
   try {
     const primaryRepo = join(root, 'primary');
     const worktreeRepo = join(root, 'worktree');
@@ -118,7 +118,7 @@ test('ensureRepoDependencies symlinks a reusable primary worktree node_modules',
 });
 
 test('ensureRepoDependencies falls back to npm ci when no reusable node_modules source exists', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'omx-smoke-install-node-modules-'));
+  const root = await mkdtemp(join(tmpdir(), 'omk-smoke-install-node-modules-'));
   try {
     const installs: string[] = [];
     const result = ensureRepoDependencies(root, {

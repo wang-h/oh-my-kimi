@@ -43,7 +43,7 @@ function runSendPaneInputInChild(params: {
 
 describe('notify-hook team tmux guard bridge', () => {
   it('submits without typing when typePrompt=false', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-team-tmux-guard-'));
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-team-tmux-guard-'));
     const fakeBinDir = join(cwd, 'fake-bin');
     const tmuxLogPath = join(cwd, 'tmux.log');
 
@@ -79,7 +79,7 @@ describe('notify-hook team tmux guard bridge', () => {
   });
 
   it('types then submits when typePrompt=true', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-team-tmux-guard-'));
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-team-tmux-guard-'));
     const fakeBinDir = join(cwd, 'fake-bin');
     const tmuxLogPath = join(cwd, 'tmux.log');
 

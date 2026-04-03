@@ -93,7 +93,7 @@ Long-running commands (install, build, test) run in background. Maximum 20 concu
 
 Ecomode can be completely disabled via config. When disabled, all ecomode keywords are ignored.
 
-Set in `~/.codex/.omx-config.json`:
+Set in `~/.codex/.omk-config.json`:
 ```json
 {
   "ecomode": {

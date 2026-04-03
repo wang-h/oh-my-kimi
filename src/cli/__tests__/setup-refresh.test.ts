@@ -48,9 +48,9 @@ describe("omx setup refresh summary and dry-run behavior", () => {
   }
 
   it("prints per-category summary and verbose changed-file detail", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-refresh-"));
     try {
-      await mkdir(join(wd, ".omx", "state"), { recursive: true });
+      await mkdir(join(wd, ".omk", "state"), { recursive: true });
       await runSetupInTempDir(wd, { scope: "project" });
 
       const skillPath = join(wd, ".kimi", "skills", "help", "SKILL.md");
@@ -73,9 +73,9 @@ describe("omx setup refresh summary and dry-run behavior", () => {
   });
 
   it("does not overwrite or create backups during dry-run", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-refresh-"));
     try {
-      await mkdir(join(wd, ".omx", "state"), { recursive: true });
+      await mkdir(join(wd, ".omk", "state"), { recursive: true });
       await runSetupInTempDir(wd, { scope: "project" });
 
       const skillPath = join(wd, ".kimi", "skills", "help", "SKILL.md");
@@ -87,7 +87,7 @@ describe("omx setup refresh summary and dry-run behavior", () => {
         dryRun: true,
       });
       assert.equal(await readFile(skillPath, "utf-8"), customized);
-      assert.equal(existsSync(join(wd, ".omx", "backups", "setup")), false);
+      assert.equal(existsSync(join(wd, ".omk", "backups", "setup")), false);
       assert.match(output, /skills: updated=/);
       assert.match(output, /skills: .*backed_up=1/);
     } finally {
@@ -95,20 +95,20 @@ describe("omx setup refresh summary and dry-run behavior", () => {
     }
   });
 
-  it("creates .gitignore with a .omx/ entry during project-scoped setup", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
+  it("creates .gitignore with a .omk/ entry during project-scoped setup", async () => {
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-refresh-"));
     try {
       await runSetupInTempDir(wd, { scope: "project" });
 
-      assert.equal(existsSync(join(wd, ".omx", "state")), true);
-      assert.equal(await readFile(join(wd, ".gitignore"), "utf-8"), ".omx/\n");
+      assert.equal(existsSync(join(wd, ".omk", "state")), true);
+      assert.equal(await readFile(join(wd, ".gitignore"), "utf-8"), ".omk/\n");
     } finally {
       await rm(wd, { recursive: true, force: true });
     }
   });
 
-  it("appends .omx/ to an existing project .gitignore without duplicating it", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
+  it("appends .omk/ to an existing project .gitignore without duplicating it", async () => {
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-refresh-"));
     try {
       await writeFile(join(wd, ".gitignore"), "node_modules/\n");
 
@@ -116,17 +116,17 @@ describe("omx setup refresh summary and dry-run behavior", () => {
       await runSetupInTempDir(wd, { scope: "project" });
 
       const gitignore = await readFile(join(wd, ".gitignore"), "utf-8");
-      assert.equal(gitignore, "node_modules/\n.omx/\n");
-      assert.equal(gitignore.match(/^\.omx\/$/gm)?.length ?? 0, 1);
+      assert.equal(gitignore, "node_modules/\n.omk/\n");
+      assert.equal(gitignore.match(/^\.omk\/$/gm)?.length ?? 0, 1);
     } finally {
       await rm(wd, { recursive: true, force: true });
     }
   });
 
   it("creates backup files under the scope-specific setup backup root when refreshing modified managed files", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-refresh-"));
     try {
-      await mkdir(join(wd, ".omx", "state"), { recursive: true });
+      await mkdir(join(wd, ".omk", "state"), { recursive: true });
       await runSetupInTempDir(wd, { scope: "project" });
 
       const promptPath = join(wd, ".kimi", "prompts", "executor.md");
@@ -135,7 +135,7 @@ describe("omx setup refresh summary and dry-run behavior", () => {
 
       await runSetupInTempDir(wd, { scope: "project" });
 
-      const backupsRoot = join(wd, ".omx", "backups", "setup");
+      const backupsRoot = join(wd, ".omk", "backups", "setup");
       assert.equal(existsSync(backupsRoot), true);
       const timestamps = await readdir(backupsRoot);
       assert.ok(timestamps.length >= 1);
@@ -154,9 +154,9 @@ describe("omx setup refresh summary and dry-run behavior", () => {
   });
 
   it("offers an upgrade from gpt-5.3-codex to gpt-5.4 when accepted", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-refresh-"));
     try {
-      await mkdir(join(wd, ".omx", "state"), { recursive: true });
+      await mkdir(join(wd, ".omk", "state"), { recursive: true });
       await mkdir(join(wd, ".kimi"), { recursive: true });
       await writeFile(
         join(wd, ".kimi", "config.toml"),
@@ -186,9 +186,9 @@ describe("omx setup refresh summary and dry-run behavior", () => {
   });
 
   it("preserves gpt-5.3-codex when the upgrade prompt is declined", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-refresh-"));
     try {
-      await mkdir(join(wd, ".omx", "state"), { recursive: true });
+      await mkdir(join(wd, ".omk", "state"), { recursive: true });
       await mkdir(join(wd, ".kimi"), { recursive: true });
       await writeFile(
         join(wd, ".kimi", "config.toml"),
@@ -211,9 +211,9 @@ describe("omx setup refresh summary and dry-run behavior", () => {
   });
 
   it("preserves gpt-5.3-codex in non-interactive runs without prompting", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-refresh-"));
     try {
-      await mkdir(join(wd, ".omx", "state"), { recursive: true });
+      await mkdir(join(wd, ".omk", "state"), { recursive: true });
       await mkdir(join(wd, ".kimi"), { recursive: true });
       await writeFile(
         join(wd, ".kimi", "config.toml"),
@@ -233,9 +233,9 @@ describe("omx setup refresh summary and dry-run behavior", () => {
   });
 
   it("skips OMX-managed [tui] writes for Codex CLI >= 0.107.0 and preserves an existing [tui] table", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-refresh-"));
     try {
-      await mkdir(join(wd, ".omx", "state"), { recursive: true });
+      await mkdir(join(wd, ".omk", "state"), { recursive: true });
       await mkdir(join(wd, ".kimi"), { recursive: true });
       await writeFile(
         join(wd, ".kimi", "config.toml"),
@@ -261,9 +261,9 @@ describe("omx setup refresh summary and dry-run behavior", () => {
   });
 
   it("keeps OMX-managed [tui] writes for older Codex CLI versions", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-refresh-"));
     try {
-      await mkdir(join(wd, ".omx", "state"), { recursive: true });
+      await mkdir(join(wd, ".omk", "state"), { recursive: true });
 
       const output = await runSetupWithCapturedLogs(wd, {
         scope: "project",
@@ -279,9 +279,9 @@ describe("omx setup refresh summary and dry-run behavior", () => {
   });
 
   it("syncs shared MCP registry entries into config.toml during setup", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-refresh-"));
     try {
-      await mkdir(join(wd, ".omx", "state"), { recursive: true });
+      await mkdir(join(wd, ".omk", "state"), { recursive: true });
       const registryPath = join(wd, "mcp-registry.json");
       await writeFile(
         registryPath,
@@ -305,14 +305,14 @@ describe("omx setup refresh summary and dry-run behavior", () => {
     }
   });
   it("syncs shared MCP registry entries into ~/.claude/settings.json for user scope", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-refresh-"));
     const previousHome = process.env.HOME;
     const previousCodexHome = process.env.CODEX_HOME;
     try {
       process.env.HOME = wd;
       delete process.env.CODEX_HOME;
 
-      await mkdir(join(wd, ".omx", "state"), { recursive: true });
+      await mkdir(join(wd, ".omk", "state"), { recursive: true });
       await mkdir(join(wd, ".claude"), { recursive: true });
       await writeFile(
         join(wd, ".claude", "settings.json"),
@@ -372,14 +372,14 @@ describe("omx setup refresh summary and dry-run behavior", () => {
   });
 
   it("does not write ~/.claude/settings.json during project-scoped setup", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-refresh-"));
     const previousHome = process.env.HOME;
     const previousCodexHome = process.env.CODEX_HOME;
     try {
       process.env.HOME = wd;
       delete process.env.CODEX_HOME;
 
-      await mkdir(join(wd, ".omx", "state"), { recursive: true });
+      await mkdir(join(wd, ".omk", "state"), { recursive: true });
       const registryPath = join(wd, "mcp-registry.json");
       await writeFile(
         registryPath,
@@ -404,14 +404,14 @@ describe("omx setup refresh summary and dry-run behavior", () => {
   });
 
   it("ignores legacy ~/.omc/mcp-registry.json during setup unless candidates are passed explicitly", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-refresh-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-refresh-"));
     const previousHome = process.env.HOME;
     const previousCodexHome = process.env.CODEX_HOME;
     try {
       process.env.HOME = wd;
       delete process.env.CODEX_HOME;
 
-      await mkdir(join(wd, ".omx", "state"), { recursive: true });
+      await mkdir(join(wd, ".omk", "state"), { recursive: true });
       await mkdir(join(wd, ".omc"), { recursive: true });
       await writeFile(
         join(wd, ".omc", "mcp-registry.json"),
@@ -428,7 +428,7 @@ describe("omx setup refresh summary and dry-run behavior", () => {
 
       const output = await runSetupWithCapturedLogs(wd, { scope: "project" });
       assert.match(output, /legacy shared MCP registry detected at .*\.omc\/mcp-registry\.json but ignored by default/i);
-      assert.match(output, /move it to .*\.omx\/mcp-registry\.json/i);
+      assert.match(output, /move it to .*\.omk\/mcp-registry\.json/i);
     } finally {
       if (typeof previousHome === "string") process.env.HOME = previousHome;
       else delete process.env.HOME;

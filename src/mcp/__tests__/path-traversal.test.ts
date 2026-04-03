@@ -5,7 +5,7 @@ import { join } from 'path';
 import { tmpdir } from 'os';
 
 describe('MCP state/team tools path traversal prevention', () => {
-  process.env.OMX_STATE_SERVER_DISABLE_AUTO_START = '1';
+  process.env.OMK_STATE_SERVER_DISABLE_AUTO_START = '1';
 
   it('rejects invalid workingDirectory inputs containing NUL bytes', async () => {
     const { handleStateToolCall } = await import('../state-server.js');
@@ -22,7 +22,7 @@ describe('MCP state/team tools path traversal prevention', () => {
 
   it('rejects traversal in mode for state_write', async () => {
     const { handleStateToolCall } = await import('../state-server.js');
-    const wd = await mkdtemp(join(tmpdir(), 'omx-traversal-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-traversal-'));
     try {
       const resp = await handleStateToolCall({
         params: {
@@ -44,7 +44,7 @@ describe('MCP state/team tools path traversal prevention', () => {
 
   it('rejects unsupported mode names for state_read', async () => {
     const { handleStateToolCall } = await import('../state-server.js');
-    const wd = await mkdtemp(join(tmpdir(), 'omx-traversal-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-traversal-'));
     try {
       const resp = await handleStateToolCall({
         params: {
@@ -65,7 +65,7 @@ describe('MCP state/team tools path traversal prevention', () => {
 
   it('team_* tools return hard-deprecated CLI-only errors even for traversal payloads', async () => {
     const { handleStateToolCall } = await import('../state-server.js');
-    const wd = await mkdtemp(join(tmpdir(), 'omx-traversal-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-traversal-'));
     try {
       const resp = await handleStateToolCall({
         params: {

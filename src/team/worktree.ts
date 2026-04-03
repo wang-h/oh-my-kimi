@@ -201,7 +201,7 @@ function resolveBranchName(input: WorktreePlanInput): string | null {
 
 function resolveWorktreePath(input: WorktreePlanInput, repoRoot: string): string {
   const parent = dirname(repoRoot);
-  const bucket = `${basename(repoRoot)}.omx-worktrees`;
+  const bucket = `${basename(repoRoot)}.omk-worktrees`;
 
   if (input.scope === 'launch') {
     if (!input.mode.enabled || input.mode.detached) {
@@ -215,12 +215,12 @@ function resolveWorktreePath(input: WorktreePlanInput, repoRoot: string): string
       throw new Error('autoresearch_worktree_requires_named_mode');
     }
     const runTag = sanitizePathToken(input.worktreeTag || 'run');
-    return join(repoRoot, '.omx', 'worktrees', `autoresearch-${sanitizePathToken(input.mode.name)}-${runTag}`);
+    return join(repoRoot, '.omk', 'worktrees', `autoresearch-${sanitizePathToken(input.mode.name)}-${runTag}`);
   }
 
   const teamName = sanitizePathToken(input.teamName || 'team');
   const workerName = sanitizePathToken(input.workerName || 'worker');
-  return join(repoRoot, '.omx', 'team', teamName, 'worktrees', workerName);
+  return join(repoRoot, '.omk', 'team', teamName, 'worktrees', workerName);
 }
 
 function findWorktreeByPath(entries: GitWorktreeEntry[], worktreePath: string): GitWorktreeEntry | null {

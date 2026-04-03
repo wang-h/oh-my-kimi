@@ -1,16 +1,16 @@
 [workspace]
 members = [
-  "crates/omx-explore",
-  "crates/omx-mux",
-  "crates/omx-runtime-core",
-  "crates/omx-runtime",
-  "crates/omx-sparkshell",
+  "crates/omk-explore",
+  "crates/omk-mux",
+  "crates/omk-runtime-core",
+  "crates/omk-runtime",
+  "crates/omk-sparkshell",
 ]
 resolver = "2"
 
 [workspace.package]
 
-version = "0.11.12"
+version = "0.11.13"
 
 edition = "2021"
 license = "MIT"

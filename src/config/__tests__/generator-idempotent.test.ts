@@ -27,24 +27,24 @@ function assertSingleOmxBlock(toml: string): void {
     "End marker should appear once",
   );
   assert.equal(
-    count(toml, /^\[mcp_servers\.omx_state\]$/gm),
+    count(toml, /^\[mcp_servers\.omk_state\]$/gm),
     1,
-    "[mcp_servers.omx_state] should appear once",
+    "[mcp_servers.omk_state] should appear once",
   );
   assert.equal(
-    count(toml, /^\[mcp_servers\.omx_memory\]$/gm),
+    count(toml, /^\[mcp_servers\.omk_memory\]$/gm),
     1,
-    "[mcp_servers.omx_memory] should appear once",
+    "[mcp_servers.omk_memory] should appear once",
   );
   assert.equal(
-    count(toml, /^\[mcp_servers\.omx_code_intel\]$/gm),
+    count(toml, /^\[mcp_servers\.omk_code_intel\]$/gm),
     1,
-    "[mcp_servers.omx_code_intel] should appear once",
+    "[mcp_servers.omk_code_intel] should appear once",
   );
   assert.equal(
-    count(toml, /^\[mcp_servers\.omx_trace\]$/gm),
+    count(toml, /^\[mcp_servers\.omk_trace\]$/gm),
     1,
-    "[mcp_servers.omx_trace] should appear once",
+    "[mcp_servers.omk_trace] should appear once",
   );
   assert.equal(count(toml, /^\[tui\]$/gm), 1, "[tui] should appear once");
   assert.equal(
@@ -69,15 +69,15 @@ function assertSingleOmxBlock(toml: string): void {
   );
   assert.equal(count(toml, /^\[env\]$/gm), 1, "[env] should appear once");
   assert.equal(
-    count(toml, /^USE_OMX_EXPLORE_CMD = "1"$/gm),
+    count(toml, /^USE_OMK_EXPLORE_CMD = "1"$/gm),
     1,
-    "USE_OMX_EXPLORE_CMD should appear once",
+    "USE_OMK_EXPLORE_CMD should appear once",
   );
 }
 
 describe("config generator idempotency (#384)", () => {
   it("first run creates config with all OMX sections", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const configPath = join(wd, "config.toml");
       await mergeConfig(configPath, wd);
@@ -92,7 +92,7 @@ describe("config generator idempotency (#384)", () => {
   });
 
   it("second run updates without duplicating any section", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const configPath = join(wd, "config.toml");
 
@@ -111,7 +111,7 @@ describe("config generator idempotency (#384)", () => {
   });
 
   it("triple run stays clean", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const configPath = join(wd, "config.toml");
 
@@ -127,7 +127,7 @@ describe("config generator idempotency (#384)", () => {
   });
 
   it("cleans up legacy config without markers", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const configPath = join(wd, "config.toml");
       // Simulate a legacy config written without OMX markers
@@ -143,12 +143,12 @@ describe("config generator idempotency (#384)", () => {
         "[features]",
         "multi_agent = true",
         "",
-        "[mcp_servers.omx_state]",
+        "[mcp_servers.omk_state]",
         'command = "node"',
         'args = ["/old/path/state-server.js"]',
         "enabled = true",
         "",
-        "[mcp_servers.omx_memory]",
+        "[mcp_servers.omk_memory]",
         'command = "node"',
         'args = ["/old/path/memory-server.js"]',
         "enabled = true",
@@ -174,7 +174,7 @@ describe("config generator idempotency (#384)", () => {
   });
 
   it("cleans up orphaned OMX sections outside marker block", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const configPath = join(wd, "config.toml");
       // Config with both orphaned sections AND a marker block
@@ -182,7 +182,7 @@ describe("config generator idempotency (#384)", () => {
         'model = "o3"',
         "",
         "# OMX State Management MCP Server",
-        "[mcp_servers.omx_state]",
+        "[mcp_servers.omk_state]",
         'command = "node"',
         'args = ["/orphaned/state-server.js"]',
         "enabled = true",
@@ -195,7 +195,7 @@ describe("config generator idempotency (#384)", () => {
         "# Managed by omx setup",
         "# ============================================================",
         "",
-        "[mcp_servers.omx_state]",
+        "[mcp_servers.omk_state]",
         'command = "node"',
         'args = ["/marker-block/state-server.js"]',
         "enabled = true",
@@ -219,7 +219,7 @@ describe("config generator idempotency (#384)", () => {
   });
 
   it("preserves user content between OMX re-runs", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const configPath = join(wd, "config.toml");
 
@@ -252,7 +252,7 @@ describe("config generator idempotency (#384)", () => {
   });
 
   it("handles config with only orphaned agents sections", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const configPath = join(wd, "config.toml");
       const orphanedAgents = [
@@ -292,7 +292,7 @@ describe("config generator idempotency (#384)", () => {
   });
 
   it("preserves non-OMX agent sections", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const configPath = join(wd, "config.toml");
       const userAgents = [
@@ -337,7 +337,7 @@ describe("config generator idempotency (#384)", () => {
   });
 
   it("merges OMX status_line into an existing user [tui] section without duplicating the table", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const configPath = join(wd, "config.toml");
       const userTui = [
@@ -369,31 +369,31 @@ describe("config generator idempotency (#384)", () => {
     });
 
     assert.doesNotMatch(toml, /^\[tui\]$/m);
-    assert.match(toml, /^\[mcp_servers\.omx_state\]$/m);
+    assert.match(toml, /^\[mcp_servers\.omk_state\]$/m);
     assert.match(toml, /^\[env\]$/m);
-    assert.match(toml, /^USE_OMX_EXPLORE_CMD = "1"$/m);
+    assert.match(toml, /^USE_OMK_EXPLORE_CMD = "1"$/m);
   });
 
-  it('seeds USE_OMX_EXPLORE_CMD=1 into generated config by default', () => {
+  it('seeds USE_OMK_EXPLORE_CMD=1 into generated config by default', () => {
     const toml = buildMergedConfig('', '/tmp/omx');
 
     assert.match(toml, /^\[env\]$/m);
-    assert.match(toml, /^USE_OMX_EXPLORE_CMD = "1"$/m);
+    assert.match(toml, /^USE_OMK_EXPLORE_CMD = "1"$/m);
   });
 
   it('preserves existing [env] keys and explicit explore routing opt-outs', () => {
     const toml = buildMergedConfig(
-      ['[env]', 'FOO = "bar"', 'USE_OMX_EXPLORE_CMD = "0"', ''].join('\n'),
+      ['[env]', 'FOO = "bar"', 'USE_OMK_EXPLORE_CMD = "0"', ''].join('\n'),
       '/tmp/omx',
     );
 
     assert.match(toml, /^\[env\]$/m);
     assert.match(toml, /^FOO = "bar"$/m);
-    assert.match(toml, /^USE_OMX_EXPLORE_CMD = "0"$/m);
+    assert.match(toml, /^USE_OMK_EXPLORE_CMD = "0"$/m);
   });
 
   it("replaces an existing OMX notify entry without leaving orphan fragments behind", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const configPath = join(wd, "config.toml");
       const existing = [
@@ -421,7 +421,7 @@ describe("config generator idempotency (#384)", () => {
     }
   });
   it("seeds context keys when root model is missing and both context keys are absent", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const configPath = join(wd, "config.toml");
       await writeFile(configPath, 'approval_policy = "on-failure"\n');
@@ -438,7 +438,7 @@ describe("config generator idempotency (#384)", () => {
   });
 
   it("can override gpt-5.3-codex to gpt-5.4 and seed 1M context defaults", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const toml = buildMergedConfig('model = \"gpt-5.3-codex\"\n', wd, {
         modelOverride: "gpt-5.4",
@@ -453,7 +453,7 @@ describe("config generator idempotency (#384)", () => {
     }
   });
   it("does not seed 1M context defaults for non-gpt-5.4 models", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const configPath = join(wd, "config.toml");
       await writeFile(configPath, 'model = "o3"\n');
@@ -470,7 +470,7 @@ describe("config generator idempotency (#384)", () => {
   });
 
   it("preserves partial user context config without backfilling the missing partner key", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const configPath = join(wd, "config.toml");
       await writeFile(
@@ -490,7 +490,7 @@ describe("config generator idempotency (#384)", () => {
   });
 
   it("does not duplicate seeded model defaults across reruns", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const configPath = join(wd, "config.toml");
       await mergeConfig(configPath, wd);
@@ -518,7 +518,7 @@ describe("config generator idempotency (#384)", () => {
   });
 
   it("writes only the global [agents] defaults into config", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const configPath = join(wd, "config.toml");
       await mergeConfig(configPath, wd);
@@ -534,7 +534,7 @@ describe("config generator idempotency (#384)", () => {
   });
 
   it("repairs config with duplicate [tui] sections from upgrade", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const configPath = join(wd, "config.toml");
       // Simulate a broken config left by an older omx setup: an orphaned
@@ -555,7 +555,7 @@ describe("config generator idempotency (#384)", () => {
         '# Managed by omx setup - manual edits preserved on next setup',
         '# ============================================================',
         '',
-        '[mcp_servers.omx_state]',
+        '[mcp_servers.omk_state]',
         'command = "node"',
         `args = ["${join(wd, "dist/mcp/state-server.js")}"]`,
         'enabled = true',
@@ -586,7 +586,7 @@ describe("config generator idempotency (#384)", () => {
   });
 
   it("repairConfigIfNeeded fixes duplicate [tui] and is a no-op when clean", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const configPath = join(wd, "config.toml");
 
@@ -617,7 +617,7 @@ describe("config generator idempotency (#384)", () => {
   });
 
   it("syncs shared MCP registry entries in a dedicated managed block", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-idem-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-idem-"));
     try {
       const first = buildMergedConfig("", wd, {
         sharedMcpServers: [
@@ -629,7 +629,7 @@ describe("config generator idempotency (#384)", () => {
             startupTimeoutSec: 12,
           },
         ],
-        sharedMcpRegistrySource: "/tmp/.omx/mcp-registry.json",
+        sharedMcpRegistrySource: "/tmp/.omk/mcp-registry.json",
       });
       const second = buildMergedConfig(first, wd, {
         sharedMcpServers: [
@@ -641,7 +641,7 @@ describe("config generator idempotency (#384)", () => {
             startupTimeoutSec: 12,
           },
         ],
-        sharedMcpRegistrySource: "/tmp/.omx/mcp-registry.json",
+        sharedMcpRegistrySource: "/tmp/.omk/mcp-registry.json",
       });
 
       assert.equal(
@@ -654,7 +654,7 @@ describe("config generator idempotency (#384)", () => {
         1,
         "shared eslint MCP table should appear once",
       );
-      assert.match(second, /# Source: \/tmp\/\.omx\/mcp-registry\.json/);
+      assert.match(second, /# Source: \/tmp\/\.omk\/mcp-registry\.json/);
     } finally {
       await rm(wd, { recursive: true, force: true });
     }
@@ -682,7 +682,7 @@ describe("config generator idempotency (#384)", () => {
           enabled: true,
         },
       ],
-      sharedMcpRegistrySource: "/tmp/.omx/mcp-registry.json",
+      sharedMcpRegistrySource: "/tmp/.omk/mcp-registry.json",
     });
 
     assert.equal(count(merged, /^\[mcp_servers\.gitnexus\]$/gm), 1);

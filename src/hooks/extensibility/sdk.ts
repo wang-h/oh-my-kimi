@@ -22,7 +22,7 @@ export function createHookPluginSdk(options: HookPluginSdkOptions): HookPluginSd
     }),
     log: createHookPluginLogger(options.cwd, pluginName, options.event),
     state: createHookPluginStateApi(options.cwd, pluginName),
-    omx: createHookPluginOmxApi(options.cwd),
+    omk: createHookPluginOmxApi(options.cwd),
   };
 }
 

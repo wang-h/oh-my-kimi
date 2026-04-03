@@ -25,7 +25,7 @@ export const EXPLORE_USAGE = [
 const PROMPT_FLAG = '--prompt';
 const PROMPT_FILE_FLAG = '--prompt-file';
 export const EXPLORE_BIN_ENV = EXPLORE_BIN_ENV_SHARED;
-const EXPLORE_SPARK_MODEL_ENV = 'OMX_EXPLORE_SPARK_MODEL';
+const EXPLORE_SPARK_MODEL_ENV = 'OMK_EXPLORE_SPARK_MODEL';
 
 export interface ParsedExploreArgs {
   prompt?: string;
@@ -156,7 +156,7 @@ async function runExploreViaSparkShell(route: ExploreSparkShellRoute, env: NodeJ
 }
 
 export function packagedExploreHarnessBinaryName(platform: NodeJS.Platform = process.platform): string {
-  return platform === 'win32' ? 'omx-explore-harness.exe' : 'omx-explore-harness';
+  return platform === 'win32' ? 'omk-explore-harness.exe' : 'omk-explore-harness';
 }
 
 export function resolvePackagedExploreHarnessCommand(
@@ -164,7 +164,7 @@ export function resolvePackagedExploreHarnessCommand(
   platform: NodeJS.Platform = process.platform,
   arch = process.arch,
 ): ExploreHarnessCommand | undefined {
-  const metadataPath = join(packageRoot, 'bin', 'omx-explore-harness.meta.json');
+  const metadataPath = join(packageRoot, 'bin', 'omk-explore-harness.meta.json');
   if (!existsSync(metadataPath)) return undefined;
   try {
     const metadata = JSON.parse(readFileSync(metadataPath, 'utf-8')) as ExploreHarnessMetadata;
@@ -284,7 +284,7 @@ export function resolveExploreHarnessCommand(
   const repoBuilt = repoBuiltExploreHarnessCommand(packageRoot);
   if (repoBuilt) return repoBuilt;
 
-  const manifestPath = join(packageRoot, 'crates', 'omx-explore', 'Cargo.toml');
+  const manifestPath = join(packageRoot, 'crates', 'omk-explore', 'Cargo.toml');
   if (!existsSync(manifestPath)) {
     throw new Error(`[explore] neither a compatible packaged harness binary nor Rust manifest was found (${manifestPath})`);
   }
@@ -305,7 +305,7 @@ export async function resolveExploreHarnessCommandWithHydration(
   }
 
   const version = await getPackageVersion(packageRoot);
-  for (const cached of resolveCachedNativeBinaryCandidatePaths('omx-explore-harness', version, process.platform, process.arch, env)) {
+  for (const cached of resolveCachedNativeBinaryCandidatePaths('omk-explore-harness', version, process.platform, process.arch, env)) {
     if (existsSync(cached)) {
       return { command: cached, args: [] };
     }
@@ -318,9 +318,9 @@ export async function resolveExploreHarnessCommandWithHydration(
   if (repoBuilt) return repoBuilt;
 
   if (!isRepositoryCheckout(packageRoot)) {
-    const hydrated = await hydrateNativeBinary('omx-explore-harness', { packageRoot, env });
+    const hydrated = await hydrateNativeBinary('omk-explore-harness', { packageRoot, env });
     if (hydrated) return { command: hydrated, args: [] };
-    throw new Error('[explore] no compatible native harness is available for this install. Reconnect to the network so OMX can fetch the release asset, or set OMX_EXPLORE_BIN to a prebuilt harness binary.');
+    throw new Error('[explore] no compatible native harness is available for this install. Reconnect to the network so OMX can fetch the release asset, or set OMK_EXPLORE_BIN to a prebuilt harness binary.');
   }
 
   return resolveExploreHarnessCommand(packageRoot, env);
@@ -382,7 +382,7 @@ export async function exploreCommand(args: string[]): Promise<void> {
   if (result.error) {
     const errno = result.error as NodeJS.ErrnoException;
     if (harness.command === 'cargo' && errno.code === 'ENOENT') {
-      throw new Error('[explore] cargo was not found. Install a Rust toolchain, use a compatible packaged omx-explore prebuilt, or set OMX_EXPLORE_BIN to a prebuilt harness binary.');
+      throw new Error('[explore] cargo was not found. Install a Rust toolchain, use a compatible packaged omk-explore prebuilt, or set OMK_EXPLORE_BIN to a prebuilt harness binary.');
     }
     throw new Error(`[explore] failed to launch harness: ${result.error.message}`);
   }

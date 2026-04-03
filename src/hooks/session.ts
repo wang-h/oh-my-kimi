@@ -38,7 +38,7 @@ function historyPath(cwd: string): string {
  * into a new Codex session.
  */
 export async function resetSessionMetrics(cwd: string): Promise<void> {
-  const omxDir = join(cwd, '.omx');
+  const omxDir = join(cwd, '.omk');
   const stateDir = omxStateDir(cwd);
   await mkdir(omxDir, { recursive: true });
   await mkdir(stateDir, { recursive: true });
@@ -243,7 +243,7 @@ export async function appendToLog(cwd: string, entry: Record<string, unknown>): 
   await mkdir(logsDir, { recursive: true });
 
   const date = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-  const logFile = join(logsDir, `omx-${date}.jsonl`);
+  const logFile = join(logsDir, `omk-${date}.jsonl`);
   const line = JSON.stringify({ ...entry, _ts: new Date().toISOString() }) + '\n';
 
   await appendFile(logFile, line);

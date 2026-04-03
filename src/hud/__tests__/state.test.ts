@@ -33,14 +33,14 @@ async function withTempRepo(prefix: string, run: (cwd: string) => Promise<void>)
 }
 
 async function writeModeState(cwd: string, mode: string, state: unknown): Promise<void> {
-  const stateDir = join(cwd, '.omx', 'state');
+  const stateDir = join(cwd, '.omk', 'state');
   await mkdir(stateDir, { recursive: true });
   await writeFile(join(stateDir, mode + '-state.json'), JSON.stringify(state));
 }
 
 describe('readGitBranch', () => {
   it('returns null in a non-git directory without printing git fatal noise', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-hud-state-'));
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-hud-state-'));
     const stderrChunks: string[] = [];
     const originalWrite = process.stderr.write.bind(process.stderr);
 
@@ -147,8 +147,8 @@ describe('buildGitBranchLabel', () => {
 
 describe('readRalphState scope precedence', () => {
   it('prefers session-scoped Ralph state when session.json points to a session', async () => {
-    await withTempRepo('omx-hud-ralph-session-', async (cwd) => {
-      const rootStateDir = join(cwd, '.omx', 'state');
+    await withTempRepo('omk-hud-ralph-session-', async (cwd) => {
+      const rootStateDir = join(cwd, '.omk', 'state');
       const sessionId = 'sess-hud';
       const sessionStateDir = join(rootStateDir, 'sessions', sessionId);
       await mkdir(sessionStateDir, { recursive: true });
@@ -163,8 +163,8 @@ describe('readRalphState scope precedence', () => {
   });
 
   it('falls back to root Ralph state when current session has no Ralph state file', async () => {
-    await withTempRepo('omx-hud-ralph-fallback-', async (cwd) => {
-      const rootStateDir = join(cwd, '.omx', 'state');
+    await withTempRepo('omk-hud-ralph-fallback-', async (cwd) => {
+      const rootStateDir = join(cwd, '.omk', 'state');
       const sessionId = 'sess-fallback';
       await mkdir(join(rootStateDir, 'sessions', sessionId), { recursive: true });
       await writeFile(join(rootStateDir, 'session.json'), JSON.stringify({ session_id: sessionId }));
@@ -177,8 +177,8 @@ describe('readRalphState scope precedence', () => {
   });
 
   it('treats session-scoped inactive Ralph state as authoritative over active root fallback', async () => {
-    await withTempRepo('omx-hud-ralph-authority-', async (cwd) => {
-      const rootStateDir = join(cwd, '.omx', 'state');
+    await withTempRepo('omk-hud-ralph-authority-', async (cwd) => {
+      const rootStateDir = join(cwd, '.omk', 'state');
       const sessionId = 'sess-authority';
       const sessionStateDir = join(rootStateDir, 'sessions', sessionId);
       await mkdir(sessionStateDir, { recursive: true });
@@ -194,7 +194,7 @@ describe('readRalphState scope precedence', () => {
 
 describe('additional HUD mode state readers', () => {
   it('reads active ralplan state', async () => {
-    await withTempRepo('omx-hud-ralplan-', async (cwd) => {
+    await withTempRepo('omk-hud-ralplan-', async (cwd) => {
       await writeModeState(cwd, 'ralplan', { active: true, current_phase: 'review', iteration: 2, planning_complete: false });
       const state = await readRalplanState(cwd);
       assert.deepEqual(state, { active: true, current_phase: 'review', iteration: 2, planning_complete: false });
@@ -202,15 +202,15 @@ describe('additional HUD mode state readers', () => {
   });
 
   it('returns null for inactive ralplan state', async () => {
-    await withTempRepo('omx-hud-ralplan-inactive-', async (cwd) => {
+    await withTempRepo('omk-hud-ralplan-inactive-', async (cwd) => {
       await writeModeState(cwd, 'ralplan', { active: false, current_phase: 'complete' });
       assert.equal(await readRalplanState(cwd), null);
     });
   });
 
   it('prefers session-scoped ralplan state over root fallback', async () => {
-    await withTempRepo('omx-hud-ralplan-session-', async (cwd) => {
-      const rootStateDir = join(cwd, '.omx', 'state');
+    await withTempRepo('omk-hud-ralplan-session-', async (cwd) => {
+      const rootStateDir = join(cwd, '.omk', 'state');
       const sessionId = 'sess-ralplan-authority';
       const sessionStateDir = join(rootStateDir, 'sessions', sessionId);
       await mkdir(sessionStateDir, { recursive: true });
@@ -224,7 +224,7 @@ describe('additional HUD mode state readers', () => {
   });
 
   it('reads deep-interview input lock from nested state payload', async () => {
-    await withTempRepo('omx-hud-interview-', async (cwd) => {
+    await withTempRepo('omk-hud-interview-', async (cwd) => {
       await writeModeState(cwd, 'deep-interview', { active: true, current_phase: 'intent-first', input_lock: { active: true } });
       const state = await readDeepInterviewState(cwd);
       assert.deepEqual(state, { active: true, current_phase: 'intent-first', input_lock: { active: true }, input_lock_active: true });
@@ -232,14 +232,14 @@ describe('additional HUD mode state readers', () => {
   });
 
   it('reads active autoresearch state', async () => {
-    await withTempRepo('omx-hud-autoresearch-', async (cwd) => {
+    await withTempRepo('omk-hud-autoresearch-', async (cwd) => {
       await writeModeState(cwd, 'autoresearch', { active: true, current_phase: 'running' });
       assert.deepEqual(await readAutoresearchState(cwd), { active: true, current_phase: 'running' });
     });
   });
 
   it('reads active ultraqa state', async () => {
-    await withTempRepo('omx-hud-ultraqa-', async (cwd) => {
+    await withTempRepo('omk-hud-ultraqa-', async (cwd) => {
       await writeModeState(cwd, 'ultraqa', { active: true, current_phase: 'diagnose' });
       assert.deepEqual(await readUltraqaState(cwd), { active: true, current_phase: 'diagnose' });
     });

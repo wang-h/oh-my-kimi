@@ -9,7 +9,7 @@ import { isPlanningComplete, readApprovedExecutionLaunchHint, readPlanningArtifa
 let tempDir: string;
 
 async function setup(): Promise<void> {
-  tempDir = await mkdtemp(join(tmpdir(), 'omx-planning-artifacts-'));
+  tempDir = await mkdtemp(join(tmpdir(), 'omk-planning-artifacts-'));
 }
 
 async function cleanup(): Promise<void> {
@@ -23,7 +23,7 @@ describe('planning artifacts', () => {
   afterEach(async () => { await cleanup(); });
 
   it('requires both PRD and test spec for planning completion', async () => {
-    const plansDir = join(tempDir, '.omx', 'plans');
+    const plansDir = join(tempDir, '.omk', 'plans');
     await mkdir(plansDir, { recursive: true });
     await writeFile(join(plansDir, 'prd-issue-827.md'), '# PRD\n');
 
@@ -36,8 +36,8 @@ describe('planning artifacts', () => {
 
 
   it('parses $ralph aliases with single-quoted task text for approved launch hints', async () => {
-    const plansDir = join(tempDir, '.omx', 'plans');
-    const specsDir = join(tempDir, '.omx', 'specs');
+    const plansDir = join(tempDir, '.omk', 'plans');
+    const specsDir = join(tempDir, '.omk', 'specs');
     await mkdir(plansDir, { recursive: true });
     await mkdir(specsDir, { recursive: true });
     await writeFile(
@@ -57,8 +57,8 @@ describe('planning artifacts', () => {
   });
 
   it('includes approved Ralph launch context with test and deep-interview artifacts', async () => {
-    const plansDir = join(tempDir, '.omx', 'plans');
-    const specsDir = join(tempDir, '.omx', 'specs');
+    const plansDir = join(tempDir, '.omk', 'plans');
+    const specsDir = join(tempDir, '.omk', 'specs');
     await mkdir(plansDir, { recursive: true });
     await mkdir(specsDir, { recursive: true });
     await writeFile(
@@ -77,8 +77,8 @@ describe('planning artifacts', () => {
   });
 
   it('parses $team aliases with single-quoted task text for approved launch hints', async () => {
-    const plansDir = join(tempDir, '.omx', 'plans');
-    const specsDir = join(tempDir, '.omx', 'specs');
+    const plansDir = join(tempDir, '.omk', 'plans');
+    const specsDir = join(tempDir, '.omk', 'specs');
     await mkdir(plansDir, { recursive: true });
     await mkdir(specsDir, { recursive: true });
     await writeFile(
@@ -101,8 +101,8 @@ describe('planning artifacts', () => {
   });
 
   it('includes approved team launch context with staffing and matching artifacts', async () => {
-    const plansDir = join(tempDir, '.omx', 'plans');
-    const specsDir = join(tempDir, '.omx', 'specs');
+    const plansDir = join(tempDir, '.omk', 'plans');
+    const specsDir = join(tempDir, '.omk', 'specs');
     await mkdir(plansDir, { recursive: true });
     await mkdir(specsDir, { recursive: true });
     await writeFile(
@@ -124,8 +124,8 @@ describe('planning artifacts', () => {
   });
 
   it('binds approved team handoff context to the selected PRD slug in multi-plan repos', async () => {
-    const plansDir = join(tempDir, '.omx', 'plans');
-    const specsDir = join(tempDir, '.omx', 'specs');
+    const plansDir = join(tempDir, '.omk', 'plans');
+    const specsDir = join(tempDir, '.omk', 'specs');
     await mkdir(plansDir, { recursive: true });
     await mkdir(specsDir, { recursive: true });
     await writeFile(join(plansDir, 'prd-alpha.md'), '# Alpha\n\nLaunch via omx team 2:executor "Execute alpha"\n');
@@ -148,8 +148,8 @@ describe('planning artifacts', () => {
 
 
   it('binds approved handoff context to the selected PRD slug in multi-plan repos', async () => {
-    const plansDir = join(tempDir, '.omx', 'plans');
-    const specsDir = join(tempDir, '.omx', 'specs');
+    const plansDir = join(tempDir, '.omk', 'plans');
+    const specsDir = join(tempDir, '.omk', 'specs');
     await mkdir(plansDir, { recursive: true });
     await mkdir(specsDir, { recursive: true });
     await writeFile(join(plansDir, 'prd-alpha.md'), '# Alpha\n\nLaunch via omx ralph "Execute alpha"\n');
@@ -168,8 +168,8 @@ describe('planning artifacts', () => {
   });
 
   it('surfaces deep-interview specs for downstream traceability', async () => {
-    const plansDir = join(tempDir, '.omx', 'plans');
-    const specsDir = join(tempDir, '.omx', 'specs');
+    const plansDir = join(tempDir, '.omk', 'plans');
+    const specsDir = join(tempDir, '.omk', 'specs');
     await mkdir(plansDir, { recursive: true });
     await mkdir(specsDir, { recursive: true });
     await writeFile(join(plansDir, 'prd-issue-827.md'), '# PRD\n');

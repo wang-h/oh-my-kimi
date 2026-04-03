@@ -34,7 +34,7 @@ function shouldSkipForSpawnPermissions(err?: string): boolean {
 
 describe('omx doctor onboarding warning copy', () => {
   it('explains first-setup expectation for config and MCP onboarding warnings', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-doctor-copy-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-doctor-copy-'));
     try {
       const home = join(wd, 'home');
       const codexDir = join(home, '.codex');
@@ -67,7 +67,7 @@ command = "node"
   });
 
   it('warns when explore harness sources are packaged but cargo is unavailable', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-doctor-explore-copy-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-doctor-explore-copy-'));
     try {
       await withPackagedExploreHarnessHidden(async () => {
         const home = join(wd, 'home');
@@ -87,7 +87,7 @@ command = "node"
         assert.equal(res.status, 0, res.stderr || res.stdout);
         assert.match(
           res.stdout,
-          /Explore Harness: (Rust harness sources are packaged, but no compatible packaged prebuilt or cargo was found \(install Rust or set OMX_EXPLORE_BIN for omx explore\)|not ready \(no packaged binary, OMX_EXPLORE_BIN, or cargo toolchain\))/,
+          /Explore Harness: (Rust harness sources are packaged, but no compatible packaged prebuilt or cargo was found \(install Rust or set OMK_EXPLORE_BIN for omx explore\)|not ready \(no packaged binary, OMK_EXPLORE_BIN, or cargo toolchain\))/,
         );
       });
     } finally {
@@ -97,14 +97,14 @@ command = "node"
 
   it('passes explore harness check when a packaged native binary is present even without cargo', async () => {
     await withPackagedExploreHarnessLock(async () => {
-      const wd = await mkdtemp(join(tmpdir(), 'omx-doctor-explore-binary-'));
+      const wd = await mkdtemp(join(tmpdir(), 'omk-doctor-explore-binary-'));
       try {
         const home = join(wd, 'home');
         const codexDir = join(home, '.codex');
         const fakeBin = join(wd, 'bin');
         const packageBinDir = join(process.cwd(), 'bin');
-        const packagedBinary = join(packageBinDir, process.platform === 'win32' ? 'omx-explore-harness.exe' : 'omx-explore-harness');
-        const packagedMeta = join(packageBinDir, 'omx-explore-harness.meta.json');
+        const packagedBinary = join(packageBinDir, process.platform === 'win32' ? 'omk-explore-harness.exe' : 'omk-explore-harness');
+        const packagedMeta = join(packageBinDir, 'omk-explore-harness.meta.json');
         const hadExistingBinary = existsSync(packagedBinary);
         const hadExistingMeta = existsSync(packagedMeta);
 
@@ -117,7 +117,7 @@ command = "node"
         const originalMeta = hadExistingMeta ? await fsPromises.readFile(packagedMeta, 'utf-8') : null;
         await mkdir(packageBinDir, { recursive: true });
         await writeFile(packagedBinary, '#!/bin/sh\necho "stub harness"\n');
-        await writeFile(packagedMeta, JSON.stringify({ binaryName: process.platform === 'win32' ? 'omx-explore-harness.exe' : 'omx-explore-harness', platform: process.platform, arch: process.arch }));
+        await writeFile(packagedMeta, JSON.stringify({ binaryName: process.platform === 'win32' ? 'omk-explore-harness.exe' : 'omk-explore-harness', platform: process.platform, arch: process.arch }));
         spawnSync('chmod', ['+x', packagedBinary], { encoding: 'utf-8' });
 
         try {
@@ -152,7 +152,7 @@ command = "node"
   });
 
   it('warns when explore routing is explicitly disabled in config.toml', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-doctor-explore-routing-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-doctor-explore-routing-'));
     try {
       const home = join(wd, 'home');
       const codexDir = join(home, '.codex');
@@ -161,7 +161,7 @@ command = "node"
         join(codexDir, 'config.toml'),
         `
 [env]
-USE_OMX_EXPLORE_CMD = "off"
+USE_OMK_EXPLORE_CMD = "off"
 `.trimStart(),
       );
 
@@ -173,7 +173,7 @@ USE_OMX_EXPLORE_CMD = "off"
       assert.equal(res.status, 0, res.stderr || res.stdout);
       assert.match(
         res.stdout,
-        /Explore routing: disabled in config\.toml \[env\]; set USE_OMX_EXPLORE_CMD = "1" to restore default explore-first routing/,
+        /Explore routing: disabled in config\.toml \[env\]; set USE_OMK_EXPLORE_CMD = "1" to restore default explore-first routing/,
       );
     } finally {
       await rm(wd, { recursive: true, force: true });
@@ -181,7 +181,7 @@ USE_OMX_EXPLORE_CMD = "off"
   });
 
   it('warns when canonical and legacy skill roots overlap', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-doctor-skill-overlap-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-doctor-skill-overlap-'));
     try {
       const home = join(wd, 'home');
       const codexDir = join(home, '.codex');
@@ -211,7 +211,7 @@ USE_OMX_EXPLORE_CMD = "off"
   });
 
   it('passes when legacy skill root is a link to the canonical skills directory', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-doctor-skill-link-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-doctor-skill-link-'));
     try {
       const home = join(wd, 'home');
       const codexDir = join(home, '.codex');

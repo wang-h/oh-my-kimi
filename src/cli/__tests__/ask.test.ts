@@ -103,7 +103,7 @@ describe('parseAskArgs', () => {
 
 describe('omx ask', () => {
   it('script usage documents provider-specific long flags from CLI help', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-ask-usage-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-ask-usage-'));
     try {
       const res = runProviderAdvisorScript(wd, []);
       if (shouldSkipForSpawnPermissions(res.error)) return;
@@ -117,13 +117,13 @@ describe('omx ask', () => {
   });
 
   it('preserves child stdout/stderr and exact non-zero exit code', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-ask-contract-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-ask-contract-'));
     try {
       const res = runOmx(wd, ['ask', 'claude', 'pass-through'], {
-        OMX_ASK_ADVISOR_SCRIPT: 'dist/scripts/fixtures/ask-advisor-stub.js',
-        OMX_ASK_STUB_STDOUT: 'artifact-path-from-stub.md\n',
-        OMX_ASK_STUB_STDERR: 'stub-warning-line\n',
-        OMX_ASK_STUB_EXIT_CODE: '7',
+        OMK_ASK_ADVISOR_SCRIPT: 'dist/scripts/fixtures/ask-advisor-stub.js',
+        OMK_ASK_STUB_STDOUT: 'artifact-path-from-stub.md\n',
+        OMK_ASK_STUB_STDERR: 'stub-warning-line\n',
+        OMK_ASK_STUB_EXIT_CODE: '7',
       });
       if (shouldSkipForSpawnPermissions(res.error)) return;
 
@@ -136,12 +136,12 @@ describe('omx ask', () => {
   });
 
   it('resolves relative advisor override path from package root even on non-root cwd', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-ask-relative-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-ask-relative-'));
     try {
       const res = runOmx(wd, ['ask', 'gemini', 'relative-check'], {
-        OMX_ASK_ADVISOR_SCRIPT: 'dist/scripts/fixtures/ask-advisor-stub.js',
-        OMX_ASK_STUB_STDOUT: 'relative-override-ok\n',
-        OMX_ASK_STUB_EXIT_CODE: '0',
+        OMK_ASK_ADVISOR_SCRIPT: 'dist/scripts/fixtures/ask-advisor-stub.js',
+        OMK_ASK_STUB_STDOUT: 'relative-override-ok\n',
+        OMK_ASK_STUB_EXIT_CODE: '0',
       });
       if (shouldSkipForSpawnPermissions(res.error)) return;
 
@@ -153,7 +153,7 @@ describe('omx ask', () => {
   });
 
   it('uses package-root advisor script path from non-package cwd and still writes artifact', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-ask-nonroot-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-ask-nonroot-'));
     try {
       const fakeBin = join(wd, 'bin');
       await mkdir(fakeBin, { recursive: true });
@@ -170,7 +170,7 @@ describe('omx ask', () => {
 
       assert.equal(res.status, 0, res.stderr || res.stdout);
       const artifactPath = res.stdout.trim();
-      assert.ok(artifactPath.startsWith(join(wd, '.omx', 'artifacts', 'claude-')));
+      assert.ok(artifactPath.startsWith(join(wd, '.omk', 'artifacts', 'claude-')));
       assert.equal(existsSync(artifactPath), true);
       const artifact = await readFile(artifactPath, 'utf-8');
       assert.match(artifact, /NONROOT_DEFAULT_OK/);
@@ -180,7 +180,7 @@ describe('omx ask', () => {
   });
 
   it('supports claude --print and gemini --prompt end-to-end through omx ask', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-ask-provider-flags-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-ask-provider-flags-'));
     try {
       const fakeBin = join(wd, 'bin');
       await mkdir(fakeBin, { recursive: true });
@@ -219,7 +219,7 @@ describe('omx ask', () => {
   });
 
   it('injects --agent-prompt content into final prompt while keeping Original task raw', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-ask-agent-prompt-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-ask-agent-prompt-'));
     try {
       const fakeBin = join(wd, 'bin');
       const codexHome = join(wd, '.codex-home');
@@ -259,7 +259,7 @@ describe('omx ask', () => {
   });
 
   it('fails clearly when --agent-prompt role is missing from prompts directory', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-ask-agent-prompt-missing-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-ask-agent-prompt-missing-'));
     try {
       const fakeBin = join(wd, 'bin');
       const codexHome = join(wd, '.codex-home');

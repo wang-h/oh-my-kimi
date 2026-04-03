@@ -22,19 +22,19 @@ interface RunnerResult {
 	error?: string;
 }
 
-const RESULT_PREFIX = "__OMX_PLUGIN_RESULT__ ";
+const RESULT_PREFIX = "__OMK_PLUGIN_RESULT__ ";
 const RUNNER_SIGKILL_GRACE_MS = 250;
 
 function hooksLogPath(cwd: string): string {
 	const day = new Date().toISOString().slice(0, 10);
-	return join(cwd, ".omx", "logs", `hooks-${day}.jsonl`);
+	return join(cwd, ".omk", "logs", `hooks-${day}.jsonl`);
 }
 
 async function appendHooksLog(
 	cwd: string,
 	payload: Record<string, unknown>,
 ): Promise<void> {
-	await mkdir(join(cwd, ".omx", "logs"), { recursive: true });
+	await mkdir(join(cwd, ".omk", "logs"), { recursive: true });
 	await appendFile(
 		hooksLogPath(cwd),
 		`${JSON.stringify({ timestamp: new Date().toISOString(), ...payload })}\n`,
@@ -48,7 +48,7 @@ async function appendHooksLog(
 
 function isTeamWorker(env: NodeJS.ProcessEnv): boolean {
 	return (
-		typeof env.OMX_TEAM_WORKER === "string" && env.OMX_TEAM_WORKER.trim() !== ""
+		typeof env.OMK_TEAM_WORKER === "string" && env.OMK_TEAM_WORKER.trim() !== ""
 	);
 }
 

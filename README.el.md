@@ -1,9 +1,9 @@
 # oh-my-kimi (OMK)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omx-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
+  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omk-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
   <br>
-  <em>Ξεκινήστε το Codex πιο δυναμικά και αφήστε το OMX να προσθέσει καλύτερα prompts, workflows και runtime υποστήριξη όταν η δουλειά μεγαλώνει.</em>
+  <em>Ξεκινήστε το Codex πιο δυναμικά και αφήστε το OMK να προσθέσει καλύτερα prompts, workflows και runtime υποστήριξη όταν η δουλειά μεγαλώνει.</em>
 </p>
 
 [![npm version](https://img.shields.io/npm/v/oh-my-kimi)](https://www.npmjs.com/package/oh-my-kimi)
@@ -14,22 +14,22 @@
 **Ιστοσελίδα:** https://github.com/wang-h/oh-my-kimi  
 **Τεκμηρίωση:** [Ξεκινώντας](./docs/getting-started.html) · [Agents](./docs/agents.html) · [Skills](./docs/skills.html) · [Ενσωματώσεις](./docs/integrations.html) · [Demo](./DEMO.md) · [Οδηγός OpenClaw](./docs/openclaw-integration.md)
 
-Το OMX είναι ένα workflow layer για το [Kimi Code CLI](https://moonshotai.github.io/kimi-cli/en/).
+Το OMK είναι ένα workflow layer για το [Kimi Code CLI](https://moonshotai.github.io/kimi-cli/en/).
 
 Διατηρεί το Codex ως μηχανή εκτέλεσης και διευκολύνει τα εξής:
 - να ξεκινάτε μια πιο δυναμική συνεδρία Codex από προεπιλογή
 - να ακολουθείτε μία συνεπή ροή από διευκρίνιση μέχρι ολοκλήρωση
 - να ενεργοποιείτε το βασικό μονοπάτι με `$deep-interview`, `$ralplan`, `$team` και `$ralph`
-- να κρατάτε οδηγίες έργου, σχέδια, αρχεία καταγραφής και κατάσταση στον φάκελο `.omx/`
+- να κρατάτε οδηγίες έργου, σχέδια, αρχεία καταγραφής και κατάσταση στον φάκελο `.omk/`
 
 ## Προτεινόμενη προεπιλεγμένη ροή
 
-Αν θέλετε την προεπιλεγμένη εμπειρία OMX, ξεκινήστε εδώ:
+Αν θέλετε την προεπιλεγμένη εμπειρία OMK, ξεκινήστε εδώ:
 
 ```bash
 npm install -g oh-my-kimi oh-my-kimi
-omx setup
-omx --madmax --high
+omk setup
+omk --madmax --high
 ```
 
 Στη συνέχεια εργαστείτε κανονικά μέσα στο Codex:
@@ -44,15 +44,15 @@ $team 3:executor "execute the approved plan in parallel"
 Αυτή είναι η βασική ροή.
 Ξεκινήστε δυνατά, ξεκαθαρίστε πρώτα όταν χρειάζεται, εγκρίνετε το σχέδιο και μετά επιλέξτε `$team` για συντονισμένη παράλληλη εκτέλεση ή `$ralph` για επίμονο βρόχο ολοκλήρωσης.
 
-## Σε τι χρησιμεύει το OMX
+## Σε τι χρησιμεύει το OMK
 
-Χρησιμοποιήστε το OMX αν σας αρέσει ήδη το Codex και θέλετε ένα καλύτερο καθημερινό περιβάλλον εργασίας γύρω του:
+Χρησιμοποιήστε το OMK αν σας αρέσει ήδη το Codex και θέλετε ένα καλύτερο καθημερινό περιβάλλον εργασίας γύρω του:
 - μια τυπική ροή βασισμένη στα `$deep-interview`, `$ralplan`, `$team` και `$ralph`
 - εξειδικευμένους ρόλους και βοηθητικά skills όταν πραγματικά χρειάζονται
 - καθοδήγηση έργου μέσω scoped `AGENTS.md`
-- επίμονη κατάσταση στον `.omx/` για σχέδια, αρχεία καταγραφής, μνήμη και παρακολούθηση λειτουργίας
+- επίμονη κατάσταση στον `.omk/` για σχέδια, αρχεία καταγραφής, μνήμη και παρακολούθηση λειτουργίας
 
-Αν θέλετε απλό Codex χωρίς επιπλέον επίπεδο ροής εργασίας, πιθανότατα δεν χρειάζεστε το OMX.
+Αν θέλετε απλό Codex χωρίς επιπλέον επίπεδο ροής εργασίας, πιθανότατα δεν χρειάζεστε το OMK.
 
 ## Γρήγορη εκκίνηση
 
@@ -66,10 +66,10 @@ $team 3:executor "execute the approved plan in parallel"
 
 ### Μια καλή πρώτη συνεδρία
 
-Εκκινήστε το OMX με τον προτεινόμενο τρόπο:
+Εκκινήστε το OMK με τον προτεινόμενο τρόπο:
 
 ```bash
-omx --madmax --high
+omk --madmax --high
 ```
 
 Στη συνέχεια δοκιμάστε την τυπική ροή:
@@ -85,20 +85,20 @@ $team 3:executor "execute the approved plan in parallel"
 
 ## Ένα απλό νοητικό μοντέλο
 
-Το OMX **δεν** αντικαθιστά το Codex.
+Το OMK **δεν** αντικαθιστά το Codex.
 
 Προσθέτει ένα καλύτερο workflow layer γύρω του:
 - **Codex** κάνει την πραγματική δουλειά του agent
-- **Keywords ρόλων OMX** κάνουν τους χρήσιμους ρόλους επαναχρησιμοποιήσιμους
-- **Skills OMX** κάνουν τα συνηθισμένα workflows επαναχρησιμοποιήσιμα
-- **`.omx/`** αποθηκεύει σχέδια, αρχεία καταγραφής, μνήμη και κατάσταση εκτέλεσης
+- **Keywords ρόλων OMK** κάνουν τους χρήσιμους ρόλους επαναχρησιμοποιήσιμους
+- **Skills OMK** κάνουν τα συνηθισμένα workflows επαναχρησιμοποιήσιμα
+- **`.omk/`** αποθηκεύει σχέδια, αρχεία καταγραφής, μνήμη και κατάσταση εκτέλεσης
 
-Οι περισσότεροι χρήστες καλό είναι να βλέπουν το OMX ως **καλύτερη δρομολόγηση εργασιών + καλύτερο workflow + καλύτερο runtime**, όχι ως ένα σύνολο εντολών για χειροκίνητη χρήση όλη μέρα.
+Οι περισσότεροι χρήστες καλό είναι να βλέπουν το OMK ως **καλύτερη δρομολόγηση εργασιών + καλύτερο workflow + καλύτερο runtime**, όχι ως ένα σύνολο εντολών για χειροκίνητη χρήση όλη μέρα.
 
 ## Ξεκινήστε εδώ αν είστε νέοι
 
-1. Εκτελέστε `omx setup`
-2. Εκκινήστε με `omx --madmax --high`
+1. Εκτελέστε `omk setup`
+2. Εκκινήστε με `omk --madmax --high`
 3. Χρησιμοποιήστε `$deep-interview "..."` όταν το αίτημα ή τα όρια είναι ακόμη ασαφή
 4. Χρησιμοποιήστε `$ralplan "..."` για να εγκρίνετε το σχέδιο και τους συμβιβασμούς
 5. Επιλέξτε `$team` για συντονισμένη παράλληλη εκτέλεση ή `$ralph` για επίμονο βρόχο ολοκλήρωσης
@@ -113,11 +113,11 @@ $team 3:executor "execute the approved plan in parallel"
 | `$team "..."` | συντονισμένη παράλληλη εκτέλεση όταν η εργασία είναι αρκετά μεγάλη |
 | `/skills` | περιήγηση στα διαθέσιμα skills και βοηθητικά εργαλεία |
 
-Χρησιμοποιήστε `$deep-interview` όταν το αίτημα είναι ακόμη ασαφές, τα όρια δεν είναι ξεκάθαρα ή θέλετε το OMX να πιέσει μέχρι να ξεκαθαρίσει πρόθεση, μη-στόχους και όρια αποφάσεων πριν περάσει στο `$ralplan` και έπειτα στο `$team` ή στο `$ralph`.
+Χρησιμοποιήστε `$deep-interview` όταν το αίτημα είναι ακόμη ασαφές, τα όρια δεν είναι ξεκάθαρα ή θέλετε το OMK να πιέσει μέχρι να ξεκαθαρίσει πρόθεση, μη-στόχους και όρια αποφάσεων πριν περάσει στο `$ralplan` και έπειτα στο `$team` ή στο `$ralph`.
 
 Τυπικές περιπτώσεις:
 - ασαφείς greenfield ιδέες που χρειάζονται πιο καθαρή πρόθεση και εύρος
-- brownfield αλλαγές όπου το OMX πρέπει πρώτα να εξετάσει το repo και μετά να κάνει στοχευμένες ερωτήσεις επιβεβαίωσης
+- brownfield αλλαγές όπου το OMK πρέπει πρώτα να εξετάσει το repo και μετά να κάνει στοχευμένες ερωτήσεις επιβεβαίωσης
 - αιτήματα όπου θέλετε έναν βρόχο διευκρίνισης μία-ερώτηση-τη-φορά αντί για άμεσο σχεδιασμό ή υλοποίηση
 
 ## Προχωρημένες λειτουργίες / για διαχειριστές
@@ -126,38 +126,38 @@ $team 3:executor "execute the approved plan in parallel"
 
 ### Team runtime
 
-Χρησιμοποιήστε τον team runtime όταν χρειάζεστε ειδικά ανθεκτικό συντονισμό tmux/worktree, όχι ως τον προεπιλεγμένο τρόπο για να ξεκινήσετε με το OMX.
+Χρησιμοποιήστε τον team runtime όταν χρειάζεστε ειδικά ανθεκτικό συντονισμό tmux/worktree, όχι ως τον προεπιλεγμένο τρόπο για να ξεκινήσετε με το OMK.
 
 ```bash
-omx team 3:executor "fix the failing tests with verification"
-omx team status <team-name>
-omx team resume <team-name>
-omx team shutdown <team-name>
+omk team 3:executor "fix the failing tests with verification"
+omk team status <team-name>
+omk team resume <team-name>
+omk team shutdown <team-name>
 ```
 
 ### Setup, doctor και HUD
 
 Αυτές είναι λειτουργίες διαχείρισης/υποστήριξης:
-- `omx setup` εγκαθιστά prompts, skills, ρυθμίσεις και scaffolding AGENTS
-- `omx doctor` επαληθεύει την εγκατάσταση όταν κάτι φαίνεται λάθος
-- `omx hud --watch` είναι λειτουργία παρακολούθησης/κατάστασης, όχι η κύρια ροή εργασίας του χρήστη
+- `omk setup` εγκαθιστά prompts, skills, ρυθμίσεις και scaffolding AGENTS
+- `omk doctor` επαληθεύει την εγκατάσταση όταν κάτι φαίνεται λάθος
+- `omk hud --watch` είναι λειτουργία παρακολούθησης/κατάστασης, όχι η κύρια ροή εργασίας του χρήστη
 
 ### Explore και sparkshell
 
-- `omx explore --prompt "..."` είναι για αναζήτηση μόνο ανάγνωσης στο repository
-- `omx sparkshell <command>` είναι για επιθεώρηση απευθείας από το shell και στοχευμένη επαλήθευση
+- `omk explore --prompt "..."` είναι για αναζήτηση μόνο ανάγνωσης στο repository
+- `omk sparkshell <command>` είναι για επιθεώρηση απευθείας από το shell και στοχευμένη επαλήθευση
 
 Παραδείγματα:
 
 ```bash
-omx explore --prompt "find where team state is written"
-omx sparkshell git status
-omx sparkshell --tmux-pane %12 --tail-lines 400
+omk explore --prompt "find where team state is written"
+omk sparkshell git status
+omk sparkshell --tmux-pane %12 --tail-lines 400
 ```
 
 ### Σημειώσεις πλατφόρμας για τη λειτουργία team
 
-Η `omx team` χρειάζεται ένα tmux-συμβατό backend:
+Η `omk team` χρειάζεται ένα tmux-συμβατό backend:
 
 | Πλατφόρμα | Εγκατάσταση |
 | --- | --- |
@@ -172,10 +172,10 @@ omx sparkshell --tmux-pane %12 --tail-lines 400
 
 ### Mac με Intel: υψηλή χρήση CPU `syspolicyd` / `trustd` κατά την εκκίνηση
 
-Σε ορισμένα Mac με Intel, η εκκίνηση του OMX, ειδικά με `--madmax --high`, μπορεί να αυξήσει απότομα τη χρήση CPU των `syspolicyd` / `trustd` ενώ το macOS Gatekeeper επαληθεύει πολλές ταυτόχρονες εκκινήσεις διεργασιών.
+Σε ορισμένα Mac με Intel, η εκκίνηση του OMK, ειδικά με `--madmax --high`, μπορεί να αυξήσει απότομα τη χρήση CPU των `syspolicyd` / `trustd` ενώ το macOS Gatekeeper επαληθεύει πολλές ταυτόχρονες εκκινήσεις διεργασιών.
 
 Αν συμβεί αυτό, δοκιμάστε:
-- `xattr -dr com.apple.quarantine $(which omx)`
+- `xattr -dr com.apple.quarantine $(which omk)`
 - προσθέστε την εφαρμογή τερματικού σας στη λίστα επιτρεπόμενων Developer Tools στις ρυθμίσεις Ασφάλειας του macOS
 - χρησιμοποιήστε χαμηλότερο επίπεδο ταυτόχρονων εκτελέσεων (για παράδειγμα, αποφύγετε `--madmax --high`)
 

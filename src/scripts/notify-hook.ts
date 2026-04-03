@@ -85,15 +85,15 @@ async function main() {
   const payloadSessionId = safeString(payload.session_id || payload['session-id'] || '');
 
   // Team worker detection via environment variable
-  const teamWorkerEnv = process.env.OMX_TEAM_WORKER; // e.g., "fix-ts/worker-1"
+  const teamWorkerEnv = process.env.OMK_TEAM_WORKER; // e.g., "fix-ts/worker-1"
   const parsedTeamWorker = parseTeamWorkerEnv(teamWorkerEnv);
   const isTeamWorker = !!parsedTeamWorker;
 
   const stateDir = (isTeamWorker && parsedTeamWorker)
     ? await resolveTeamStateDirForWorker(cwd, parsedTeamWorker)
-    : join(cwd, '.omx', 'state');
-  const logsDir = join(cwd, '.omx', 'logs');
-  const omxDir = join(cwd, '.omx');
+    : join(cwd, '.omk', 'state');
+  const logsDir = join(cwd, '.omk', 'logs');
+  const omxDir = join(cwd, '.omk');
 
   // Ensure directories exist
   await mkdir(logsDir, { recursive: true }).catch(() => {});
@@ -525,7 +525,7 @@ async function main() {
   }
 
   // 10. Code simplifier: delegate recently modified files for simplification.
-  //     Opt-in via ~/.omx/config.json: { "codeSimplifier": { "enabled": true } }
+  //     Opt-in via ~/.omk/config.json: { "codeSimplifier": { "enabled": true } }
   if (!isTeamWorker) {
     try {
       const { processCodeSimplifier } = await import('../hooks/code-simplifier/index.js');

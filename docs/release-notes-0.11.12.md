@@ -2,7 +2,7 @@
 
 ## Summary
 
-`0.11.12` is a patch release after `0.11.11` that removes more Windows terminal flicker paths, closes additional team/runtime seam gaps, makes Node test execution cross-platform, and aligns workflow docs around the current OMX onboarding path.
+`0.11.12` is a patch release after `0.11.11` that removes more Windows terminal flicker paths, closes additional team/runtime seam gaps, makes Node test execution cross-platform, and aligns workflow docs around the current OMK onboarding path.
 
 ## Included fixes and changes
 

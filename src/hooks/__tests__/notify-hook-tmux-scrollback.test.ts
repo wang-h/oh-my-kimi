@@ -17,7 +17,7 @@ import { join } from 'node:path';
 const NOTIFY_HOOK_SCRIPT = new URL('../../../dist/scripts/notify-hook.js', import.meta.url);
 
 async function withTempWorkingDir(run: (cwd: string) => Promise<void>): Promise<void> {
-  const cwd = await mkdtemp(join(tmpdir(), 'omx-notify-scroll-'));
+  const cwd = await mkdtemp(join(tmpdir(), 'omk-notify-scroll-'));
   try {
     await run(cwd);
   } finally {
@@ -91,10 +91,10 @@ exit 1
 }
 
 async function setupFixture(cwd: string, paneInMode: '0' | '1', skipIfScrolling = true) {
-  const omxDir = join(cwd, '.omx');
+  const omxDir = join(cwd, '.omk');
   const stateDir = join(omxDir, 'state');
   const logsDir = join(omxDir, 'logs');
-  const sessionId = 'omx-scroll-test';
+  const sessionId = 'omk-scroll-test';
   const sessionStateDir = join(stateDir, 'sessions', sessionId);
   const fakeBinDir = join(cwd, 'fake-bin');
   const fakeTmuxPath = join(fakeBinDir, 'tmux');
@@ -111,8 +111,8 @@ async function setupFixture(cwd: string, paneInMode: '0' | '1', skipIfScrolling 
     allowed_modes: ['ralph'],
     cooldown_ms: 0,
     max_injections_per_session: 10,
-    prompt_template: 'Continue [OMX_TMUX_INJECT]',
-    marker: '[OMX_TMUX_INJECT]',
+    prompt_template: 'Continue [OMK_TMUX_INJECT]',
+    marker: '[OMK_TMUX_INJECT]',
     dry_run: false,
     log_level: 'debug',
     skip_if_scrolling: skipIfScrolling,
@@ -138,7 +138,7 @@ function runNotifyHook(cwd: string, fakeBinDir: string, threadId: string) {
     env: {
       ...process.env,
       PATH: `${fakeBinDir}:${process.env.PATH || ''}`,
-      OMX_TEAM_WORKER: '',
+      OMK_TEAM_WORKER: '',
       TMUX_PANE: '%42',
     },
   });

@@ -15,8 +15,8 @@ Agents now carry Sisyphus-style posture metadata that separates three dimensions
 - **Tier**: reasoning depth / cost (`LOW`, `STANDARD`, `THOROUGH`)
 - **Posture**: operating style (`frontier-orchestrator`, `deep-worker`, `fast-lane`)
 
-After `omx setup`, native agent configs in `~/.omx/agents/` include new sections:
-`## OMX Posture Overlay`, `## Model-Class Guidance`, and `## OMX Agent Metadata`.
+After `omk setup`, native agent configs in `~/.omk/agents/` include new sections:
+`## OMK Posture Overlay`, `## Model-Class Guidance`, and `## OMK Agent Metadata`.
 
 Representative routing:
 - `planner` / `architect` / `critic` -> `frontier-orchestrator`
@@ -29,7 +29,7 @@ PRs: [#588](https://github.com/Yeachan-Heo/oh-my-codex/pull/588), [#592](https:/
 
 ### Windows ESM import crash
 
-`bin/omx.js` failed on Windows with `ERR_UNSUPPORTED_ESM_URL_SCHEME` because `import()` received a bare absolute path (`C:\...`) instead of a `file://` URL.
+`bin/omk.js` failed on Windows with `ERR_UNSUPPORTED_ESM_URL_SCHEME` because `import()` received a bare absolute path (`C:\...`) instead of a `file://` URL.
 
 Fix: convert the resolved path to a `file://` URL via `url.pathToFileURL()` before dynamic import.
 
@@ -64,8 +64,8 @@ Part of PR: [#592](https://github.com/Yeachan-Heo/oh-my-codex/pull/592) ([@HaD0Y
 07e2cfd chore: bump version to 0.8.5 and add maintainers to README
 9bbe1e8 fix(notifications): use valid tmux capture-pane history flag
 0ae60af docs(bench): add benchmark comparison screenshot
-2f4862a docs(omx): remove remaining legacy model alias references
-0d2115c fix(omx): remove legacy model aliases from prompts and runtime metadata
+2f4862a docs(omk): remove remaining legacy model alias references
+0d2115c fix(omk): remove legacy model aliases from prompts and runtime metadata
 8fb3aa0 fix(bin): use file:// URL for dynamic import on Windows
-f448108 feat(omx): add posture-aware agent routing metadata
+f448108 feat(omk): add posture-aware agent routing metadata
 ```

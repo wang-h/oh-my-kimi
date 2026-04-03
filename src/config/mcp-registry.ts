@@ -105,7 +105,7 @@ function normalizeEntry(
 
 export function getUnifiedMcpRegistryCandidates(homeDir = homedir()): string[] {
   return [
-    join(homeDir, ".omx", "mcp-registry.json"),
+    join(homeDir, ".omk", "mcp-registry.json"),
     join(homeDir, ".omc", "mcp-registry.json"),
   ];
 }

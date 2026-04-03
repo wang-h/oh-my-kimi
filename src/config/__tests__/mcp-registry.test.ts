@@ -10,12 +10,12 @@ import {
 } from "../mcp-registry.js";
 
 describe("unified MCP registry loader", () => {
-  it("prefers ~/.omx/mcp-registry.json over ~/.omc/mcp-registry.json", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-mcp-registry-"));
+  it("prefers ~/.omk/mcp-registry.json over ~/.omc/mcp-registry.json", async () => {
+    const wd = await mkdtemp(join(tmpdir(), "omk-mcp-registry-"));
     try {
-      const omxPath = join(wd, ".omx", "mcp-registry.json");
+      const omxPath = join(wd, ".omk", "mcp-registry.json");
       const omcPath = join(wd, ".omc", "mcp-registry.json");
-      await mkdir(join(wd, ".omx"), { recursive: true });
+      await mkdir(join(wd, ".omk"), { recursive: true });
       await mkdir(join(wd, ".omc"), { recursive: true });
 
       await writeFile(
@@ -40,8 +40,8 @@ describe("unified MCP registry loader", () => {
     }
   });
 
-  it("falls back to ~/.omc/mcp-registry.json when ~/.omx registry is absent", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-mcp-registry-"));
+  it("falls back to ~/.omc/mcp-registry.json when ~/.omk registry is absent", async () => {
+    const wd = await mkdtemp(join(tmpdir(), "omk-mcp-registry-"));
     try {
       const omcPath = join(wd, ".omc", "mcp-registry.json");
       await mkdir(join(wd, ".omc"), { recursive: true });
@@ -63,7 +63,7 @@ describe("unified MCP registry loader", () => {
   });
 
   it("skips invalid entries but keeps valid entries from the same file", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-mcp-registry-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-mcp-registry-"));
     try {
       const registryPath = join(wd, "registry.json");
       await writeFile(
@@ -90,7 +90,7 @@ describe("unified MCP registry loader", () => {
   it("returns canonical home-based registry candidates", () => {
     const candidates = getUnifiedMcpRegistryCandidates("/tmp/home");
     assert.deepEqual(candidates, [
-      "/tmp/home/.omx/mcp-registry.json",
+      "/tmp/home/.omk/mcp-registry.json",
       "/tmp/home/.omc/mcp-registry.json",
     ]);
   });

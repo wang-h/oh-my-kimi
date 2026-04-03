@@ -21,7 +21,7 @@ import {
 } from '../autoresearch-guided.js';
 
 async function initRepo(): Promise<string> {
-  const cwd = await mkdtemp(join(tmpdir(), 'omx-autoresearch-guided-test-'));
+  const cwd = await mkdtemp(join(tmpdir(), 'omk-autoresearch-guided-test-'));
   execFileSync('git', ['init'], { cwd, stdio: 'ignore' });
   execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd, stdio: 'ignore' });
   execFileSync('git', ['config', 'user.name', 'Test User'], { cwd, stdio: 'ignore' });
@@ -217,7 +217,7 @@ describe('autoresearch intake draft artifacts', () => {
         seedInputs: { topic: 'Improve onboarding for first-time contributors' },
       });
 
-      assert.match(artifact.path, /\.omx\/specs\/deep-interview-autoresearch-improve-onboarding-for-first-time-contributors\.md$/);
+      assert.match(artifact.path, /\.omk\/specs\/deep-interview-autoresearch-improve-onboarding-for-first-time-contributors\.md$/);
       assert.equal(artifact.launchReady, false);
       assert.match(artifact.content, /## Mission Draft/);
       assert.match(artifact.content, /## Evaluator Draft/);
@@ -308,8 +308,8 @@ describe('runAutoresearchNoviceBridge', () => {
         ]),
       ));
 
-      const draftContent = await readFile(join(repo, '.omx', 'specs', 'deep-interview-autoresearch-ux-eval.md'), 'utf-8');
-      const resultContent = await readFile(join(repo, '.omx', 'specs', 'autoresearch-ux-eval', 'result.json'), 'utf-8');
+      const draftContent = await readFile(join(repo, '.omk', 'specs', 'deep-interview-autoresearch-ux-eval.md'), 'utf-8');
+      const resultContent = await readFile(join(repo, '.omk', 'specs', 'autoresearch-ux-eval', 'result.json'), 'utf-8');
       const missionContent = await readFile(join(result.missionDir, 'mission.md'), 'utf-8');
       const sandboxContent = await readFile(join(result.missionDir, 'sandbox.md'), 'utf-8');
 
@@ -345,7 +345,7 @@ describe('runAutoresearchNoviceBridge', () => {
         ]),
       ));
 
-      const draftContent = await readFile(join(repo, '.omx', 'specs', 'deep-interview-autoresearch-seeded-topic.md'), 'utf-8');
+      const draftContent = await readFile(join(repo, '.omk', 'specs', 'deep-interview-autoresearch-seeded-topic.md'), 'utf-8');
       assert.equal(result.slug, 'seeded-topic');
       assert.match(draftContent, /- topic: Seeded topic/);
       assert.match(draftContent, /- evaluator: node scripts\/eval\.js/);

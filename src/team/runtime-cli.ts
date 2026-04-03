@@ -48,7 +48,7 @@ async function writePanesFile(
   paneIds: string[],
   leaderPaneId: string,
 ): Promise<void> {
-  const omxJobsDir = process.env.OMX_JOBS_DIR;
+  const omxJobsDir = process.env.OMK_JOBS_DIR;
   if (!jobId || !omxJobsDir) return;
 
   const panesPath = join(omxJobsDir, `${jobId}-panes.json`);
@@ -167,7 +167,7 @@ async function main(): Promise<void> {
   } = input;
 
   const workerCount = input.workerCount ?? agentTypes.length;
-  const stateRoot = join(cwd, '.omx', 'state');
+  const stateRoot = join(cwd, '.omk', 'state');
 
   let runtime: TeamRuntime | null = null;
   let finalStatus: 'completed' | 'failed' = 'failed';
@@ -234,9 +234,9 @@ async function main(): Promise<void> {
   const agentType = 'executor';
   try {
     const providers = normalizeAgentTypes(agentTypes, workerCount);
-    const previousCliMap = process.env.OMX_TEAM_WORKER_CLI_MAP;
+    const previousCliMap = process.env.OMK_TEAM_WORKER_CLI_MAP;
     try {
-      process.env.OMX_TEAM_WORKER_CLI_MAP = providers.join(',');
+      process.env.OMK_TEAM_WORKER_CLI_MAP = providers.join(',');
       runtime = await startTeam(
         teamName,
         tasks.map(t => t.subject).join('; '),
@@ -246,8 +246,8 @@ async function main(): Promise<void> {
         cwd,
       );
     } finally {
-      if (typeof previousCliMap === 'string') process.env.OMX_TEAM_WORKER_CLI_MAP = previousCliMap;
-      else delete process.env.OMX_TEAM_WORKER_CLI_MAP;
+      if (typeof previousCliMap === 'string') process.env.OMK_TEAM_WORKER_CLI_MAP = previousCliMap;
+      else delete process.env.OMK_TEAM_WORKER_CLI_MAP;
     }
   } catch (err) {
     process.stderr.write(`[runtime-cli] startTeam failed: ${err}\n`);
@@ -255,7 +255,7 @@ async function main(): Promise<void> {
   }
 
   // Persist pane IDs so MCP server can clean up explicitly via omx_run_team_cleanup.
-  const jobId = process.env.OMX_JOB_ID;
+  const jobId = process.env.OMK_JOB_ID;
   try {
     const livePanes = await loadLivePaneState(teamName, cwd);
     if (livePanes) {
@@ -333,7 +333,7 @@ async function main(): Promise<void> {
   }
 }
 
-const shouldAutoStart = process.env.OMX_RUNTIME_CLI_DISABLE_AUTO_START !== '1';
+const shouldAutoStart = process.env.OMK_RUNTIME_CLI_DISABLE_AUTO_START !== '1';
 
 if (shouldAutoStart) {
   main().catch(err => {

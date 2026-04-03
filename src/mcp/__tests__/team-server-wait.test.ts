@@ -5,32 +5,32 @@ import { tmpdir, homedir } from 'node:os';
 import { join } from 'node:path';
 import { initTeamState, appendTeamEvent } from '../../team/state.js';
 
-const OMX_JOBS_DIR = join(homedir(), '.omx', 'team-jobs');
+const OMK_JOBS_DIR = join(homedir(), '.omk', 'team-jobs');
 
 async function writeJobFiles(
   jobId: string,
   job: Record<string, unknown>,
   panes: { paneIds: string[]; leaderPaneId: string },
 ): Promise<void> {
-  await mkdir(OMX_JOBS_DIR, { recursive: true });
-  await writeFile(join(OMX_JOBS_DIR, `${jobId}.json`), JSON.stringify(job));
-  await writeFile(join(OMX_JOBS_DIR, `${jobId}-panes.json`), JSON.stringify(panes));
+  await mkdir(OMK_JOBS_DIR, { recursive: true });
+  await writeFile(join(OMK_JOBS_DIR, `${jobId}.json`), JSON.stringify(job));
+  await writeFile(join(OMK_JOBS_DIR, `${jobId}-panes.json`), JSON.stringify(panes));
 }
 
 async function cleanupJobFiles(jobId: string): Promise<void> {
-  await rm(join(OMX_JOBS_DIR, `${jobId}.json`), { force: true });
-  await rm(join(OMX_JOBS_DIR, `${jobId}-panes.json`), { force: true });
+  await rm(join(OMK_JOBS_DIR, `${jobId}.json`), { force: true });
+  await rm(join(OMK_JOBS_DIR, `${jobId}-panes.json`), { force: true });
 }
 
 async function loadTeamServer() {
-  process.env.OMX_TEAM_SERVER_DISABLE_AUTO_START = '1';
+  process.env.OMK_TEAM_SERVER_DISABLE_AUTO_START = '1';
   return await import('../team-server.js');
 }
 
 describe('team-server wait semantics', () => {
   it('keeps default terminal semantics unchanged when wake_on is omitted', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-team-wait-default-'));
-    const jobId = `omx-${Date.now().toString(36)}`;
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-team-wait-default-'));
+    const jobId = `omk-${Date.now().toString(36)}`;
     try {
       await initTeamState('wait-default', 'task', 'executor', 1, cwd);
       await writeJobFiles(jobId, {
@@ -62,8 +62,8 @@ describe('team-server wait semantics', () => {
   });
 
   it('returns next event with cursor in wake_on=event mode', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-team-wait-event-'));
-    const jobId = `omx-${Date.now().toString(36)}`;
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-team-wait-event-'));
+    const jobId = `omk-${Date.now().toString(36)}`;
     try {
       await initTeamState('wait-event', 'task', 'executor', 1, cwd);
       const baseline = await appendTeamEvent('wait-event', {
@@ -122,8 +122,8 @@ describe('team-server wait semantics', () => {
   });
 
   it('normalizes legacy worker_idle events in wake_on=event mode', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-team-wait-legacy-'));
-    const jobId = `omx-${Date.now().toString(36)}`;
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-team-wait-legacy-'));
+    const jobId = `omk-${Date.now().toString(36)}`;
     try {
       await initTeamState('wait-legacy', 'task', 'executor', 1, cwd);
       const baseline = await appendTeamEvent('wait-legacy', {

@@ -1,22 +1,22 @@
 # Hooks Extension (Custom Plugins)
 
-OMX supports an additive hooks extension point for user plugins under `.omx/hooks/*.mjs`.
+OMK supports an additive hooks extension point for user plugins under `.omk/hooks/*.mjs`.
 
-> Compatibility guarantee: `omx tmux-hook` remains fully supported and unchanged.
-> The new `omx hooks` command group is additive and does **not** replace tmux-hook workflows.
+> Compatibility guarantee: `omk tmux-hook` remains fully supported and unchanged.
+> The new `omk hooks` command group is additive and does **not** replace tmux-hook workflows.
 
 ## Quick start
 
 ```bash
-omx hooks init
-omx hooks status
-omx hooks validate
-omx hooks test
+omk hooks init
+omk hooks status
+omk hooks validate
+omk hooks test
 ```
 
 This creates a scaffold plugin at:
 
-- `.omx/hooks/sample-plugin.mjs`
+- `.omk/hooks/sample-plugin.mjs`
 
 ## Enablement model
 
@@ -25,13 +25,13 @@ Plugins are **enabled by default**.
 Disable plugin dispatch explicitly:
 
 ```bash
-export OMX_HOOK_PLUGINS=0
+export OMK_HOOK_PLUGINS=0
 ```
 
 Optional timeout tuning (default: 1500ms):
 
 ```bash
-export OMX_HOOK_PLUGIN_TIMEOUT_MS=1500
+export OMK_HOOK_PLUGIN_TIMEOUT_MS=1500
 ```
 
 ## Native event pipeline (v1)
@@ -61,7 +61,7 @@ Envelope fields include:
 Best-effort derived events are gated and disabled by default.
 
 ```bash
-export OMX_HOOK_DERIVED_SIGNALS=1
+export OMK_HOOK_DERIVED_SIGNALS=1
 ```
 
 Derived signals include:
@@ -78,7 +78,7 @@ Derived events are labeled with:
 
 ## Team-safety behavior
 
-In team-worker sessions (`OMX_TEAM_WORKER` set), plugin side effects are skipped by default.
+In team-worker sessions (`OMK_TEAM_WORKER` set), plugin side effects are skipped by default.
 This keeps the lead session as the canonical side-effect emitter and avoids duplicate sends.
 
 ## Plugin contract
@@ -96,23 +96,23 @@ SDK surface includes:
 - `sdk.tmux.sendKeys(...)`
 - `sdk.log.info|warn|error(...)`
 - `sdk.state.read|write|delete|all(...)` (plugin namespace scoped)
-- `sdk.omx.session.read()`
-- `sdk.omx.hud.read()`
-- `sdk.omx.notifyFallback.read()`
-- `sdk.omx.updateCheck.read()`
+- `sdk.omk.session.read()`
+- `sdk.omk.hud.read()`
+- `sdk.omk.notifyFallback.read()`
+- `sdk.omk.updateCheck.read()`
 
-`sdk.omx` is intentionally narrow and read-only in pass one. These helpers read the
-repo-root `.omx/state/*.json` runtime files for the current workspace.
+`sdk.omk` is intentionally narrow and read-only in pass one. These helpers read the
+repo-root `.omk/state/*.json` runtime files for the current workspace.
 
 Compatibility notes:
 
-- `omx tmux-hook` remains a CLI/runtime workflow, not `sdk.omx.tmuxHook.*`
-- pass one does not add `sdk.omx.tmuxHook.*`; tmux plugin behavior stays on `sdk.tmux.sendKeys(...)`
-- pass one does not add generic `sdk.omx.readJson(...)`, `sdk.omx.list()`, or `sdk.omx.exists()`
+- `omk tmux-hook` remains a CLI/runtime workflow, not `sdk.omk.tmuxHook.*`
+- pass one does not add `sdk.omk.tmuxHook.*`; tmux plugin behavior stays on `sdk.tmux.sendKeys(...)`
+- pass one does not add generic `sdk.omk.readJson(...)`, `sdk.omk.list()`, or `sdk.omk.exists()`
 - pass one does not add `sdk.pluginState`; keep using `sdk.state`
 
 ## Logs
 
 Plugin dispatch and plugin logs are written to:
 
-- `.omx/logs/hooks-YYYY-MM-DD.jsonl`
+- `.omk/logs/hooks-YYYY-MM-DD.jsonl`

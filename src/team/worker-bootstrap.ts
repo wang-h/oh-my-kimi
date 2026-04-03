@@ -13,7 +13,7 @@ import { sleep } from "../utils/sleep.js";
 const TEAM_OVERLAY_START = "<!-- OMX:TEAM:WORKER:START -->";
 const TEAM_OVERLAY_END = "<!-- OMX:TEAM:WORKER:END -->";
 const SKILL_REFERENCE_PATTERN = /\/skills\/([^/\s`]+)\/SKILL\.md\b/g;
-const AGENTS_LOCK_PATH = [".omx", "state", "agents-md.lock"];
+const AGENTS_LOCK_PATH = [".omk", "state", "agents-md.lock"];
 const LOCK_OWNER_FILE = "owner.json";
 const LOCK_TIMEOUT_MS = 5000;
 const LOCK_POLL_INTERVAL_MS = 100;
@@ -90,7 +90,7 @@ This file is generated for a live OMX team worker run and is disposable.
 
    \`omx team api send-message --input "{\"team_name\":\"${options.teamName}\",\"from_worker\":\"${options.workerName}\",\"to_worker\":\"leader-fixed\",\"body\":\"ACK: ${options.workerName} initialized\"}" --json\`
 
-4. Resolve canonical team state root in this order: \`OMX_TEAM_STATE_ROOT\` env -> worker identity \`team_state_root\` -> config/manifest \`team_state_root\` -> local cwd fallback.
+4. Resolve canonical team state root in this order: \`OMK_TEAM_STATE_ROOT\` env -> worker identity \`team_state_root\` -> config/manifest \`team_state_root\` -> local cwd fallback.
 5. Read task files from \`${options.teamStateRoot}/team/${options.teamName}/tasks/task-<id>.json\` using bare \`task_id\` values in APIs.
 6. Use claim-safe lifecycle APIs only:
    - \`omx team api claim-task --json\`
@@ -303,10 +303,10 @@ You are a team worker in team "${teamName}". Your identity and assigned tasks ar
    - \`<leader_cwd>/skills/worker/SKILL.md\` (repo fallback)
 3. Send an ACK to the lead using CLI interop \`omx team api send-message --json\` (to_worker="leader-fixed") once initialized
 4. Resolve canonical team state root in this order:
-   - OMX_TEAM_STATE_ROOT env
+   - OMK_TEAM_STATE_ROOT env
    - worker identity team_state_root
    - team config/manifest team_state_root
-   - local cwd fallback (.omx/state)
+   - local cwd fallback (.omk/state)
 5. Read your task from <team_state_root>/team/${teamName}/tasks/task-<id>.json (example: task-1.json)
 6. Task id format:
    - State/MCP APIs use task_id: "<id>" (example: "1"), never "task-1"
@@ -479,7 +479,7 @@ export async function writeTeamWorkerInstructionsFile(
 
   const outPath = join(
     cwd,
-    ".omx",
+    ".omk",
     "state",
     "team",
     teamName,
@@ -520,7 +520,7 @@ ${roleOverlay}`
       : roleOverlay.trimStart();
   const outPath = join(
     cwd,
-    ".omx",
+    ".omk",
     "state",
     "team",
     teamName,
@@ -542,7 +542,7 @@ export async function removeTeamWorkerInstructionsFile(
 ): Promise<void> {
   const outPath = join(
     cwd,
-    ".omx",
+    ".omk",
     "state",
     "team",
     teamName,
@@ -633,7 +633,7 @@ async function withAgentsMdLock<T>(
 
 /**
  * Generate initial inbox file content for worker bootstrap.
- * This is written to .omx/state/team/{team}/workers/{worker}/inbox.md by the lead.
+ * This is written to .omk/state/team/{team}/workers/{worker}/inbox.md by the lead.
  */
 export function generateInitialInbox(
   workerName: string,
@@ -692,7 +692,7 @@ ${taskList}
    \`omx team api send-message --input "{\"team_name\":\"${teamName}\",\"from_worker\":\"${workerName}\",\"to_worker\":\"leader-fixed\",\"body\":\"ACK: ${workerName} initialized\"}" --json\`
 
 3. Start with the first non-blocked task
-4. Resolve canonical team state root in this order: \`OMX_TEAM_STATE_ROOT\` env -> worker identity \`team_state_root\` -> config/manifest \`team_state_root\` -> local cwd fallback.
+4. Resolve canonical team state root in this order: \`OMK_TEAM_STATE_ROOT\` env -> worker identity \`team_state_root\` -> config/manifest \`team_state_root\` -> local cwd fallback.
 5. Read the task file for your selected task id at \`${teamStateRoot}/team/${teamName}/tasks/task-<id>.json\` (example: \`task-1.json\`)
 6. Task id format:
    - State/MCP APIs use \`task_id: "<id>"\` (example: \`"1"\`), not \`"task-1"\`.
@@ -808,7 +808,7 @@ function buildInstructionPath(...parts: string[]): string {
 export function generateTriggerMessage(
   workerName: string,
   teamName: string,
-  teamStateRoot: string = ".omx/state",
+  teamStateRoot: string = ".omk/state",
 ): string {
   const inboxPath = buildInstructionPath(
     teamStateRoot,
@@ -818,7 +818,7 @@ export function generateTriggerMessage(
     workerName,
     "inbox.md",
   );
-  if (teamStateRoot !== ".omx/state") {
+  if (teamStateRoot !== ".omk/state") {
     return `Read ${inboxPath}, work now, report progress, continue assigned work or next feasible task.`;
   }
   return `Read ${inboxPath}, start work now, report concrete progress, then continue assigned work or next feasible task.`;
@@ -832,7 +832,7 @@ export function generateMailboxTriggerMessage(
   workerName: string,
   teamName: string,
   count: number,
-  teamStateRoot: string = ".omx/state",
+  teamStateRoot: string = ".omk/state",
 ): string {
   const n = Number.isFinite(count) ? Math.max(1, Math.floor(count)) : 1;
   const mailboxPath = buildInstructionPath(
@@ -842,7 +842,7 @@ export function generateMailboxTriggerMessage(
     "mailbox",
     workerName + ".json",
   );
-  if (teamStateRoot !== ".omx/state") {
+  if (teamStateRoot !== ".omk/state") {
     return `${n} new msg(s): read ${mailboxPath}, act, report progress, continue assigned work or next feasible task.`;
   }
   return `You have ${n} new message(s). Read ${mailboxPath}, act now, reply with concrete progress, then continue assigned work or next feasible task.`;
@@ -851,7 +851,7 @@ export function generateMailboxTriggerMessage(
 export function generateLeaderMailboxTriggerMessage(
   teamName: string,
   fromWorker: string,
-  teamStateRoot: string = ".omx/state",
+  teamStateRoot: string = ".omk/state",
 ): string {
   const mailboxPath = buildInstructionPath(
     teamStateRoot,
@@ -860,7 +860,7 @@ export function generateLeaderMailboxTriggerMessage(
     "mailbox",
     "leader-fixed.json",
   );
-  if (teamStateRoot !== ".omx/state") {
+  if (teamStateRoot !== ".omk/state") {
     return `Read ${mailboxPath}; new msg from ${fromWorker}. Review it; decide next step.`;
   }
   return `Read ${mailboxPath}; ${fromWorker} sent a new message. Review it and decide the next concrete step.`;

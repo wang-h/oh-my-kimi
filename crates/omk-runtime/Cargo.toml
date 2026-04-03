@@ -1,0 +1,12 @@
+[package]
+name = "omk-runtime"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+omk-mux = { path = "../omk-mux" }
+omk-runtime-core = { path = "../omk-runtime-core" }
+serde_json = "1"
+

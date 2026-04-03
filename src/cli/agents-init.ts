@@ -30,7 +30,7 @@ const MANUAL_END = "<!-- OMX:AGENTS-INIT:MANUAL:END -->";
 const DEFAULT_LIST_LIMIT = 12;
 const IGNORE_DIRECTORY_NAMES = new Set([
   ".git",
-  ".omx",
+  ".omk",
   ".codex",
   "node_modules",
   "dist",
@@ -305,7 +305,7 @@ export async function agentsInit(
   const plannedDirs = await resolveTargetDirectories(targetDir);
   const backupRoot = join(
     cwd,
-    ".omx",
+    ".omk",
     "backups",
     "agents-init",
     new Date().toISOString().replaceAll(":", "-"),

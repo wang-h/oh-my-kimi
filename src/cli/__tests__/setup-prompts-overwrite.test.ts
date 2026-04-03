@@ -10,10 +10,10 @@ describe('omx setup prompt/native-agent overwrite behavior', () => {
   const obsoleteNativeAgentField = ['skill', 'ref'].join('_');
 
   it('installs only active/internal catalog prompts and native agents', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-setup-prompts-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-setup-prompts-'));
     const previousCwd = process.cwd();
     try {
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       process.chdir(wd);
 
       await setup({ scope: 'project' });
@@ -62,10 +62,10 @@ describe('omx setup prompt/native-agent overwrite behavior', () => {
   });
 
   it('removes stale merged/unlisted prompts on --force', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-setup-prompts-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-setup-prompts-'));
     const previousCwd = process.cwd();
     try {
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       process.chdir(wd);
 
       await setup({ scope: 'project' });
@@ -89,10 +89,10 @@ describe('omx setup prompt/native-agent overwrite behavior', () => {
     }
   });
   it('removes stale merged native agents on --force', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-setup-prompts-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-setup-prompts-'));
     const previousCwd = process.cwd();
     try {
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       process.chdir(wd);
 
       await setup({ scope: 'project' });
@@ -117,10 +117,10 @@ describe('omx setup prompt/native-agent overwrite behavior', () => {
   });
 
   it('removes stale native agents with the obsolete bridge field during normal setup', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-setup-prompts-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-setup-prompts-'));
     const previousCwd = process.cwd();
     try {
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       process.chdir(wd);
 
       await setup({ scope: 'project' });

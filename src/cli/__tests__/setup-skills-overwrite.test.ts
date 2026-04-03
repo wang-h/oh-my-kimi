@@ -8,10 +8,10 @@ import { setup } from '../setup.js';
 
 describe('omx setup skills overwrite behavior', () => {
   it('installs only active/internal catalog skills (skips alias/merged)', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-setup-skills-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-setup-skills-'));
     const previousCwd = process.cwd();
     try {
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       process.chdir(wd);
 
       await setup({ scope: 'project' });
@@ -39,10 +39,10 @@ describe('omx setup skills overwrite behavior', () => {
   });
 
   it('removes stale alias/merged skill directories on --force', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-setup-skills-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-setup-skills-'));
     const previousCwd = process.cwd();
     try {
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       process.chdir(wd);
 
       await setup({ scope: 'project' });
@@ -68,10 +68,10 @@ describe('omx setup skills overwrite behavior', () => {
   });
 
   it('removes stale unlisted shipped skill directories on --force', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-setup-skills-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-setup-skills-'));
     const previousCwd = process.cwd();
     try {
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       process.chdir(wd);
 
       await setup({ scope: 'project' });
@@ -93,10 +93,10 @@ describe('omx setup skills overwrite behavior', () => {
   });
 
   it('refreshes existing skill files by default and restores packaged content', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-setup-skills-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-setup-skills-'));
     const previousCwd = process.cwd();
     try {
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       process.chdir(wd);
 
       await setup({ scope: 'project' });
@@ -111,7 +111,7 @@ describe('omx setup skills overwrite behavior', () => {
       await setup({ scope: 'project' });
       assert.equal(await readFile(skillPath, 'utf-8'), installed);
 
-      const backupsRoot = join(wd, '.omx', 'backups', 'setup');
+      const backupsRoot = join(wd, '.omk', 'backups', 'setup');
       assert.equal(existsSync(backupsRoot), true);
 
       await setup({ scope: 'project', force: true });
@@ -123,12 +123,12 @@ describe('omx setup skills overwrite behavior', () => {
   });
 
   it('logs skip/remove decisions in verbose mode', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-setup-skills-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-setup-skills-'));
     const previousCwd = process.cwd();
     const logs: string[] = [];
     const originalLog = console.log;
     try {
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       process.chdir(wd);
       console.log = (...args: unknown[]) => {
         logs.push(args.map((arg) => String(arg)).join(' '));
@@ -151,7 +151,7 @@ describe('omx setup skills overwrite behavior', () => {
   });
 
   it('prints a migration hint when legacy ~/.agents/skills overlaps canonical user skills', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-setup-skills-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-setup-skills-'));
     const previousCwd = process.cwd();
     const previousHome = process.env.HOME;
     const previousCodexHome = process.env.CODEX_HOME;
@@ -162,7 +162,7 @@ describe('omx setup skills overwrite behavior', () => {
       const codexHome = join(home, '.codex');
       process.env.HOME = home;
       process.env.CODEX_HOME = codexHome;
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       await mkdir(join(home, '.agents', 'skills', 'help'), { recursive: true });
       await writeFile(join(home, '.agents', 'skills', 'help', 'SKILL.md'), '# legacy help\n');
       process.chdir(wd);

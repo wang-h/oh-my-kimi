@@ -9,7 +9,7 @@ Contributor: [@Yeachan-Heo](https://github.com/Yeachan-Heo).
 
 ### Anti-slop workflow rollout
 
-OMX now ships an anti-slop workflow across its guidance/catalog surfaces.
+OMK now ships an anti-slop workflow across its guidance/catalog surfaces.
 
 This release:
 - adds anti-slop workflow guidance to root and template `AGENTS.md`

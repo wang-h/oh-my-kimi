@@ -7,12 +7,12 @@ import { spawnSync } from 'node:child_process';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const projectRoot = join(__dirname, '..', '..');
-const nativeRoot = join(projectRoot, 'crates', 'omx-sparkshell');
-const manifestPath = process.env.OMX_SPARKSHELL_MANIFEST ?? join(nativeRoot, 'Cargo.toml');
-const binaryName = platform() === 'win32' ? 'omx-sparkshell.exe' : 'omx-sparkshell';
+const nativeRoot = join(projectRoot, 'crates', 'omk-sparkshell');
+const manifestPath = process.env.OMK_SPARKSHELL_MANIFEST ?? join(nativeRoot, 'Cargo.toml');
+const binaryName = platform() === 'win32' ? 'omk-sparkshell.exe' : 'omk-sparkshell';
 const releaseBinaryPath = join(projectRoot, 'target', 'release', binaryName);
-const stagedBinaryRoot = process.env.OMX_SPARKSHELL_STAGE_DIR
-  ? join(process.env.OMX_SPARKSHELL_STAGE_DIR, `${platform()}-${arch()}`)
+const stagedBinaryRoot = process.env.OMK_SPARKSHELL_STAGE_DIR
+  ? join(process.env.OMK_SPARKSHELL_STAGE_DIR, `${platform()}-${arch()}`)
   : join(projectRoot, 'bin', 'native', `${platform()}-${arch()}`);
 const packagedBinaryDir = stagedBinaryRoot;
 const packagedBinaryPath = join(packagedBinaryDir, binaryName);

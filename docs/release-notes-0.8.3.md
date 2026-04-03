@@ -19,7 +19,7 @@ This is a **focused hotfix release** for the Gemini team-worker path shipped in 
 
 ### 1) Gemini prompt-mode workers now start with an explicit initial prompt
 
-Gemini workers launched through OMX team prompt mode are now started with an explicit initial instruction:
+Gemini workers launched through OMK team prompt mode are now started with an explicit initial instruction:
 
 - `--approval-mode yolo`
 - `-i "Read and follow the instructions in .../inbox.md"`

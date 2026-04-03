@@ -10,14 +10,14 @@ import type { NotificationConfig, NotificationPayload } from '../notifier.js';
 
 describe('loadNotificationConfig', () => {
   it('returns null when config file does not exist', async () => {
-    const fakePath = join(tmpdir(), `omx-test-${randomUUID()}`);
+    const fakePath = join(tmpdir(), `omk-test-${randomUUID()}`);
     const config = await loadNotificationConfig(fakePath);
     assert.equal(config, null);
   });
 
   it('returns parsed config when file exists', async () => {
-    const tmpDir = join(tmpdir(), `omx-test-${randomUUID()}`);
-    const omxDir = join(tmpDir, '.omx');
+    const tmpDir = join(tmpdir(), `omk-test-${randomUUID()}`);
+    const omxDir = join(tmpDir, '.omk');
     mkdirSync(omxDir, { recursive: true });
 
     const configData: NotificationConfig = {
@@ -40,8 +40,8 @@ describe('loadNotificationConfig', () => {
   });
 
   it('returns null for invalid JSON', async () => {
-    const tmpDir = join(tmpdir(), `omx-test-${randomUUID()}`);
-    const omxDir = join(tmpDir, '.omx');
+    const tmpDir = join(tmpdir(), `omk-test-${randomUUID()}`);
+    const omxDir = join(tmpDir, '.omk');
     mkdirSync(omxDir, { recursive: true });
     writeFileSync(join(omxDir, 'notifications.json'), 'not-json');
 

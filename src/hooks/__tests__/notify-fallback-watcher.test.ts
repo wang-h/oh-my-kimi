@@ -75,21 +75,21 @@ echo "$@" >> "${tmuxLogPath}"
 cmd="$1"
 shift || true
 if [[ "$cmd" == "capture-pane" ]]; then
-  if [[ -n "\${OMX_TEST_CAPTURE_SEQUENCE_FILE:-}" && -f "\${OMX_TEST_CAPTURE_SEQUENCE_FILE}" ]]; then
-    counterFile="\${OMX_TEST_CAPTURE_COUNTER_FILE:-\${OMX_TEST_CAPTURE_SEQUENCE_FILE}.idx}"
+  if [[ -n "\${OMK_TEST_CAPTURE_SEQUENCE_FILE:-}" && -f "\${OMK_TEST_CAPTURE_SEQUENCE_FILE}" ]]; then
+    counterFile="\${OMK_TEST_CAPTURE_COUNTER_FILE:-\${OMK_TEST_CAPTURE_SEQUENCE_FILE}.idx}"
     idx=0
     if [[ -f "$counterFile" ]]; then idx="$(cat "$counterFile")"; fi
     lineNo=$((idx + 1))
-    line="$(sed -n "\${lineNo}p" "\${OMX_TEST_CAPTURE_SEQUENCE_FILE}" || true)"
+    line="$(sed -n "\${lineNo}p" "\${OMK_TEST_CAPTURE_SEQUENCE_FILE}" || true)"
     if [[ -z "$line" ]]; then
-      line="$(tail -n 1 "\${OMX_TEST_CAPTURE_SEQUENCE_FILE}" || true)"
+      line="$(tail -n 1 "\${OMK_TEST_CAPTURE_SEQUENCE_FILE}" || true)"
     fi
     printf "%s\\n" "$line"
     echo "$lineNo" > "$counterFile"
     exit 0
   fi
-  if [[ -n "\${OMX_TEST_CAPTURE_FILE:-}" && -f "\${OMX_TEST_CAPTURE_FILE}" ]]; then
-    cat "\${OMX_TEST_CAPTURE_FILE}"
+  if [[ -n "\${OMK_TEST_CAPTURE_FILE:-}" && -f "\${OMK_TEST_CAPTURE_FILE}" ]]; then
+    cat "\${OMK_TEST_CAPTURE_FILE}"
   fi
   exit 0
 fi
@@ -155,10 +155,10 @@ function buildCleanNotifyEnv(
 ): NodeJS.ProcessEnv {
   return {
     ...process.env,
-    OMX_TEAM_WORKER: '',
-    OMX_TEAM_STATE_ROOT: '',
-    OMX_TEAM_LEADER_CWD: '',
-    OMX_MODEL_INSTRUCTIONS_FILE: '',
+    OMK_TEAM_WORKER: '',
+    OMK_TEAM_STATE_ROOT: '',
+    OMK_TEAM_LEADER_CWD: '',
+    OMK_MODEL_INSTRUCTIONS_FILE: '',
     TMUX: '',
     TMUX_PANE: '',
     ...overrides,
@@ -167,15 +167,15 @@ function buildCleanNotifyEnv(
 
 describe('notify-fallback watcher', () => {
   it('one-shot mode forwards only recent task_complete events', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-once-'));
-    const tempHome = await mkdtemp(join(tmpdir(), 'omx-fallback-home-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-once-'));
+    const tempHome = await mkdtemp(join(tmpdir(), 'omk-fallback-home-'));
     const sid = `test-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     const sessionDir = todaySessionDir(tempHome);
     const rolloutPath = join(sessionDir, `rollout-test-fallback-once-${sid}.jsonl`);
 
     try {
-      await mkdir(join(wd, '.omx', 'logs'), { recursive: true });
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'logs'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       await mkdir(sessionDir, { recursive: true });
 
       const staleIso = new Date(Date.now() - 60_000).toISOString();
@@ -220,7 +220,7 @@ describe('notify-fallback watcher', () => {
       );
       assert.equal(result.status, 0, result.stderr || result.stdout);
 
-      const turnLog = join(wd, '.omx', 'logs', `turns-${new Date().toISOString().split('T')[0]}.jsonl`);
+      const turnLog = join(wd, '.omk', 'logs', `turns-${new Date().toISOString().split('T')[0]}.jsonl`);
       const turnLines = await readLines(turnLog);
       assert.equal(turnLines.length, 1);
       assert.match(turnLines[0], new RegExp(freshTurn));
@@ -233,15 +233,15 @@ describe('notify-fallback watcher', () => {
   });
 
   it('streaming mode buffers partial JSON lines until the newline arrives', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-stream-partial-'));
-    const tempHome = await mkdtemp(join(tmpdir(), 'omx-fallback-home-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-stream-partial-'));
+    const tempHome = await mkdtemp(join(tmpdir(), 'omk-fallback-home-'));
     const sid = randomUUID();
     const sessionDir = todaySessionDir(tempHome);
     const rolloutPath = join(sessionDir, `rollout-test-fallback-stream-partial-${sid}.jsonl`);
 
     try {
-      await mkdir(join(wd, '.omx', 'logs'), { recursive: true });
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'logs'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       await mkdir(sessionDir, { recursive: true });
 
       const nowIso = new Date().toISOString();
@@ -260,8 +260,8 @@ describe('notify-fallback watcher', () => {
 
       const watcherScript = new URL('../../../dist/scripts/notify-fallback-watcher.js', import.meta.url).pathname;
       const notifyHook = new URL('../../../dist/scripts/notify-hook.js', import.meta.url).pathname;
-      const watcherStatePath = join(wd, '.omx', 'state', 'notify-fallback-state.json');
-      const turnLog = join(wd, '.omx', 'logs', `turns-${new Date().toISOString().split('T')[0]}.jsonl`);
+      const watcherStatePath = join(wd, '.omk', 'state', 'notify-fallback-state.json');
+      const turnLog = join(wd, '.omk', 'logs', `turns-${new Date().toISOString().split('T')[0]}.jsonl`);
       const child = spawn(
         process.execPath,
         [watcherScript, '--cwd', wd, '--notify-script', notifyHook, '--poll-ms', '75'],
@@ -314,15 +314,15 @@ describe('notify-fallback watcher', () => {
   });
 
   it('streaming mode tails from EOF and does not replay backlog', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-stream-'));
-    const tempHome = await mkdtemp(join(tmpdir(), 'omx-fallback-home-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-stream-'));
+    const tempHome = await mkdtemp(join(tmpdir(), 'omk-fallback-home-'));
     const sid = randomUUID();
     const sessionDir = todaySessionDir(tempHome);
     const rolloutPath = join(sessionDir, `rollout-test-fallback-stream-${sid}.jsonl`);
 
     try {
-      await mkdir(join(wd, '.omx', 'logs'), { recursive: true });
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'logs'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       await mkdir(sessionDir, { recursive: true });
 
       const nowIso = new Date().toISOString();
@@ -351,8 +351,8 @@ describe('notify-fallback watcher', () => {
 
       const watcherScript = new URL('../../../dist/scripts/notify-fallback-watcher.js', import.meta.url).pathname;
       const notifyHook = new URL('../../../dist/scripts/notify-hook.js', import.meta.url).pathname;
-      const watcherStatePath = join(wd, '.omx', 'state', 'notify-fallback-state.json');
-      const turnLog = join(wd, '.omx', 'logs', `turns-${new Date().toISOString().split('T')[0]}.jsonl`);
+      const watcherStatePath = join(wd, '.omk', 'state', 'notify-fallback-state.json');
+      const turnLog = join(wd, '.omk', 'logs', `turns-${new Date().toISOString().split('T')[0]}.jsonl`);
       const child = spawn(
         process.execPath,
         [watcherScript, '--cwd', wd, '--notify-script', notifyHook, '--poll-ms', '75'],
@@ -402,7 +402,7 @@ describe('notify-fallback watcher', () => {
   });
 
   it('records explicit leader-only dispatch drain state and log visibility in one-shot mode', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-dispatch-state-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-dispatch-state-'));
     try {
       await initTeamState('dispatch-team', 'task', 'executor', 1, wd);
       await enqueueDispatchRequest('dispatch-team', {
@@ -421,7 +421,7 @@ describe('notify-fallback watcher', () => {
       );
       assert.equal(result.status, 0, result.stderr || result.stdout);
 
-      const watcherStatePath = join(wd, '.omx', 'state', 'notify-fallback-state.json');
+      const watcherStatePath = join(wd, '.omk', 'state', 'notify-fallback-state.json');
       const watcherState = JSON.parse(await readFile(watcherStatePath, 'utf-8'));
       assert.equal(watcherState.dispatch_drain?.enabled, true);
       assert.equal(watcherState.dispatch_drain?.leader_only, true);
@@ -429,7 +429,7 @@ describe('notify-fallback watcher', () => {
       assert.equal(watcherState.dispatch_drain?.run_count, 1);
       assert.equal(watcherState.dispatch_drain?.last_result?.processed, 1);
 
-      const logPath = join(wd, '.omx', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
+      const logPath = join(wd, '.omk', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
       const logEntries = (await readFile(logPath, 'utf-8')).trim().split('\n').filter(Boolean).map((line) => JSON.parse(line));
       const drainEvent = logEntries.find((entry: { type?: string }) => entry.type === 'dispatch_drain_tick');
       assert.ok(drainEvent, 'expected dispatch_drain_tick log event');
@@ -442,39 +442,39 @@ describe('notify-fallback watcher', () => {
 
 
   it('disables fallback watcher nudges when deep-interview state is active', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-deep-interview-suppressed-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-deep-interview-suppressed-'));
     const fakeBinDir = join(wd, 'fake-bin');
     const tmuxLogPath = join(wd, 'tmux.log');
     try {
-      await mkdir(join(wd, '.omx', 'logs'), { recursive: true });
-      await mkdir(join(wd, '.omx', 'state', 'team', 'dispatch-team'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'logs'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state', 'team', 'dispatch-team'), { recursive: true });
       await mkdir(fakeBinDir, { recursive: true });
       await writeFile(join(fakeBinDir, 'tmux'), buildFakeTmux(tmuxLogPath));
       await chmod(join(fakeBinDir, 'tmux'), 0o755);
 
-      await writeFile(join(wd, '.omx', 'state', 'deep-interview-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'deep-interview-state.json'), JSON.stringify({
         active: true,
         mode: 'deep-interview',
         current_phase: 'deep-interview',
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'ralph-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'ralph-state.json'), JSON.stringify({
         active: true,
         current_phase: 'executing',
         tmux_pane_id: '%42',
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'team-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'team-state.json'), JSON.stringify({
         active: true,
         team_name: 'dispatch-team',
         current_phase: 'team-exec',
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'hud-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'hud-state.json'), JSON.stringify({
         last_turn_at: new Date(Date.now() - 300_000).toISOString(),
         turn_count: 3,
         last_agent_output: 'Would you like me to continue?',
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'team', 'dispatch-team', 'config.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'team', 'dispatch-team', 'config.json'), JSON.stringify({
         name: 'dispatch-team',
-        tmux_session: 'omx-team-dispatch-team',
+        tmux_session: 'omk-team-dispatch-team',
         leader_pane_id: '%42',
       }, null, 2));
 
@@ -493,35 +493,35 @@ describe('notify-fallback watcher', () => {
       const tmuxLog = await readFile(tmuxLogPath, 'utf8').catch(() => '');
       assert.doesNotMatch(tmuxLog, /Ralph loop active continue/);
       assert.doesNotMatch(tmuxLog, /Team dispatch-team:/);
-      assert.doesNotMatch(tmuxLog, /yes, proceed \[OMX_TMUX_INJECT\]/);
+      assert.doesNotMatch(tmuxLog, /yes, proceed \[OMK_TMUX_INJECT\]/);
     } finally {
       await rm(wd, { recursive: true, force: true });
     }
   });
 
   it('runs leader nudge checks from the fallback watcher so stale alerts do not wait for a leader turn', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-leader-nudge-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-leader-nudge-'));
     const fakeBinDir = join(wd, 'fake-bin');
     const tmuxLogPath = join(wd, 'tmux.log');
     try {
-      await mkdir(join(wd, '.omx', 'logs'), { recursive: true });
-      await mkdir(join(wd, '.omx', 'state', 'team', 'dispatch-team'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'logs'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state', 'team', 'dispatch-team'), { recursive: true });
       await mkdir(fakeBinDir, { recursive: true });
       await writeFile(join(fakeBinDir, 'tmux'), buildFakeTmux(tmuxLogPath));
       await chmod(join(fakeBinDir, 'tmux'), 0o755);
 
-      await writeFile(join(wd, '.omx', 'state', 'team-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'team-state.json'), JSON.stringify({
         active: true,
         team_name: 'dispatch-team',
         current_phase: 'team-exec',
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'hud-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'hud-state.json'), JSON.stringify({
         last_turn_at: new Date(Date.now() - 300_000).toISOString(),
         turn_count: 3,
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'team', 'dispatch-team', 'config.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'team', 'dispatch-team', 'config.json'), JSON.stringify({
         name: 'dispatch-team',
-        tmux_session: 'omx-team-dispatch-team',
+        tmux_session: 'omk-team-dispatch-team',
         leader_pane_id: '%42',
       }, null, 2));
 
@@ -542,7 +542,7 @@ describe('notify-fallback watcher', () => {
       const tmuxLog = await readFile(tmuxLogPath, 'utf8');
       assert.match(tmuxLog, /send-keys -t %42 -l Team dispatch-team: leader stale/);
 
-      const watcherStatePath = join(wd, '.omx', 'state', 'notify-fallback-state.json');
+      const watcherStatePath = join(wd, '.omk', 'state', 'notify-fallback-state.json');
       const watcherState = JSON.parse(await readFile(watcherStatePath, 'utf-8'));
       assert.equal(watcherState.poll_ms, 250);
       assert.equal(watcherState.leader_nudge?.enabled, true);
@@ -550,7 +550,7 @@ describe('notify-fallback watcher', () => {
       assert.equal(watcherState.leader_nudge?.run_count, 1);
       assert.equal(watcherState.leader_nudge?.precomputed_leader_stale, true);
 
-      const logPath = join(wd, '.omx', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
+      const logPath = join(wd, '.omk', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
       const logEntries = (await readFile(logPath, 'utf-8')).trim().split('\n').filter(Boolean).map((line) => JSON.parse(line));
       const nudgeEvent = logEntries.find((entry: { type?: string }) => entry.type === 'leader_nudge_tick');
       assert.ok(nudgeEvent, 'expected leader_nudge_tick log event');
@@ -563,31 +563,31 @@ describe('notify-fallback watcher', () => {
 
 
   it('skips fallback watcher leader nudges when the leader is not stale even if mailbox messages exist', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-leader-nudge-fresh-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-leader-nudge-fresh-'));
     const fakeBinDir = join(wd, 'fake-bin');
     const tmuxLogPath = join(wd, 'tmux.log');
     try {
-      await mkdir(join(wd, '.omx', 'logs'), { recursive: true });
-      await mkdir(join(wd, '.omx', 'state', 'team', 'dispatch-team', 'mailbox'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'logs'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state', 'team', 'dispatch-team', 'mailbox'), { recursive: true });
       await mkdir(fakeBinDir, { recursive: true });
       await writeFile(join(fakeBinDir, 'tmux'), buildFakeTmux(tmuxLogPath));
       await chmod(join(fakeBinDir, 'tmux'), 0o755);
 
-      await writeFile(join(wd, '.omx', 'state', 'team-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'team-state.json'), JSON.stringify({
         active: true,
         team_name: 'dispatch-team',
         current_phase: 'team-exec',
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'hud-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'hud-state.json'), JSON.stringify({
         last_turn_at: new Date().toISOString(),
         turn_count: 3,
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'team', 'dispatch-team', 'config.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'team', 'dispatch-team', 'config.json'), JSON.stringify({
         name: 'dispatch-team',
-        tmux_session: 'omx-team-dispatch-team',
+        tmux_session: 'omk-team-dispatch-team',
         leader_pane_id: '%42',
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'team', 'dispatch-team', 'mailbox', 'leader-fixed.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'team', 'dispatch-team', 'mailbox', 'leader-fixed.json'), JSON.stringify({
         worker: 'leader-fixed',
         messages: [
           {
@@ -617,14 +617,14 @@ describe('notify-fallback watcher', () => {
       const tmuxLog = await readFile(tmuxLogPath, 'utf8').catch(() => '');
       assert.doesNotMatch(tmuxLog, /send-keys -t %42 -l Team dispatch-team:/);
 
-      const watcherStatePath = join(wd, '.omx', 'state', 'notify-fallback-state.json');
+      const watcherStatePath = join(wd, '.omk', 'state', 'notify-fallback-state.json');
       const watcherState = JSON.parse(await readFile(watcherStatePath, 'utf-8'));
       assert.equal(watcherState.leader_nudge?.enabled, true);
       assert.equal(watcherState.leader_nudge?.leader_only, true);
       assert.equal(watcherState.leader_nudge?.run_count, 1);
       assert.equal(watcherState.leader_nudge?.precomputed_leader_stale, false);
 
-      const logPath = join(wd, '.omx', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
+      const logPath = join(wd, '.omk', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
       const logEntries = (await readFile(logPath, 'utf-8')).trim().split('\n').filter(Boolean).map((line) => JSON.parse(line));
       const nudgeEvent = logEntries.find((entry: { type?: string }) => entry.type === 'leader_nudge_tick');
       assert.ok(nudgeEvent, 'expected leader_nudge_tick log event');
@@ -636,22 +636,22 @@ describe('notify-fallback watcher', () => {
   });
 
   it('auto-nudges stalled session output even when no active mode state exists', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-auto-nudge-stalled-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-auto-nudge-stalled-'));
     const fakeBinDir = join(wd, 'fake-bin');
     const tmuxLogPath = join(wd, 'tmux.log');
     const codexHome = join(wd, 'codex-home');
     try {
-      await mkdir(join(wd, '.omx', 'logs'), { recursive: true });
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'logs'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       await mkdir(fakeBinDir, { recursive: true });
       await mkdir(codexHome, { recursive: true });
       await writeFile(join(fakeBinDir, 'tmux'), buildFakeTmux(tmuxLogPath));
       await chmod(join(fakeBinDir, 'tmux'), 0o755);
-      await writeFile(join(codexHome, '.omx-config.json'), JSON.stringify({
+      await writeFile(join(codexHome, '.omk-config.json'), JSON.stringify({
         autoNudge: { enabled: true, delaySec: 0, ttlMs: 30_000 },
       }, null, 2));
       await writeSessionStart(wd, 'sess-managed-fallback');
-      await writeFile(join(wd, '.omx', 'state', 'hud-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'hud-state.json'), JSON.stringify({
         last_turn_at: new Date(Date.now() - 6_000).toISOString(),
         turn_count: 7,
         last_agent_output: 'If you want, I can keep going from here.',
@@ -667,19 +667,19 @@ describe('notify-fallback watcher', () => {
           env: buildCleanNotifyEnv({
             PATH: `${fakeBinDir}:${process.env.PATH || ''}`,
             CODEX_HOME: codexHome,
-            OMX_SESSION_ID: 'sess-managed-fallback',
+            OMK_SESSION_ID: 'sess-managed-fallback',
             TMUX: '1',
             TMUX_PANE: '%42',
-            OMX_NOTIFY_FALLBACK_AUTO_NUDGE_STALL_MS: '5000',
+            OMK_NOTIFY_FALLBACK_AUTO_NUDGE_STALL_MS: '5000',
           }),
         },
       );
       assert.equal(result.status, 0, result.stderr || result.stdout);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf8');
-      assert.match(tmuxLog, /send-keys -t %42 -l yes, proceed \[OMX_TMUX_INJECT\]/);
+      assert.match(tmuxLog, /send-keys -t %42 -l yes, proceed \[OMK_TMUX_INJECT\]/);
 
-      const watcherStatePath = join(wd, '.omx', 'state', 'notify-fallback-state.json');
+      const watcherStatePath = join(wd, '.omk', 'state', 'notify-fallback-state.json');
       const watcherState = JSON.parse(await readFile(watcherStatePath, 'utf-8'));
       assert.equal(watcherState.fallback_auto_nudge?.last_reason, 'sent');
       assert.equal(watcherState.fallback_auto_nudge?.last_turn_count, 7);
@@ -690,21 +690,21 @@ describe('notify-fallback watcher', () => {
   });
 
   it('does not auto-nudge stalled-like output when the latest turn is still fresh', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-auto-nudge-fresh-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-auto-nudge-fresh-'));
     const fakeBinDir = join(wd, 'fake-bin');
     const tmuxLogPath = join(wd, 'tmux.log');
     const codexHome = join(wd, 'codex-home');
     try {
-      await mkdir(join(wd, '.omx', 'logs'), { recursive: true });
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'logs'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       await mkdir(fakeBinDir, { recursive: true });
       await mkdir(codexHome, { recursive: true });
       await writeFile(join(fakeBinDir, 'tmux'), buildFakeTmux(tmuxLogPath));
       await chmod(join(fakeBinDir, 'tmux'), 0o755);
-      await writeFile(join(codexHome, '.omx-config.json'), JSON.stringify({
+      await writeFile(join(codexHome, '.omk-config.json'), JSON.stringify({
         autoNudge: { enabled: true, delaySec: 0 },
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'hud-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'hud-state.json'), JSON.stringify({
         last_turn_at: new Date(Date.now() - 1_000).toISOString(),
         turn_count: 8,
         last_agent_output: 'If you want, I can keep going from here.',
@@ -722,16 +722,16 @@ describe('notify-fallback watcher', () => {
             CODEX_HOME: codexHome,
             TMUX: '1',
             TMUX_PANE: '%42',
-            OMX_NOTIFY_FALLBACK_AUTO_NUDGE_STALL_MS: '5000',
+            OMK_NOTIFY_FALLBACK_AUTO_NUDGE_STALL_MS: '5000',
           }),
         },
       );
       assert.equal(result.status, 0, result.stderr || result.stdout);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf8').catch(() => '');
-      assert.doesNotMatch(tmuxLog, /send-keys -t %42 -l yes, proceed \[OMX_TMUX_INJECT\]/);
+      assert.doesNotMatch(tmuxLog, /send-keys -t %42 -l yes, proceed \[OMK_TMUX_INJECT\]/);
 
-      const watcherStatePath = join(wd, '.omx', 'state', 'notify-fallback-state.json');
+      const watcherStatePath = join(wd, '.omk', 'state', 'notify-fallback-state.json');
       const watcherState = JSON.parse(await readFile(watcherStatePath, 'utf-8'));
       assert.equal(watcherState.fallback_auto_nudge?.last_reason, 'recent_turn_activity');
       assert.equal(watcherState.fallback_auto_nudge?.last_turn_count, 8);
@@ -741,28 +741,28 @@ describe('notify-fallback watcher', () => {
   });
 
   it('does not fallback auto-nudge a stalled hud snapshot that notify-hook already nudged', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-auto-nudge-dedup-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-auto-nudge-dedup-'));
     const fakeBinDir = join(wd, 'fake-bin');
     const tmuxLogPath = join(wd, 'tmux.log');
     const codexHome = join(wd, 'codex-home');
     const lastTurnAt = new Date(Date.now() - 6_000).toISOString();
     const lastMessage = 'If you want, I can keep going from here.';
     try {
-      await mkdir(join(wd, '.omx', 'logs'), { recursive: true });
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'logs'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       await mkdir(fakeBinDir, { recursive: true });
       await mkdir(codexHome, { recursive: true });
       await writeFile(join(fakeBinDir, 'tmux'), buildFakeTmux(tmuxLogPath));
       await chmod(join(fakeBinDir, 'tmux'), 0o755);
-      await writeFile(join(codexHome, '.omx-config.json'), JSON.stringify({
+      await writeFile(join(codexHome, '.omk-config.json'), JSON.stringify({
         autoNudge: { enabled: true, delaySec: 0 },
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'hud-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'hud-state.json'), JSON.stringify({
         last_turn_at: lastTurnAt,
         turn_count: 7,
         last_agent_output: lastMessage,
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'auto-nudge-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'auto-nudge-state.json'), JSON.stringify({
         nudgeCount: 1,
         lastNudgeAt: new Date().toISOString(),
         lastSignature: `hud:7|${lastTurnAt}|stall:proceed_intent`,
@@ -781,16 +781,16 @@ describe('notify-fallback watcher', () => {
             CODEX_HOME: codexHome,
             TMUX: '1',
             TMUX_PANE: '%42',
-            OMX_NOTIFY_FALLBACK_AUTO_NUDGE_STALL_MS: '5000',
+            OMK_NOTIFY_FALLBACK_AUTO_NUDGE_STALL_MS: '5000',
           }),
         },
       );
       assert.equal(result.status, 0, result.stderr || result.stdout);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf8').catch(() => '');
-      assert.doesNotMatch(tmuxLog, /send-keys -t %42 -l yes, proceed \[OMX_TMUX_INJECT\]/);
+      assert.doesNotMatch(tmuxLog, /send-keys -t %42 -l yes, proceed \[OMK_TMUX_INJECT\]/);
 
-      const watcherStatePath = join(wd, '.omx', 'state', 'notify-fallback-state.json');
+      const watcherStatePath = join(wd, '.omk', 'state', 'notify-fallback-state.json');
       const watcherState = JSON.parse(await readFile(watcherStatePath, 'utf-8'));
       assert.equal(watcherState.fallback_auto_nudge?.last_reason, 'already_nudged_for_signature');
       assert.equal(watcherState.fallback_auto_nudge?.last_turn_count, 7);
@@ -800,28 +800,28 @@ describe('notify-fallback watcher', () => {
   });
 
   it('does not fallback auto-nudge the same stalled hud turn again after TTL expiry', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-auto-nudge-exact-dedup-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-auto-nudge-exact-dedup-'));
     const fakeBinDir = join(wd, 'fake-bin');
     const tmuxLogPath = join(wd, 'tmux.log');
     const codexHome = join(wd, 'codex-home');
     const lastTurnAt = '2026-03-01T00:00:00.000Z';
     const lastMessage = 'If you want, I can keep going from here.';
     try {
-      await mkdir(join(wd, '.omx', 'logs'), { recursive: true });
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'logs'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       await mkdir(fakeBinDir, { recursive: true });
       await mkdir(codexHome, { recursive: true });
       await writeFile(join(fakeBinDir, 'tmux'), buildFakeTmux(tmuxLogPath));
       await chmod(join(fakeBinDir, 'tmux'), 0o755);
-      await writeFile(join(codexHome, '.omx-config.json'), JSON.stringify({
+      await writeFile(join(codexHome, '.omk-config.json'), JSON.stringify({
         autoNudge: { enabled: true, delaySec: 0, ttlMs: 5000 },
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'hud-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'hud-state.json'), JSON.stringify({
         last_turn_at: lastTurnAt,
         turn_count: 7,
         last_agent_output: lastMessage,
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'auto-nudge-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'auto-nudge-state.json'), JSON.stringify({
         nudgeCount: 1,
         lastNudgeAt: '2026-03-01T00:00:10.000Z',
         lastSignature: `hud:7|${lastTurnAt}|stall:proceed_intent`,
@@ -840,16 +840,16 @@ describe('notify-fallback watcher', () => {
             CODEX_HOME: codexHome,
             TMUX: '1',
             TMUX_PANE: '%42',
-            OMX_NOTIFY_FALLBACK_AUTO_NUDGE_STALL_MS: '5000',
+            OMK_NOTIFY_FALLBACK_AUTO_NUDGE_STALL_MS: '5000',
           }),
         },
       );
       assert.equal(result.status, 0, result.stderr || result.stdout);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf8').catch(() => '');
-      assert.doesNotMatch(tmuxLog, /send-keys -t %42 -l yes, proceed \[OMX_TMUX_INJECT\]/);
+      assert.doesNotMatch(tmuxLog, /send-keys -t %42 -l yes, proceed \[OMK_TMUX_INJECT\]/);
 
-      const watcherStatePath = join(wd, '.omx', 'state', 'notify-fallback-state.json');
+      const watcherStatePath = join(wd, '.omk', 'state', 'notify-fallback-state.json');
       const watcherState = JSON.parse(await readFile(watcherStatePath, 'utf-8'));
       assert.equal(watcherState.fallback_auto_nudge?.last_reason, 'already_nudged_for_signature');
       assert.equal(watcherState.fallback_auto_nudge?.last_turn_count, 7);
@@ -859,7 +859,7 @@ describe('notify-fallback watcher', () => {
   });
 
   it('runs bounded non-turn team dispatch drain tick in leader context', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-dispatch-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-dispatch-'));
     try {
       await initTeamState('dispatch-team', 'task', 'executor', 1, wd);
       const queued = await enqueueDispatchRequest('dispatch-team', {
@@ -885,7 +885,7 @@ describe('notify-fallback watcher', () => {
   });
 
   it('skips dispatch drain in worker context (leader-only guard)', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-dispatch-worker-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-dispatch-worker-'));
     try {
       await initTeamState('dispatch-team', 'task', 'executor', 1, wd);
       const queued = await enqueueDispatchRequest('dispatch-team', {
@@ -899,19 +899,19 @@ describe('notify-fallback watcher', () => {
       const result = spawnSync(
         process.execPath,
         [watcherScript, '--once', '--cwd', wd, '--notify-script', notifyHook, '--poll-ms', '50', '--dispatch-max-per-tick', '1'],
-        { encoding: 'utf-8', env: buildCleanNotifyEnv({ OMX_TEAM_WORKER: 'dispatch-team/worker-1', OMX_TEAM_STATE_ROOT: join(wd, '.omx', 'state') }) },
+        { encoding: 'utf-8', env: buildCleanNotifyEnv({ OMK_TEAM_WORKER: 'dispatch-team/worker-1', OMK_TEAM_STATE_ROOT: join(wd, '.omk', 'state') }) },
       );
       assert.equal(result.status, 0, result.stderr || result.stdout);
       const request = await readDispatchRequest('dispatch-team', queued.request.request_id, wd);
       assert.equal(request?.status, 'pending');
 
-      const watcherStatePath = join(wd, '.omx', 'state', 'notify-fallback-state.json');
+      const watcherStatePath = join(wd, '.omk', 'state', 'notify-fallback-state.json');
       const watcherState = JSON.parse(await readFile(watcherStatePath, 'utf-8'));
       assert.equal(watcherState.dispatch_drain?.leader_only, false);
       assert.equal(watcherState.dispatch_drain?.last_result?.reason, 'worker_context');
       assert.equal(watcherState.dispatch_drain?.last_result?.processed, 0);
 
-      const logPath = join(wd, '.omx', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
+      const logPath = join(wd, '.omk', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
       const logEntries = (await readFile(logPath, 'utf-8')).trim().split('\n').filter(Boolean).map((line) => JSON.parse(line));
       const drainEvent = logEntries.find((entry: { type?: string }) => entry.type === 'dispatch_drain_tick');
       assert.ok(drainEvent, 'expected dispatch_drain_tick log event');
@@ -923,7 +923,7 @@ describe('notify-fallback watcher', () => {
   });
 
   it('watcher retry does not retype when pre-capture still contains trigger', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-dispatch-cm-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-dispatch-cm-'));
     const fakeBinDir = join(wd, 'fake-bin');
     const tmuxLogPath = join(wd, 'tmux.log');
     const captureFile = join(wd, 'capture.txt');
@@ -947,7 +947,7 @@ describe('notify-fallback watcher', () => {
       const env = {
         ...buildCleanNotifyEnv(),
         PATH: `${fakeBinDir}:${process.env.PATH || ''}`,
-        OMX_TEST_CAPTURE_FILE: captureFile,
+        OMK_TEST_CAPTURE_FILE: captureFile,
       };
 
       const first = spawnSync(
@@ -978,9 +978,9 @@ describe('notify-fallback watcher', () => {
   });
 
   it('sends bounded periodic Ralph continue steer while Ralph state stays active', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-ralph-active-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-ralph-active-'));
     const fakeBinDir = join(wd, 'fake-bin');
-    const stateDir = join(wd, '.omx', 'state');
+    const stateDir = join(wd, '.omk', 'state');
     const tmuxLogPath = join(wd, 'tmux.log');
     const statePath = join(stateDir, 'notify-fallback-state.json');
     const sharedTimestampPath = join(stateDir, 'ralph-last-steer-at');
@@ -1037,7 +1037,7 @@ describe('notify-fallback watcher', () => {
       assert.equal(second.status, 0, second.stderr || second.stdout);
 
       const boundedLog = await readFile(tmuxLogPath, 'utf8');
-      let sends = boundedLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMX_TMUX_INJECT\]/g) || [];
+      let sends = boundedLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMK_TMUX_INJECT\]/g) || [];
       assert.equal(sends.length, 1, 'cadence should suppress a second Ralph steer inside 60s');
 
       const watcherState = JSON.parse(await readFile(statePath, 'utf-8'));
@@ -1055,7 +1055,7 @@ describe('notify-fallback watcher', () => {
       assert.equal(third.status, 0, third.stderr || third.stdout);
 
       const finalLog = await readFile(tmuxLogPath, 'utf8');
-      sends = finalLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMX_TMUX_INJECT\]/g) || [];
+      sends = finalLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMK_TMUX_INJECT\]/g) || [];
       assert.equal(sends.length, 2, 'Ralph steer should fire again once the 60s cadence elapses');
     } finally {
       await rm(wd, { recursive: true, force: true });
@@ -1063,9 +1063,9 @@ describe('notify-fallback watcher', () => {
   });
 
   it('suppresses Ralph continue steer when hud progress is still fresh after cooldown', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-ralph-progress-fresh-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-ralph-progress-fresh-'));
     const fakeBinDir = join(wd, 'fake-bin');
-    const stateDir = join(wd, '.omx', 'state');
+    const stateDir = join(wd, '.omk', 'state');
     const tmuxLogPath = join(wd, 'tmux.log');
     const statePath = join(stateDir, 'notify-fallback-state.json');
     try {
@@ -1102,7 +1102,7 @@ describe('notify-fallback watcher', () => {
       assert.equal(run.status, 0, run.stderr || run.stdout);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf8').catch(() => '');
-      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMX_TMUX_INJECT\]/g) || [];
+      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMK_TMUX_INJECT\]/g) || [];
       assert.equal(sends.length, 0, 'fresh progress should suppress continue steer even after cooldown elapses');
 
       const watcherState = JSON.parse(await readFile(statePath, 'utf-8'));
@@ -1113,9 +1113,9 @@ describe('notify-fallback watcher', () => {
   });
 
   it('still sends Ralph continue steer when hud progress is stale after cooldown', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-ralph-progress-stale-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-ralph-progress-stale-'));
     const fakeBinDir = join(wd, 'fake-bin');
-    const stateDir = join(wd, '.omx', 'state');
+    const stateDir = join(wd, '.omk', 'state');
     const tmuxLogPath = join(wd, 'tmux.log');
     const statePath = join(stateDir, 'notify-fallback-state.json');
     try {
@@ -1152,7 +1152,7 @@ describe('notify-fallback watcher', () => {
       assert.equal(run.status, 0, run.stderr || run.stdout);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf8');
-      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMX_TMUX_INJECT\]/g) || [];
+      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMK_TMUX_INJECT\]/g) || [];
       assert.equal(sends.length, 1, 'stale progress should still allow continue steer once cooldown elapses');
 
       const watcherState = JSON.parse(await readFile(statePath, 'utf-8'));
@@ -1163,9 +1163,9 @@ describe('notify-fallback watcher', () => {
   });
 
   it('fails closed when Ralph hud progress is missing or invalid', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-ralph-progress-guard-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-ralph-progress-guard-'));
     const fakeBinDir = join(wd, 'fake-bin');
-    const stateDir = join(wd, '.omx', 'state');
+    const stateDir = join(wd, '.omk', 'state');
     const tmuxLogPath = join(wd, 'tmux.log');
     const statePath = join(stateDir, 'notify-fallback-state.json');
     try {
@@ -1213,7 +1213,7 @@ describe('notify-fallback watcher', () => {
       assert.equal(watcherState.ralph_continue_steer?.last_reason, 'progress_invalid');
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf8').catch(() => '');
-      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMX_TMUX_INJECT\]/g) || [];
+      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMK_TMUX_INJECT\]/g) || [];
       assert.equal(sends.length, 0, 'missing or invalid progress should fail closed without sending steer');
     } finally {
       await rm(wd, { recursive: true, force: true });
@@ -1221,9 +1221,9 @@ describe('notify-fallback watcher', () => {
   });
 
   it('fails closed when active Ralph state has no bound tmux pane', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-ralph-pane-missing-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-ralph-pane-missing-'));
     const fakeBinDir = join(wd, 'fake-bin');
-    const stateDir = join(wd, '.omx', 'state');
+    const stateDir = join(wd, '.omk', 'state');
     const tmuxLogPath = join(wd, 'tmux.log');
     const statePath = join(stateDir, 'notify-fallback-state.json');
     try {
@@ -1263,7 +1263,7 @@ describe('notify-fallback watcher', () => {
       assert.equal(watcherState.ralph_continue_steer?.pane_id, '');
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf8').catch(() => '');
-      assert.equal(/send-keys -t %42 -l Ralph loop active continue \[OMX_TMUX_INJECT\]/.test(tmuxLog), false);
+      assert.equal(/send-keys -t %42 -l Ralph loop active continue \[OMK_TMUX_INJECT\]/.test(tmuxLog), false);
       assert.equal(/display-message -p -t %42 #{pane_id}/.test(tmuxLog), false, 'watcher should not guess a pane when tmux_pane_id is missing');
     } finally {
       await rm(wd, { recursive: true, force: true });
@@ -1271,9 +1271,9 @@ describe('notify-fallback watcher', () => {
   });
 
   it('waits a full cadence from startup when persisted Ralph steer state is empty', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-ralph-startup-cooldown-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-ralph-startup-cooldown-'));
     const fakeBinDir = join(wd, 'fake-bin');
-    const stateDir = join(wd, '.omx', 'state');
+    const stateDir = join(wd, '.omk', 'state');
     const tmuxLogPath = join(wd, 'tmux.log');
     const statePath = join(stateDir, 'notify-fallback-state.json');
     try {
@@ -1317,7 +1317,7 @@ describe('notify-fallback watcher', () => {
       assert.equal(second.status, 0, second.stderr || second.stdout);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf8').catch(() => '');
-      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMX_TMUX_INJECT\]/g) || [];
+      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMK_TMUX_INJECT\]/g) || [];
       assert.equal(sends.length, 0, 'empty startup state should wait one cadence period before the first Ralph steer');
 
       const watcherState = JSON.parse(await readFile(statePath, 'utf-8'));
@@ -1334,9 +1334,9 @@ describe('notify-fallback watcher', () => {
   });
 
   it('falls back to an aged persisted cooldown anchor when last_sent_at is invalid', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-ralph-invalid-last-sent-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-ralph-invalid-last-sent-'));
     const fakeBinDir = join(wd, 'fake-bin');
-    const stateDir = join(wd, '.omx', 'state');
+    const stateDir = join(wd, '.omk', 'state');
     const tmuxLogPath = join(wd, 'tmux.log');
     const statePath = join(stateDir, 'notify-fallback-state.json');
     try {
@@ -1374,7 +1374,7 @@ describe('notify-fallback watcher', () => {
       assert.equal(run.status, 0, run.stderr || run.stdout);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf8');
-      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMX_TMUX_INJECT\]/g) || [];
+      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMK_TMUX_INJECT\]/g) || [];
       assert.equal(sends.length, 1, 'invalid last_sent_at should fall back to the persisted cooldown anchor once 60s have elapsed');
 
       const watcherState = JSON.parse(await readFile(statePath, 'utf-8'));
@@ -1394,10 +1394,10 @@ describe('notify-fallback watcher', () => {
   });
 
   it('stops Ralph continue steer immediately once Ralph state is terminal or cleared', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-ralph-terminal-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-ralph-terminal-'));
     const fakeBinDir = join(wd, 'fake-bin');
     const tmuxLogPath = join(wd, 'tmux.log');
-    const stateDir = join(wd, '.omx', 'state');
+    const stateDir = join(wd, '.omk', 'state');
     const watcherStatePath = join(stateDir, 'notify-fallback-state.json');
     const ralphStatePath = join(stateDir, 'ralph-state.json');
     try {
@@ -1462,7 +1462,7 @@ describe('notify-fallback watcher', () => {
       assert.equal(clearedRun.status, 0, clearedRun.stderr || clearedRun.stdout);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf8');
-      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMX_TMUX_INJECT\]/g) || [];
+      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMK_TMUX_INJECT\]/g) || [];
       assert.equal(sends.length, 1, 'terminal/cleared Ralph state must stop additional periodic steer sends');
     } finally {
       await rm(wd, { recursive: true, force: true });
@@ -1470,10 +1470,10 @@ describe('notify-fallback watcher', () => {
   });
 
   it('globally debounces Ralph continue steer across concurrent watcher instances', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-ralph-global-debounce-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-ralph-global-debounce-'));
     const fakeBinDir = join(wd, 'fake-bin');
     const tmuxLogPath = join(wd, 'tmux.log');
-    const stateDir = join(wd, '.omx', 'state');
+    const stateDir = join(wd, '.omk', 'state');
     const sharedTimestampPath = join(stateDir, 'ralph-last-steer-at');
     try {
       await mkdir(stateDir, { recursive: true });
@@ -1517,7 +1517,7 @@ describe('notify-fallback watcher', () => {
       assert.equal(second.exitCode, 0);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf8');
-      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMX_TMUX_INJECT\]/g) || [];
+      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMK_TMUX_INJECT\]/g) || [];
       assert.equal(sends.length, 1, 'shared timestamp + lock should allow only one concurrent Ralph steer send');
 
       const sharedTimestamp = (await readFile(sharedTimestampPath, 'utf-8')).trim();
@@ -1537,11 +1537,11 @@ describe('notify-fallback watcher', () => {
   });
 
   it('keeps team control-plane pumping when Ralph continue steer fails', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-control-plane-split-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-control-plane-split-'));
     const fakeBinDir = join(wd, 'fake-bin');
     const tmuxLogPath = join(wd, 'tmux.log');
     try {
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
       await mkdir(fakeBinDir, { recursive: true });
       await writeFile(join(fakeBinDir, 'tmux'), buildFakeTmux(tmuxLogPath, {
         failSendKeysMatch: 'Ralph loop active continue',
@@ -1555,15 +1555,15 @@ describe('notify-fallback watcher', () => {
         worker_index: 1,
         trigger_message: 'dispatch ping',
       }, wd);
-      await writeFile(join(wd, '.omx', 'state', 'ralph-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'ralph-state.json'), JSON.stringify({
         active: true,
         current_phase: 'executing',
         tmux_pane_id: '%42',
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'hud-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'hud-state.json'), JSON.stringify({
         last_progress_at: new Date(Date.now() - 61_000).toISOString(),
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'notify-fallback-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'notify-fallback-state.json'), JSON.stringify({
         ralph_continue_steer: {
           last_sent_at: new Date(Date.now() - 61_000).toISOString(),
         },
@@ -1586,7 +1586,7 @@ describe('notify-fallback watcher', () => {
       const request = await readDispatchRequest('dispatch-team', queued.request.request_id, wd);
       assert.ok(request);
 
-      const watcherStatePath = join(wd, '.omx', 'state', 'notify-fallback-state.json');
+      const watcherStatePath = join(wd, '.omk', 'state', 'notify-fallback-state.json');
       const watcherState = JSON.parse(await readFile(watcherStatePath, 'utf-8'));
       assert.equal(watcherState.dispatch_drain?.run_count, 1);
       assert.equal(watcherState.ralph_continue_steer?.last_reason, 'send_failed');
@@ -1594,7 +1594,7 @@ describe('notify-fallback watcher', () => {
       const tmuxLog = await readFile(tmuxLogPath, 'utf8');
       assert.match(tmuxLog, /send-keys -t .* -l dispatch ping/);
 
-      const logPath = join(wd, '.omx', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
+      const logPath = join(wd, '.omk', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
       const logEntries = (await readFile(logPath, 'utf-8')).trim().split('\n').filter(Boolean).map((line) => JSON.parse(line));
       const drainEvent = logEntries.find((entry: { type?: string }) => entry.type === 'dispatch_drain_tick');
       assert.ok(drainEvent, 'expected dispatch_drain_tick log event');
@@ -1608,7 +1608,7 @@ describe('notify-fallback watcher', () => {
   });
 
   it('retypes on every retry when trigger is not in narrow input area', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-dispatch-cm-fallback-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-dispatch-cm-fallback-'));
     const fakeBinDir = join(wd, 'fake-bin');
     const tmuxLogPath = join(wd, 'tmux.log');
     const captureSeqFile = join(wd, 'capture-seq.txt');
@@ -1643,8 +1643,8 @@ describe('notify-fallback watcher', () => {
       const env = {
         ...buildCleanNotifyEnv(),
         PATH: `${fakeBinDir}:${process.env.PATH || ''}`,
-        OMX_TEST_CAPTURE_SEQUENCE_FILE: captureSeqFile,
-        OMX_TEST_CAPTURE_COUNTER_FILE: captureCounterFile,
+        OMK_TEST_CAPTURE_SEQUENCE_FILE: captureSeqFile,
+        OMK_TEST_CAPTURE_COUNTER_FILE: captureCounterFile,
       };
 
       for (let i = 0; i < 3; i += 1) {
@@ -1669,11 +1669,11 @@ describe('notify-fallback watcher', () => {
   });
 
   it('exits when the tracked parent pid is gone', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-parent-exit-'));
-    const tempHome = await mkdtemp(join(tmpdir(), 'omx-fallback-parent-home-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-parent-exit-'));
+    const tempHome = await mkdtemp(join(tmpdir(), 'omk-fallback-parent-home-'));
     const watcherScript = new URL('../../../dist/scripts/notify-fallback-watcher.js', import.meta.url).pathname;
     const notifyHook = new URL('../../../dist/scripts/notify-hook.js', import.meta.url).pathname;
-    const logPath = join(wd, '.omx', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
+    const logPath = join(wd, '.omk', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
     let child: ReturnType<typeof spawn> | undefined;
 
     try {
@@ -1725,10 +1725,10 @@ describe('notify-fallback watcher', () => {
 
 
   it('ignores stale session-scoped Ralph state when the current session identity is stale', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-stale-session-ralph-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-stale-session-ralph-'));
     const fakeBinDir = join(wd, 'fake-bin');
     const tmuxLogPath = join(wd, 'tmux.log');
-    const stateDir = join(wd, '.omx', 'state');
+    const stateDir = join(wd, '.omk', 'state');
     const sessionId = 'sess-stale';
     const sessionStateDir = join(stateDir, 'sessions', sessionId);
     const watcherStatePath = join(stateDir, 'notify-fallback-state.json');
@@ -1769,7 +1769,7 @@ describe('notify-fallback watcher', () => {
       assert.equal(run.status, 0, run.stderr || run.stdout);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf8').catch(() => '');
-      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMX_TMUX_INJECT\]/g) || [];
+      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMK_TMUX_INJECT\]/g) || [];
       assert.equal(sends.length, 0, 'stale current-session identity must block Ralph continue injection');
 
       const watcherState = JSON.parse(await readFile(watcherStatePath, 'utf-8'));
@@ -1781,10 +1781,10 @@ describe('notify-fallback watcher', () => {
   });
 
   it('ignores stale root Ralph state when the current session has not started Ralph', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-stale-root-ralph-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-stale-root-ralph-'));
     const fakeBinDir = join(wd, 'fake-bin');
     const tmuxLogPath = join(wd, 'tmux.log');
-    const stateDir = join(wd, '.omx', 'state');
+    const stateDir = join(wd, '.omk', 'state');
     const sessionId = 'sess-fresh';
     const watcherStatePath = join(stateDir, 'notify-fallback-state.json');
     try {
@@ -1819,7 +1819,7 @@ describe('notify-fallback watcher', () => {
       assert.equal(run.status, 0, run.stderr || run.stdout);
 
       const tmuxLog = await readFile(tmuxLogPath, 'utf8').catch(() => '');
-      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMX_TMUX_INJECT\]/g) || [];
+      const sends = tmuxLog.match(/send-keys -t %42 -l Ralph loop active continue \[OMK_TMUX_INJECT\]/g) || [];
       assert.equal(sends.length, 0, 'fresh sessions must ignore stale root Ralph state');
 
       const watcherState = JSON.parse(await readFile(watcherStatePath, 'utf-8'));
@@ -1831,17 +1831,17 @@ describe('notify-fallback watcher', () => {
   });
 
   it('keeps ticking for active session-scoped Ralph after parent loss, then stops once Ralph is terminal', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-parent-ralph-active-'));
-    const tempHome = await mkdtemp(join(tmpdir(), 'omx-fallback-parent-ralph-home-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-parent-ralph-active-'));
+    const tempHome = await mkdtemp(join(tmpdir(), 'omk-fallback-parent-ralph-home-'));
     const fakeBinDir = join(wd, 'fake-bin');
     const tmuxLogPath = join(wd, 'tmux.log');
-    const stateDir = join(wd, '.omx', 'state');
+    const stateDir = join(wd, '.omk', 'state');
     const sessionId = 'sess-active-ralph';
     const sessionStateDir = join(stateDir, 'sessions', sessionId);
     const ralphStatePath = join(sessionStateDir, 'ralph-state.json');
     const watcherScript = new URL('../../../dist/scripts/notify-fallback-watcher.js', import.meta.url).pathname;
     const notifyHook = new URL('../../../dist/scripts/notify-hook.js', import.meta.url).pathname;
-    const logPath = join(wd, '.omx', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
+    const logPath = join(wd, '.omk', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
     let child: ReturnType<typeof spawn> | undefined;
 
     try {
@@ -1895,7 +1895,7 @@ describe('notify-fallback watcher', () => {
 
       await waitFor(async () => {
         const tmuxLog = await readFile(tmuxLogPath, 'utf-8').catch(() => '');
-        return /send-keys -t %42 -l Ralph loop active continue \[OMX_TMUX_INJECT\]/.test(tmuxLog);
+        return /send-keys -t %42 -l Ralph loop active continue \[OMK_TMUX_INJECT\]/.test(tmuxLog);
       }, 4000, 50);
 
       assert.ok(isPidAlive(child.pid), 'expected watcher to stay alive while Ralph remains active');
@@ -1928,23 +1928,23 @@ describe('notify-fallback watcher', () => {
   });
 
   it('stays alive after parent exit while an active team still has live worker panes', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-parent-gone-team-'));
-    const tempHome = await mkdtemp(join(tmpdir(), 'omx-fallback-parent-gone-team-home-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-parent-gone-team-'));
+    const tempHome = await mkdtemp(join(tmpdir(), 'omk-fallback-parent-gone-team-home-'));
     const fakeBinDir = join(wd, 'fake-bin');
     const tmuxLogPath = join(wd, 'tmux.log');
-    const teamStatePath = join(wd, '.omx', 'state', 'team-state.json');
+    const teamStatePath = join(wd, '.omk', 'state', 'team-state.json');
     let child: ReturnType<typeof spawn> | undefined;
 
     try {
-      await mkdir(join(wd, '.omx', 'logs'), { recursive: true });
-      await mkdir(join(wd, '.omx', 'state', 'team', 'dispatch-team'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'logs'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state', 'team', 'dispatch-team'), { recursive: true });
       await mkdir(fakeBinDir, { recursive: true });
       await writeFile(teamStatePath, JSON.stringify({
         active: true,
         team_name: 'dispatch-team',
         current_phase: 'team-exec',
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'team', 'dispatch-team', 'config.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'team', 'dispatch-team', 'config.json'), JSON.stringify({
         name: 'dispatch-team',
         tmux_session: 'dispatch-team:0',
         leader_pane_id: '%99',
@@ -1957,7 +1957,7 @@ describe('notify-fallback watcher', () => {
 
       const watcherScript = new URL('../../../dist/scripts/notify-fallback-watcher.js', import.meta.url).pathname;
       const notifyHook = new URL('../../../dist/scripts/notify-hook.js', import.meta.url).pathname;
-      const logPath = join(wd, '.omx', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
+      const logPath = join(wd, '.omk', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
 
       const shortLivedParent = spawn(process.execPath, ['-e', 'setTimeout(() => process.exit(0), 10)'], {
         stdio: 'ignore',
@@ -2030,25 +2030,25 @@ describe('notify-fallback watcher', () => {
   });
 
   it('does not defer parent-loss shutdown for a team that is already terminal in phase.json', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-parent-gone-terminal-team-'));
-    const tempHome = await mkdtemp(join(tmpdir(), 'omx-fallback-parent-gone-terminal-team-home-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-parent-gone-terminal-team-'));
+    const tempHome = await mkdtemp(join(tmpdir(), 'omk-fallback-parent-gone-terminal-team-home-'));
     const fakeBinDir = join(wd, 'fake-bin');
     const tmuxLogPath = join(wd, 'tmux.log');
     let child: ReturnType<typeof spawn> | undefined;
 
     try {
-      await mkdir(join(wd, '.omx', 'logs'), { recursive: true });
-      await mkdir(join(wd, '.omx', 'state', 'team', 'dispatch-team'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'logs'), { recursive: true });
+      await mkdir(join(wd, '.omk', 'state', 'team', 'dispatch-team'), { recursive: true });
       await mkdir(fakeBinDir, { recursive: true });
-      await writeFile(join(wd, '.omx', 'state', 'team-state.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'team-state.json'), JSON.stringify({
         active: true,
         team_name: 'dispatch-team',
         current_phase: 'team-exec',
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'team', 'dispatch-team', 'phase.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'team', 'dispatch-team', 'phase.json'), JSON.stringify({
         current_phase: 'complete',
       }, null, 2));
-      await writeFile(join(wd, '.omx', 'state', 'team', 'dispatch-team', 'config.json'), JSON.stringify({
+      await writeFile(join(wd, '.omk', 'state', 'team', 'dispatch-team', 'config.json'), JSON.stringify({
         name: 'dispatch-team',
         tmux_session: 'dispatch-team:0',
         leader_pane_id: '%99',
@@ -2061,7 +2061,7 @@ describe('notify-fallback watcher', () => {
 
       const watcherScript = new URL('../../../dist/scripts/notify-fallback-watcher.js', import.meta.url).pathname;
       const notifyHook = new URL('../../../dist/scripts/notify-hook.js', import.meta.url).pathname;
-      const logPath = join(wd, '.omx', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
+      const logPath = join(wd, '.omk', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
 
       const shortLivedParent = spawn(process.execPath, ['-e', 'setTimeout(() => process.exit(0), 10)'], {
         stdio: 'ignore',
@@ -2114,11 +2114,11 @@ describe('notify-fallback watcher', () => {
 
   it('replaces a stale watcher from the per-cwd pid file', async () => {
     const replacementTimeoutMs = 20000; // c8-instrumented Node20 full runs can delay watcher handoff well beyond 8s.
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-stale-pid-'));
-    const tempHome = await mkdtemp(join(tmpdir(), 'omx-fallback-stale-home-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-stale-pid-'));
+    const tempHome = await mkdtemp(join(tmpdir(), 'omk-fallback-stale-home-'));
     const watcherScript = new URL('../../../dist/scripts/notify-fallback-watcher.js', import.meta.url).pathname;
     const notifyHook = new URL('../../../dist/scripts/notify-hook.js', import.meta.url).pathname;
-    const pidPath = join(wd, '.omx', 'state', 'notify-fallback.pid');
+    const pidPath = join(wd, '.omk', 'state', 'notify-fallback.pid');
     let first: ReturnType<typeof spawn> | undefined;
     let second: ReturnType<typeof spawn> | undefined;
 
@@ -2208,11 +2208,11 @@ describe('notify-fallback watcher', () => {
   });
 
   it('exits after the configured max lifetime', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-fallback-max-life-'));
-    const tempHome = await mkdtemp(join(tmpdir(), 'omx-fallback-max-home-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-fallback-max-life-'));
+    const tempHome = await mkdtemp(join(tmpdir(), 'omk-fallback-max-home-'));
     const watcherScript = new URL('../../../dist/scripts/notify-fallback-watcher.js', import.meta.url).pathname;
     const notifyHook = new URL('../../../dist/scripts/notify-hook.js', import.meta.url).pathname;
-    const logPath = join(wd, '.omx', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
+    const logPath = join(wd, '.omk', 'logs', `notify-fallback-${new Date().toISOString().split('T')[0]}.jsonl`);
     let child: ReturnType<typeof spawn> | undefined;
 
     try {

@@ -39,7 +39,7 @@ interface UninstallSummary {
   cacheDirectoryRemoved: boolean;
 }
 
-const OMX_MCP_SERVERS = [
+const OMK_MCP_SERVERS = [
   "omx_state",
   "omx_memory",
   "omx_code_intel",
@@ -54,7 +54,7 @@ function detectOmxConfigArtifacts(config: string): {
   hasFeatureFlags: boolean;
   hasExploreRoutingEnv: boolean;
 } {
-  const hasMcpServers = OMX_MCP_SERVERS.filter((name) =>
+  const hasMcpServers = OMK_MCP_SERVERS.filter((name) =>
     new RegExp(`\\[mcp_servers\\.${name}\\]`).test(config),
   );
 
@@ -79,7 +79,7 @@ function detectOmxConfigArtifacts(config: string): {
   const hasFeatureFlags =
     /^\s*multi_agent\s*=\s*true/m.test(config) ||
     /^\s*child_agents_md\s*=\s*true/m.test(config);
-  const hasExploreRoutingEnv = /^\s*USE_OMX_EXPLORE_CMD\s*=/m.test(config);
+  const hasExploreRoutingEnv = /^\s*USE_OMK_EXPLORE_CMD\s*=/m.test(config);
 
   return {
     hasMcpServers,
@@ -288,7 +288,7 @@ async function removeCacheDirectory(
   projectRoot: string,
   options: Pick<UninstallOptions, "dryRun" | "verbose">,
 ): Promise<boolean> {
-  const omxDir = join(projectRoot, ".omx");
+  const omxDir = join(projectRoot, ".omk");
   if (!existsSync(omxDir)) return false;
 
   if (!options.dryRun) {
@@ -342,7 +342,7 @@ function printSummary(summary: UninstallSummary, dryRun: boolean): void {
     console.log(`  ${prefix} AGENTS.md`);
   }
   if (summary.cacheDirectoryRemoved) {
-    console.log(`  ${prefix} .omx/ cache directory`);
+    console.log(`  ${prefix} .omk/ cache directory`);
   }
 
   const totalActions =
@@ -444,7 +444,7 @@ export async function uninstall(options: UninstallOptions = {}): Promise<void> {
   );
   console.log();
 
-  // Step 5: Remove AGENTS.md and optionally .omx/ cache directory
+  // Step 5: Remove AGENTS.md and optionally .omk/ cache directory
   console.log("[5/5] Cleaning up...");
   const agentsMdPath =
     scope === "project"
@@ -461,8 +461,8 @@ export async function uninstall(options: UninstallOptions = {}): Promise<void> {
     });
   } else {
     // Always clean up setup-scope.json and hud-config.json
-    const scopeFile = join(projectRoot, ".omx", "setup-scope.json");
-    const hudConfig = join(projectRoot, ".omx", "hud-config.json");
+    const scopeFile = join(projectRoot, ".omk", "setup-scope.json");
+    const hudConfig = join(projectRoot, ".omk", "hud-config.json");
     for (const f of [scopeFile, hudConfig]) {
       if (existsSync(f)) {
         if (!dryRun) await rm(f, { force: true });

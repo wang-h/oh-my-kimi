@@ -12,12 +12,12 @@ import {
 
 describe('leader runtime activity', () => {
   it('records team status activity with shared leader activity metadata', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-leader-activity-'));
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-leader-activity-'));
     try {
       const nowIso = '2026-03-21T04:11:12.000Z';
       await recordLeaderRuntimeActivity(cwd, 'team_status', 'alpha', nowIso);
 
-      const activity = JSON.parse(await readFile(join(cwd, '.omx', 'state', 'leader-runtime-activity.json'), 'utf-8')) as {
+      const activity = JSON.parse(await readFile(join(cwd, '.omk', 'state', 'leader-runtime-activity.json'), 'utf-8')) as {
         last_activity_at?: string;
         last_team_status_at?: string;
         last_source?: string;
@@ -34,9 +34,9 @@ describe('leader runtime activity', () => {
   });
 
   it('uses the newest runtime signal across hud and explicit leader activity', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-leader-activity-'));
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-leader-activity-'));
     try {
-      const stateDir = join(cwd, '.omx', 'state');
+      const stateDir = join(cwd, '.omk', 'state');
       await mkdir(stateDir, { recursive: true });
       await writeFile(join(stateDir, 'hud-state.json'), JSON.stringify({
         last_turn_at: '2026-03-21T04:00:00.000Z',
@@ -56,9 +56,9 @@ describe('leader runtime activity', () => {
 
 
   it('treats the leader as active when any runtime signal is still fresh', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-leader-activity-'));
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-leader-activity-'));
     try {
-      const stateDir = join(cwd, '.omx', 'state');
+      const stateDir = join(cwd, '.omk', 'state');
       await mkdir(stateDir, { recursive: true });
       const nowMs = Date.parse('2026-03-21T04:10:00.000Z');
 
@@ -77,9 +77,9 @@ describe('leader runtime activity', () => {
   });
 
   it('treats the leader as stale only when every valid runtime signal is stale', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-leader-activity-'));
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-leader-activity-'));
     try {
-      const stateDir = join(cwd, '.omx', 'state');
+      const stateDir = join(cwd, '.omk', 'state');
       await mkdir(stateDir, { recursive: true });
       const nowMs = Date.parse('2026-03-21T04:10:00.000Z');
 
@@ -100,7 +100,7 @@ describe('leader runtime activity', () => {
 
 
   it('treats recent leader-branch git movement as activity even when runtime timestamps are stale', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-leader-activity-git-'));
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-leader-activity-git-'));
     try {
       execFileSync('git', ['init'], { cwd, stdio: 'ignore' });
       execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd, stdio: 'ignore' });
@@ -109,7 +109,7 @@ describe('leader runtime activity', () => {
       execFileSync('git', ['add', 'README.md'], { cwd, stdio: 'ignore' });
       execFileSync('git', ['commit', '-m', 'init'], { cwd, stdio: 'ignore' });
 
-      const stateDir = join(cwd, '.omx', 'state');
+      const stateDir = join(cwd, '.omk', 'state');
       await mkdir(stateDir, { recursive: true });
       await writeFile(join(stateDir, 'hud-state.json'), JSON.stringify({
         last_turn_at: '2026-03-21T04:00:00.000Z',
@@ -136,9 +136,9 @@ describe('leader runtime activity', () => {
   });
 
   it('treats missing or invalid runtime evidence as not stale', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-leader-activity-'));
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-leader-activity-'));
     try {
-      const stateDir = join(cwd, '.omx', 'state');
+      const stateDir = join(cwd, '.omk', 'state');
       await mkdir(stateDir, { recursive: true });
 
       assert.equal(await isLeaderRuntimeStale(stateDir, 30_000, Date.now()), false);

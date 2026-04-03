@@ -56,9 +56,9 @@ const approvedHint: ApprovedExecutionLaunchHint = {
   mode: 'ralph',
   command: 'omx ralph "Execute approved issue 1072 plan"',
   task: 'Execute approved issue 1072 plan',
-  sourcePath: '.omx/plans/prd-issue-1072.md',
-  testSpecPaths: ['.omx/plans/test-spec-issue-1072.md'],
-  deepInterviewSpecPaths: ['.omx/specs/deep-interview-issue-1072.md'],
+  sourcePath: '.omk/plans/prd-issue-1072.md',
+  testSpecPaths: ['.omk/plans/test-spec-issue-1072.md'],
+  deepInterviewSpecPaths: ['.omk/specs/deep-interview-issue-1072.md'],
 };
 
 describe('ralph deslop launch wiring', () => {
@@ -68,20 +68,20 @@ describe('ralph deslop launch wiring', () => {
 
   it('documents changed-files-only deslop guidance by default', () => {
     const instructions = buildRalphAppendInstructions('fix issue 920', {
-      changedFilesPath: '.omx/ralph/changed-files.txt',
+      changedFilesPath: '.omk/ralph/changed-files.txt',
       noDeslop: false,
       approvedHint: null,
     });
     assert.match(instructions, /ai-slop-cleaner/i);
     assert.match(instructions, /changed files only/i);
-    assert.match(instructions, /\.omx\/ralph\/changed-files\.txt/);
+    assert.match(instructions, /\.omk\/ralph\/changed-files\.txt/);
     assert.match(instructions, /standard mode/i);
     assert.match(instructions, /rerun the current tests\/build\/lint verification/i);
   });
 
   it('documents the --no-deslop opt-out when enabled', () => {
     const instructions = buildRalphAppendInstructions('fix issue 920', {
-      changedFilesPath: '.omx/ralph/changed-files.txt',
+      changedFilesPath: '.omk/ralph/changed-files.txt',
       noDeslop: true,
       approvedHint: null,
     });
@@ -94,14 +94,14 @@ describe('ralph deslop launch wiring', () => {
 
   it('includes approved plan and deep-interview handoff context when available', () => {
     const instructions = buildRalphAppendInstructions('Execute approved issue 1072 plan', {
-      changedFilesPath: '.omx/ralph/changed-files.txt',
+      changedFilesPath: '.omk/ralph/changed-files.txt',
       noDeslop: false,
       approvedHint,
     });
     assert.match(instructions, /Approved planning handoff context/i);
-    assert.match(instructions, /approved plan: \.omx\/plans\/prd-issue-1072\.md/i);
-    assert.match(instructions, /test specs: \.omx\/plans\/test-spec-issue-1072\.md/i);
-    assert.match(instructions, /deep-interview specs: \.omx\/specs\/deep-interview-issue-1072\.md/i);
+    assert.match(instructions, /approved plan: \.omk\/plans\/prd-issue-1072\.md/i);
+    assert.match(instructions, /test specs: \.omk\/plans\/test-spec-issue-1072\.md/i);
+    assert.match(instructions, /deep-interview specs: \.omk\/specs\/deep-interview-issue-1072\.md/i);
     assert.match(instructions, /Carry forward the approved deep-interview requirements/i);
   });
 

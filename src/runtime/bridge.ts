@@ -1,9 +1,9 @@
 /**
- * TS Runtime Bridge — thin wrapper over omx-runtime binary.
+ * TS Runtime Bridge — thin wrapper over omk-runtime binary.
  *
  * All semantic state mutations route through `execCommand()`.
  * All state queries read Rust-authored compatibility JSON files.
- * Set OMX_RUNTIME_BRIDGE=0 to disable bridge (fallback to TS-direct).
+ * Set OMK_RUNTIME_BRIDGE=0 to disable bridge (fallback to TS-direct).
  */
 
 import { execFileSync } from 'node:child_process';
@@ -118,20 +118,20 @@ export interface RuntimeBinaryDiscoveryOptions {
 
 export function resolveRuntimeBinaryPath(options: RuntimeBinaryDiscoveryOptions = {}): string {
   const exists = options.exists ?? existsSync;
-  const envOverride = process.env.OMX_RUNTIME_BINARY?.trim();
+  const envOverride = process.env.OMK_RUNTIME_BINARY?.trim();
   if (envOverride) return envOverride;
 
-  const workspaceDebug = options.debugPath ?? resolve(__bridge_dirname, '../../target/debug/omx-runtime');
+  const workspaceDebug = options.debugPath ?? resolve(__bridge_dirname, '../../target/debug/omk-runtime');
   if (exists(workspaceDebug)) return workspaceDebug;
 
-  const workspaceRelease = options.releasePath ?? resolve(__bridge_dirname, '../../target/release/omx-runtime');
+  const workspaceRelease = options.releasePath ?? resolve(__bridge_dirname, '../../target/release/omk-runtime');
   if (exists(workspaceRelease)) return workspaceRelease;
 
-  return options.fallbackBinary ?? 'omx-runtime';
+  return options.fallbackBinary ?? 'omk-runtime';
 }
 
 export function resolveBridgeStateDir(cwd: string, env: NodeJS.ProcessEnv = process.env): string {
-  const explicit = env.OMX_TEAM_STATE_ROOT;
+  const explicit = env.OMK_TEAM_STATE_ROOT;
   if (typeof explicit === 'string' && explicit.trim() !== '') {
     return resolve(cwd, explicit.trim());
   }
@@ -144,12 +144,12 @@ export class RuntimeBridge {
   private enabled: boolean;
 
   constructor(options: { stateDir?: string; binaryPath?: string } = {}) {
-    this.enabled = process.env.OMX_RUNTIME_BRIDGE !== '0';
+    this.enabled = process.env.OMK_RUNTIME_BRIDGE !== '0';
     this.stateDir = options.stateDir;
     this.binaryPath = options.binaryPath ?? resolveRuntimeBinaryPath();
   }
 
-  /** Whether the bridge is enabled (OMX_RUNTIME_BRIDGE != '0'). */
+  /** Whether the bridge is enabled (OMK_RUNTIME_BRIDGE != '0'). */
   isEnabled(): boolean {
     return this.enabled;
   }
@@ -240,7 +240,7 @@ export class RuntimeBridge {
       );
       if (missing.length > 0) {
         throw new Error(
-          `omx-runtime schema missing commands: ${missing.join(', ')}. ` +
+          `omk-runtime schema missing commands: ${missing.join(', ')}. ` +
           `Bridge types may be out of sync with the Rust binary.`,
         );
       }
@@ -264,7 +264,7 @@ export class RuntimeBridge {
     } catch (err: unknown) {
       const execErr = err as { stderr?: string; message?: string };
       const stderr = execErr.stderr?.trim() ?? execErr.message ?? 'unknown error';
-      throw new Error(`omx-runtime ${args[0]} failed: ${stderr}`);
+      throw new Error(`omk-runtime ${args[0]} failed: ${stderr}`);
     }
   }
 }
@@ -286,5 +286,5 @@ export function getDefaultBridge(stateDir?: string): RuntimeBridge {
 }
 
 export function isBridgeEnabled(): boolean {
-  return process.env.OMX_RUNTIME_BRIDGE !== '0';
+  return process.env.OMK_RUNTIME_BRIDGE !== '0';
 }

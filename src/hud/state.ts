@@ -1,7 +1,7 @@
 /**
  * OMX HUD - State file readers
  *
- * Reads .omx/state/ files to build HUD render context.
+ * Reads .omk/state/ files to build HUD render context.
  */
 
 import { readFile } from 'fs/promises';
@@ -145,7 +145,7 @@ export async function readTeamState(cwd: string): Promise<TeamStateForHud | null
 }
 
 export async function readMetrics(cwd: string): Promise<HudMetrics | null> {
-  return readJsonFile<HudMetrics>(join(cwd, '.omx', 'metrics.json'));
+  return readJsonFile<HudMetrics>(join(cwd, '.omk', 'metrics.json'));
 }
 
 export async function readHudNotifyState(cwd: string): Promise<HudNotifyState | null> {
@@ -158,7 +158,7 @@ export async function readSessionState(cwd: string): Promise<SessionStateForHud 
 }
 
 export async function readHudConfig(cwd: string): Promise<ResolvedHudConfig> {
-  const config = await readJsonFile<HudConfig>(join(cwd, '.omx', 'hud-config.json'));
+  const config = await readJsonFile<HudConfig>(join(cwd, '.omk', 'hud-config.json'));
   return normalizeHudConfig(config);
 }
 

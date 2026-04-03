@@ -8,16 +8,16 @@ import { readModeState, startMode, updateModeState } from '../base.js';
 
 describe('modes/base session-scoped persistence', () => {
   it('writes mode state into the current session scope when session.json exists', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-mode-session-scope-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-mode-session-scope-'));
     try {
-      await mkdir(join(wd, '.omx', 'state'), { recursive: true });
-      await writeFile(join(wd, '.omx', 'state', 'session.json'), JSON.stringify({ session_id: 'sess-base-write' }));
+      await mkdir(join(wd, '.omk', 'state'), { recursive: true });
+      await writeFile(join(wd, '.omk', 'state', 'session.json'), JSON.stringify({ session_id: 'sess-base-write' }));
 
       await startMode('ralplan', 'write in session scope', 5, wd);
 
-      const scopedPath = join(wd, '.omx', 'state', 'sessions', 'sess-base-write', 'ralplan-state.json');
+      const scopedPath = join(wd, '.omk', 'state', 'sessions', 'sess-base-write', 'ralplan-state.json');
       assert.equal(existsSync(scopedPath), true);
-      assert.equal(existsSync(join(wd, '.omx', 'state', 'ralplan-state.json')), false);
+      assert.equal(existsSync(join(wd, '.omk', 'state', 'ralplan-state.json')), false);
 
       const raw = JSON.parse(await readFile(scopedPath, 'utf-8')) as Record<string, unknown>;
       assert.equal(raw.mode, 'ralplan');
@@ -28,9 +28,9 @@ describe('modes/base session-scoped persistence', () => {
   });
 
   it('prefers session-scoped reads over root fallback and writes updates back to the session scope', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-mode-session-read-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-mode-session-read-'));
     try {
-      const stateDir = join(wd, '.omx', 'state');
+      const stateDir = join(wd, '.omk', 'state');
       const sessionId = 'sess-base-read';
       const sessionDir = join(stateDir, 'sessions', sessionId);
       await mkdir(sessionDir, { recursive: true });

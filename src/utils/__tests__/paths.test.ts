@@ -322,8 +322,8 @@ describe("listInstalledSkillDirectories", () => {
   });
 
   it("deduplicates by skill name and prefers project skills over user skills", async () => {
-    const projectRoot = await mkdtemp(join(tmpdir(), "omx-paths-project-"));
-    const codexHomeRoot = await mkdtemp(join(tmpdir(), "omx-paths-codex-"));
+    const projectRoot = await mkdtemp(join(tmpdir(), "omk-paths-project-"));
+    const codexHomeRoot = await mkdtemp(join(tmpdir(), "omk-paths-codex-"));
     process.env.CODEX_HOME = codexHomeRoot;
 
     try {
@@ -367,7 +367,7 @@ describe("listInstalledSkillDirectories", () => {
     }
   });
   it("detects overlapping legacy and canonical user skill roots including content mismatches", async () => {
-    const homeRoot = await mkdtemp(join(tmpdir(), "omx-paths-home-"));
+    const homeRoot = await mkdtemp(join(tmpdir(), "omk-paths-home-"));
     const codexHomeRoot = join(homeRoot, ".codex");
     const legacyRoot = join(homeRoot, ".agents", "skills");
     process.env.HOME = homeRoot;
@@ -405,7 +405,7 @@ describe("listInstalledSkillDirectories", () => {
   });
 
   it("treats a legacy link to canonical skills as the same resolved target", async () => {
-    const homeRoot = await mkdtemp(join(tmpdir(), "omx-paths-linked-home-"));
+    const homeRoot = await mkdtemp(join(tmpdir(), "omk-paths-linked-home-"));
     const codexHomeRoot = join(homeRoot, ".codex");
     const canonicalSkillsRoot = join(codexHomeRoot, "skills");
     const legacyParent = join(homeRoot, ".agents");
@@ -442,11 +442,11 @@ describe("listInstalledSkillDirectories", () => {
 
 describe("omxStateDir", () => {
   it("uses provided projectRoot", () => {
-    assert.equal(omxStateDir("/my/project"), join("/my/project", ".omx", "state"));
+    assert.equal(omxStateDir("/my/project"), join("/my/project", ".omk", "state"));
   });
 
   it("defaults to cwd when no projectRoot given", () => {
-    assert.equal(omxStateDir(), join(process.cwd(), ".omx", "state"));
+    assert.equal(omxStateDir(), join(process.cwd(), ".omk", "state"));
   });
 });
 
@@ -454,45 +454,45 @@ describe("omxProjectMemoryPath", () => {
   it("uses provided projectRoot", () => {
     assert.equal(
       omxProjectMemoryPath("/my/project"),
-      join("/my/project", ".omx", "project-memory.json"),
+      join("/my/project", ".omk", "project-memory.json"),
     );
   });
 
   it("defaults to cwd when no projectRoot given", () => {
     assert.equal(
       omxProjectMemoryPath(),
-      join(process.cwd(), ".omx", "project-memory.json"),
+      join(process.cwd(), ".omk", "project-memory.json"),
     );
   });
 });
 
 describe("omxNotepadPath", () => {
   it("uses provided projectRoot", () => {
-    assert.equal(omxNotepadPath("/my/project"), join("/my/project", ".omx", "notepad.md"));
+    assert.equal(omxNotepadPath("/my/project"), join("/my/project", ".omk", "notepad.md"));
   });
 
   it("defaults to cwd when no projectRoot given", () => {
-    assert.equal(omxNotepadPath(), join(process.cwd(), ".omx", "notepad.md"));
+    assert.equal(omxNotepadPath(), join(process.cwd(), ".omk", "notepad.md"));
   });
 });
 
 describe("omxPlansDir", () => {
   it("uses provided projectRoot", () => {
-    assert.equal(omxPlansDir("/my/project"), join("/my/project", ".omx", "plans"));
+    assert.equal(omxPlansDir("/my/project"), join("/my/project", ".omk", "plans"));
   });
 
   it("defaults to cwd when no projectRoot given", () => {
-    assert.equal(omxPlansDir(), join(process.cwd(), ".omx", "plans"));
+    assert.equal(omxPlansDir(), join(process.cwd(), ".omk", "plans"));
   });
 });
 
 describe("omxLogsDir", () => {
   it("uses provided projectRoot", () => {
-    assert.equal(omxLogsDir("/my/project"), join("/my/project", ".omx", "logs"));
+    assert.equal(omxLogsDir("/my/project"), join("/my/project", ".omk", "logs"));
   });
 
   it("defaults to cwd when no projectRoot given", () => {
-    assert.equal(omxLogsDir(), join(process.cwd(), ".omx", "logs"));
+    assert.equal(omxLogsDir(), join(process.cwd(), ".omk", "logs"));
   });
 });
 

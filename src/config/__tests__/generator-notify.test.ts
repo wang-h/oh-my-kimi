@@ -7,7 +7,7 @@ import { mergeConfig } from '../generator.js';
 
 describe('config generator', () => {
   it('places top-level keys before [features]', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-config-gen-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-config-gen-'));
     try {
       const configPath = join(wd, 'config.toml');
       await mergeConfig(configPath, wd);
@@ -42,7 +42,7 @@ describe('config generator', () => {
   });
 
   it('writes notify as a TOML array', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-config-gen-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-config-gen-'));
     try {
       const configPath = join(wd, 'config.toml');
       await mergeConfig(configPath, wd);
@@ -55,7 +55,7 @@ describe('config generator', () => {
   });
 
   it('seeds gpt-5.4 model and context defaults for fresh configs', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-config-gen-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-config-gen-'));
     try {
       const configPath = join(wd, 'config.toml');
       await mergeConfig(configPath, wd);
@@ -70,7 +70,7 @@ describe('config generator', () => {
   });
 
   it('seeds default model and context settings on fresh config', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-config-gen-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-config-gen-'));
     try {
       const configPath = join(wd, 'config.toml');
       await mergeConfig(configPath, wd);
@@ -89,7 +89,7 @@ describe('config generator', () => {
   });
 
   it('writes model_reasoning_effort and strengthened developer_instructions', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-config-gen-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-config-gen-'));
     try {
       const configPath = join(wd, 'config.toml');
       await mergeConfig(configPath, wd);
@@ -125,7 +125,7 @@ describe('config generator', () => {
   });
 
   it('re-runs setup replacing OMX config cleanly', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-config-gen-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-config-gen-'));
     try {
       const configPath = join(wd, 'config.toml');
       await mergeConfig(configPath, wd);
@@ -167,7 +167,7 @@ describe('config generator', () => {
   });
 
   it('does not seed 1M context keys for non-gpt-5.4 models', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-config-gen-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-config-gen-'));
     try {
       const configPath = join(wd, 'config.toml');
       await writeFile(configPath, 'model = \"o3\"\n');
@@ -184,7 +184,7 @@ describe('config generator', () => {
   });
 
   it('preserves existing user top-level config', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-config-gen-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-config-gen-'));
     try {
       const configPath = join(wd, 'config.toml');
       const existing = [
@@ -219,7 +219,7 @@ describe('config generator', () => {
   });
 
   it('writes a global [agents] section with OMX defaults', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-config-gen-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-config-gen-'));
     try {
       const configPath = join(wd, 'config.toml');
       await mergeConfig(configPath, wd);
@@ -234,7 +234,7 @@ describe('config generator', () => {
   });
 
   it('removes deprecated collab flag from [features]', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-config-gen-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-config-gen-'));
     try {
       const configPath = join(wd, 'config.toml');
       const existing = [
@@ -266,7 +266,7 @@ describe('config generator', () => {
   });
 
   it('migrates a legacy OMX block and preserves user settings', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-config-gen-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-config-gen-'));
     try {
       const configPath = join(wd, 'config.toml');
       const legacy = [
@@ -276,7 +276,7 @@ describe('config generator', () => {
         '# oh-my-kimi (OMK) Configuration',
         '# legacy block without top divider',
         'notify = ["node", "/tmp/legacy notify-hook.js"]',
-        '[mcp_servers.omx_state]',
+        '[mcp_servers.omk_state]',
         'command = "node"',
         'args = ["/tmp/state-server.js"]',
         '# End oh-my-kimi',
@@ -305,7 +305,7 @@ describe('config generator', () => {
   });
 
   it('merges into existing [features] table without duplicating it', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-config-gen-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-config-gen-'));
     try {
       const configPath = join(wd, 'config.toml');
       const original = [
@@ -334,7 +334,7 @@ describe('config generator', () => {
   });
 
   it('escapes Windows-style backslashes for MCP server args', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-config-gen-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-config-gen-'));
     try {
       const configPath = join(wd, 'config.toml');
       const windowsPkgRoot = 'C:\\Users\\alice\\oh-my-kimi';

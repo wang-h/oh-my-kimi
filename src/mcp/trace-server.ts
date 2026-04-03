@@ -1,7 +1,7 @@
 /**
  * OMX Trace MCP Server
  * Provides trace timeline and summary tools for debugging agent flows.
- * Reads .omx/logs/ turn JSONL files produced by the notify hook.
+ * Reads .omk/logs/ turn JSONL files produced by the notify hook.
  */
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
@@ -202,7 +202,7 @@ async function readMetrics(omxDir: string): Promise<Metrics | null> {
 // ── MCP Server ──────────────────────────────────────────────────────────────
 
 const server = new Server(
-  { name: 'omx-trace', version: '0.1.0' },
+  { name: 'omk-trace', version: '0.1.0' },
   { capabilities: { tools: {} } }
 );
 
@@ -249,7 +249,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       isError: true,
     };
   }
-  const omxDir = join(wd, '.omx');
+  const omxDir = join(wd, '.omk');
   const logsDir = join(omxDir, 'logs');
 
   switch (name) {

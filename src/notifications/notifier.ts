@@ -40,10 +40,10 @@ interface JsonHttpsRequestOptions {
 }
 
 /**
- * Load notification config from .omx/notifications.json
+ * Load notification config from .omk/notifications.json
  */
 export async function loadNotificationConfig(projectRoot?: string): Promise<NotificationConfig | null> {
-  const configPath = join(projectRoot || process.cwd(), '.omx', 'notifications.json');
+  const configPath = join(projectRoot || process.cwd(), '.omk', 'notifications.json');
   if (!existsSync(configPath)) return null;
   try {
     return JSON.parse(await readFile(configPath, 'utf-8'));

@@ -7,7 +7,7 @@ Design goals:
 - small code footprint
 - no large datasets checked into git
 - no heavyweight runtime artifacts committed
-- evaluator-driven keep/discard loops that are easy to inspect under `.omx/logs/autoresearch/`
+- evaluator-driven keep/discard loops that are easy to inspect under `.omk/logs/autoresearch/`
 
 ## Layout
 
@@ -86,10 +86,10 @@ omx autoresearch missions/noisy-bayesopt-highdim
 Then inspect:
 
 ```bash
-RUN_ID=$(find .omx/logs/autoresearch -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | sort | tail -n 1)
-cat .omx/logs/autoresearch/$RUN_ID/manifest.json
-cat .omx/logs/autoresearch/$RUN_ID/candidate.json
-cat .omx/logs/autoresearch/$RUN_ID/iteration-ledger.json
+RUN_ID=$(find .omk/logs/autoresearch -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | sort | tail -n 1)
+cat .omk/logs/autoresearch/$RUN_ID/manifest.json
+cat .omk/logs/autoresearch/$RUN_ID/candidate.json
+cat .omk/logs/autoresearch/$RUN_ID/iteration-ledger.json
 ```
 
 You can also run evaluators directly without the supervisor:
@@ -111,6 +111,6 @@ Please avoid committing:
 - large model artifacts
 - benchmark output dumps
 - generated caches like `__pycache__/`
-- runtime autoresearch logs under `.omx/logs/`
+- runtime autoresearch logs under `.omk/logs/`
 
 Keep research state in code, configs, missions, and evaluator scripts; keep bulky runtime outputs local.

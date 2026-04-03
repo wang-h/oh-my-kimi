@@ -1,7 +1,7 @@
 /**
  * OMX Team Runner MCP Server
  * Provides omx_run_team_* tools for spawning and managing tmux CLI worker teams.
- * Storage: ~/.omx/team-jobs/
+ * Storage: ~/.omk/team-jobs/
  */
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
@@ -33,7 +33,7 @@ const startSchema = z.object({
   cwd: z.string().min(1),
 });
 
-const jobIdSchema = z.string().regex(/^omx-[a-z0-9]{1,12}$/);
+const jobIdSchema = z.string().regex(/^omk-[a-z0-9]{1,12}$/);
 
 const statusSchema = z.object({ job_id: jobIdSchema });
 
@@ -72,7 +72,7 @@ interface OmxTeamJob {
 const omxTeamJobs = new Map<string, OmxTeamJob>();
 
 function getOmxJobsDir(): string {
-  return join(homedir(), '.omx', 'team-jobs');
+  return join(homedir(), '.omk', 'team-jobs');
 }
 
 function persistJob(jobId: string, job: OmxTeamJob): void {
@@ -235,7 +235,7 @@ interface CleanupSummary {
 // ---------------------------------------------------------------------------
 
 const server = new Server(
-  { name: 'omx-team-server', version: '0.1.0' },
+  { name: 'omk-team-server', version: '0.1.0' },
   { capabilities: { tools: {} } }
 );
 
@@ -323,14 +323,14 @@ export async function handleTeamToolCall(request: {
       case 'omx_run_team_start': {
         const { teamName, agentTypes, tasks, cwd: inputCwd } = startSchema.parse(a);
 
-        const jobId = `omx-${Date.now().toString(36)}`;
+        const jobId = `omk-${Date.now().toString(36)}`;
         const runtimeCliPath = join(dirname(fileURLToPath(import.meta.url)), '..', 'team', 'runtime-cli.js');
 
         const job: OmxTeamJob = { status: 'running', startedAt: Date.now(), teamName, cwd: inputCwd };
         omxTeamJobs.set(jobId, job);
 
         const child = spawn('node', [runtimeCliPath], {
-          env: { ...process.env, OMX_JOB_ID: jobId, OMX_JOBS_DIR: getOmxJobsDir() },
+          env: { ...process.env, OMK_JOB_ID: jobId, OMK_JOBS_DIR: getOmxJobsDir() },
           stdio: ['pipe', 'pipe', 'pipe'],
         });
         job.pid = child.pid;

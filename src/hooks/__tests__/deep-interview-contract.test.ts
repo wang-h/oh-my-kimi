@@ -156,8 +156,8 @@ describe("deep-interview Ouroboros contract", () => {
 	});
 
 	it("uses OMX-native output paths", () => {
-		assert.match(deepInterviewSkill, /\.omx\/interviews\//);
-		assert.match(deepInterviewSkill, /\.omx\/specs\//);
+		assert.match(deepInterviewSkill, /\.omk\/interviews\//);
+		assert.match(deepInterviewSkill, /\.omk\/specs\//);
 	});
 
 	it("requires preflight context intake before interview rounds", () => {
@@ -168,7 +168,7 @@ describe("deep-interview Ouroboros contract", () => {
 		);
 		assert.match(
 			deepInterviewSkill,
-			/\.omx\/context\/\{slug\}-\{timestamp\}\.md/,
+			/\.omk\/context\/\{slug\}-\{timestamp\}\.md/,
 		);
 		assert.match(deepInterviewSkill, /context_snapshot_path/i);
 	});
@@ -184,7 +184,7 @@ describe("deep-interview Ouroboros contract", () => {
 		assert.match(deepInterviewSkill, /evaluator readiness/i);
 		assert.match(
 			deepInterviewSkill,
-			/\.omx\/specs\/deep-interview-autoresearch-\{slug\}\.md/i,
+			/\.omk\/specs\/deep-interview-autoresearch-\{slug\}\.md/i,
 		);
 		assert.match(deepInterviewSkill, /Mission Draft/i);
 		assert.match(deepInterviewSkill, /Evaluator Draft/i);

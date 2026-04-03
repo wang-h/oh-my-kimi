@@ -8,7 +8,7 @@ const PROVIDER_BINARIES: Record<string, string> = {
   claude: 'claude',
   gemini: 'gemini',
 };
-const ASK_ORIGINAL_TASK_ENV = 'OMX_ASK_ORIGINAL_TASK';
+const ASK_ORIGINAL_TASK_ENV = 'OMK_ASK_ORIGINAL_TASK';
 
 function usage(): void {
   console.error('Usage: omx ask <claude|gemini> "<prompt>"');
@@ -101,7 +101,7 @@ async function writeArtifact({ provider, originalTask, finalPrompt, rawOutput, e
   exitCode: number;
 }): Promise<string> {
   const root = process.cwd();
-  const artifactDir = join(root, '.omx', 'artifacts');
+  const artifactDir = join(root, '.omk', 'artifacts');
   const slug = slugify(originalTask);
   const timestamp = timestampToken();
   const artifactPath = join(artifactDir, `${provider}-${slug}-${timestamp}.md`);

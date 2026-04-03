@@ -2,7 +2,7 @@
 
 Date: **2026-03-19**  
 Baseline commit: **`8106d67`**  
-Execution surface: active OMX team worker pane (`worker-3`) with local verification run from repository root after clearing `OMX_TEAM_*` env vars.
+Execution surface: active OMK team worker pane (`worker-3`) with local verification run from repository root after clearing `OMK_TEAM_*` env vars.
 
 ## Scope
 
@@ -13,7 +13,7 @@ This note captures the remaining local full-suite drift observed after the earli
 Command sequence used from the repository root:
 
 ```bash
-unset OMX_TEAM_STATE_ROOT OMX_TEAM_WORKER OMX_TEAM_LEADER_CWD
+unset OMK_TEAM_STATE_ROOT OMK_TEAM_WORKER OMK_TEAM_LEADER_CWD
 npm run build
 npm run lint
 npm test
@@ -39,20 +39,20 @@ Failing test:
 
 Observed mismatch:
 
-- expected `instructions-path: .../.omx/state/sessions/omx-*/AGENTS.md`
-- actual `instructions-path: .../.omx/team/continue-from-clean-commit-810/worktrees/worker-3/AGENTS.md`
+- expected `instructions-path: .../.omk/state/sessions/omk-*/AGENTS.md`
+- actual `instructions-path: .../.omk/team/continue-from-clean-commit-810/worktrees/worker-3/AGENTS.md`
 
 Interpretation:
 
-- The test expects the `omx exec` path to always use a generated session-scoped overlay file.
+- The test expects the `omk exec` path to always use a generated session-scoped overlay file.
 - Inside the active team worker pane, the invocation instead surfaces the worker worktree `AGENTS.md` path.
 - This looks like a **test/contract expectation drift for worker-session execution context**, not evidence of a new product regression in the main clean-commit lane.
 
 Evidence excerpt:
 
 ```text
-expected: /instructions-path:.*\/\.omx\/state\/sessions\/omx-.*\/AGENTS\.md/
-actual: fake-codex:exec --model gpt-5 say hi -c model_instructions_file="/home/.../.omx/team/continue-from-clean-commit-810/worktrees/worker-3/AGENTS.md"
+expected: /instructions-path:.*\/\.omk\/state\/sessions\/omk-.*\/AGENTS\.md/
+actual: fake-codex:exec --model gpt-5 say hi -c model_instructions_file="/home/.../.omk/team/continue-from-clean-commit-810/worktrees/worker-3/AGENTS.md"
 ```
 
 ### 2. `dist/hooks/__tests__/codebase-map.test.js`
@@ -96,7 +96,7 @@ No additional failure buckets were observed in the same `npm test` run.
 ## Notes
 
 - No runtime or product source files were changed for this documentation pass.
-- The full-suite evidence for this snapshot is stored in `.omx/context/task-3-npm-test-20260319.log`.
+- The full-suite evidence for this snapshot is stored in `.omk/context/task-3-npm-test-20260319.log`.
 - Focused repro logs were stored in:
-  - `.omx/context/task-3-exec-test.log`
-  - `.omx/context/task-3-codebase-map-test.log`
+  - `.omk/context/task-3-exec-test.log`
+  - `.omk/context/task-3-codebase-map-test.log`

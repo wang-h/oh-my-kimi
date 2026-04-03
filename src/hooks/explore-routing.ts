@@ -1,4 +1,4 @@
-export const OMX_EXPLORE_CMD_ENV = 'USE_OMX_EXPLORE_CMD';
+export const OMK_EXPLORE_CMD_ENV = 'USE_OMK_EXPLORE_CMD';
 
 const DISABLED_VALUES = new Set(['0', 'false', 'no', 'off']);
 
@@ -19,7 +19,7 @@ const NON_EXPLORATION_PATTERNS: RegExp[] = [
 ];
 
 export function isExploreCommandRoutingEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
-  const raw = env[OMX_EXPLORE_CMD_ENV];
+  const raw = env[OMK_EXPLORE_CMD_ENV];
   if (typeof raw !== 'string') return true;
   return !DISABLED_VALUES.has(raw.trim().toLowerCase());
 }
@@ -34,7 +34,7 @@ export function isSimpleExplorationPrompt(text: string): boolean {
 export function buildExploreRoutingGuidance(env: NodeJS.ProcessEnv = process.env): string {
   if (!isExploreCommandRoutingEnabled(env)) return '';
   return [
-    `**Explore Command Preference:** enabled via \`${OMX_EXPLORE_CMD_ENV}\` (default-on; opt out with \`0\`, \`false\`, \`no\`, or \`off\`)`,
+    `**Explore Command Preference:** enabled via \`${OMK_EXPLORE_CMD_ENV}\` (default-on; opt out with \`0\`, \`false\`, \`no\`, or \`off\`)`,
     '- Advisory steering only: agents SHOULD treat `omx explore` as the default first stop for direct inspection and SHOULD reserve `omx sparkshell` for qualifying read-only shell-native tasks.',
     '- For simple file/symbol lookups, use `omx explore` FIRST before attempting full code analysis.',
     '- When the user asks for a simple read-only exploration task (file/symbol/pattern/relationship lookup), strongly prefer `omx explore` as the default surface.',

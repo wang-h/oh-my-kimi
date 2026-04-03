@@ -34,7 +34,7 @@ function escapeTomlString(value: string): string {
 // ---------------------------------------------------------------------------
 
 /** Keys we own at the TOML root level. Used for upsert + strip. */
-const OMX_TOP_LEVEL_KEYS = [
+const OMK_TOP_LEVEL_KEYS = [
   "notify",
   "model_reasoning_effort",
   "developer_instructions",
@@ -46,11 +46,11 @@ const DEFAULT_SETUP_MODEL_AUTO_COMPACT_TOKEN_LIMIT = 900000;
 const SHARED_MCP_REGISTRY_MARKER = "oh-my-kimi (OMK) Shared MCP Registry Sync";
 const SHARED_MCP_REGISTRY_END_MARKER =
   "# End oh-my-kimi shared MCP registry sync";
-const OMX_AGENTS_MAX_THREADS = 6;
-const OMX_AGENTS_MAX_DEPTH = 2;
-const OMX_EXPLORE_ROUTING_DEFAULT = '1';
-const OMX_EXPLORE_CMD_ENV = 'USE_OMX_EXPLORE_CMD';
-const OMX_TUI_STATUS_LINE =
+const OMK_AGENTS_MAX_THREADS = 6;
+const OMK_AGENTS_MAX_DEPTH = 2;
+const OMK_EXPLORE_ROUTING_DEFAULT = '1';
+const OMK_EXPLORE_CMD_ENV = 'USE_OMK_EXPLORE_CMD';
+const OMK_TUI_STATUS_LINE =
   'status_line = ["model-with-reasoning", "git-branch", "context-remaining", "total-input-tokens", "total-output-tokens", "five-hour-limit", "weekly-limit"]';
 
 function unwrapTomlString(value: string | undefined): string | undefined {
@@ -118,7 +118,7 @@ function stripRootLevelKeys(config: string, keys: readonly string[]): string {
 
   if (
     keys.some((key) =>
-      OMX_TOP_LEVEL_KEYS.includes(key as (typeof OMX_TOP_LEVEL_KEYS)[number]),
+      OMK_TOP_LEVEL_KEYS.includes(key as (typeof OMK_TOP_LEVEL_KEYS)[number]),
     )
   ) {
     lines = lines.filter(
@@ -162,7 +162,7 @@ function stripOrphanedManagedNotify(config: string): string {
  * cleanly. Also removes the comment line that precedes them.
  */
 export function stripOmxTopLevelKeys(config: string): string {
-  return stripRootLevelKeys(config, OMX_TOP_LEVEL_KEYS);
+  return stripRootLevelKeys(config, OMK_TOP_LEVEL_KEYS);
 }
 
 // ---------------------------------------------------------------------------
@@ -239,7 +239,7 @@ function upsertEnvSettings(config: string): string {
     const base = config.trimEnd();
     const envBlock = [
       "[env]",
-      `${OMX_EXPLORE_CMD_ENV} = "${OMX_EXPLORE_ROUTING_DEFAULT}"`,
+      `${OMK_EXPLORE_CMD_ENV} = "${OMK_EXPLORE_ROUTING_DEFAULT}"`,
       "",
     ].join("\n");
     if (base.length === 0) return envBlock;
@@ -256,7 +256,7 @@ function upsertEnvSettings(config: string): string {
 
   let exploreRoutingIdx = -1;
   for (let i = envStart + 1; i < sectionEnd; i++) {
-    if (new RegExp(`^\\s*${OMX_EXPLORE_CMD_ENV}\\s*=`).test(lines[i])) {
+    if (new RegExp(`^\\s*${OMK_EXPLORE_CMD_ENV}\\s*=`).test(lines[i])) {
       exploreRoutingIdx = i;
       break;
     }
@@ -266,7 +266,7 @@ function upsertEnvSettings(config: string): string {
     lines.splice(
       sectionEnd,
       0,
-      `${OMX_EXPLORE_CMD_ENV} = "${OMX_EXPLORE_ROUTING_DEFAULT}"`,
+      `${OMK_EXPLORE_CMD_ENV} = "${OMK_EXPLORE_ROUTING_DEFAULT}"`,
     );
   }
 
@@ -283,8 +283,8 @@ function upsertAgentsSettings(config: string): string {
     const base = config.trimEnd();
     const agentsBlock = [
       "[agents]",
-      `max_threads = ${OMX_AGENTS_MAX_THREADS}`,
-      `max_depth = ${OMX_AGENTS_MAX_DEPTH}`,
+      `max_threads = ${OMK_AGENTS_MAX_THREADS}`,
+      `max_depth = ${OMK_AGENTS_MAX_DEPTH}`,
       "",
     ].join("\n");
     if (base.length === 0) return agentsBlock;
@@ -310,11 +310,11 @@ function upsertAgentsSettings(config: string): string {
   }
 
   if (maxThreadsIdx < 0) {
-    lines.splice(sectionEnd, 0, `max_threads = ${OMX_AGENTS_MAX_THREADS}`);
+    lines.splice(sectionEnd, 0, `max_threads = ${OMK_AGENTS_MAX_THREADS}`);
     sectionEnd += 1;
   }
   if (maxDepthIdx < 0) {
-    lines.splice(sectionEnd, 0, `max_depth = ${OMX_AGENTS_MAX_DEPTH}`);
+    lines.splice(sectionEnd, 0, `max_depth = ${OMK_AGENTS_MAX_DEPTH}`);
   }
 
   return lines.join("\n");
@@ -391,7 +391,7 @@ export function stripOmxEnvSettings(config: string): string {
   for (let i = 0; i < lines.length; i++) {
     if (i > envStart && i < sectionEnd) {
       const isOmxEnvKey = new RegExp(
-        `^\\s*${OMX_EXPLORE_CMD_ENV}\\s*=`,
+        `^\\s*${OMK_EXPLORE_CMD_ENV}\\s*=`,
       ).test(lines[i]);
       if (isOmxEnvKey) continue;
     }
@@ -436,7 +436,7 @@ function isLegacyOmxAgentSection(tableName: string): boolean {
  * This covers legacy configs that were written before markers were added,
  * or configs where the marker was accidentally removed.
  *
- * Targets: [mcp_servers.omx_*], legacy [agents.<name>] entries, [tui]
+ * Targets: [mcp_servers.omk_*], legacy [agents.<name>] entries, [tui]
  */
 function stripOrphanedOmxSections(config: string): string {
   const lines = config.split(/\r?\n/);
@@ -453,7 +453,7 @@ function stripOrphanedOmxSections(config: string): string {
       // The marker-based stripExistingOmxBlocks already handles [tui]
       // when it lives inside the OMX marker block.
       const isOmxSection =
-        /^mcp_servers\.omx_/.test(tableName) ||
+        /^mcp_servers\.omk_/.test(tableName) ||
         isLegacyOmxAgentSection(tableName);
 
       if (isOmxSection) {
@@ -527,7 +527,7 @@ function upsertTuiStatusLine(config: string): {
     }
   }
 
-  const mergedSection = ["[tui]", ...preservedKeyLines, OMX_TUI_STATUS_LINE];
+  const mergedSection = ["[tui]", ...preservedKeyLines, OMK_TUI_STATUS_LINE];
   const firstStart = sections[0].start;
   const rebuilt: string[] = [];
 
@@ -733,35 +733,35 @@ function getOmxTablesBlock(pkgRoot: string, includeTui = true): string {
     "# ============================================================",
     "",
     "# OMX State Management MCP Server",
-    "[mcp_servers.omx_state]",
+    "[mcp_servers.omk_state]",
     'command = "node"',
     `args = ["${stateServerPath}"]`,
     "enabled = true",
     "startup_timeout_sec = 5",
     "",
     "# OMX Project Memory MCP Server",
-    "[mcp_servers.omx_memory]",
+    "[mcp_servers.omk_memory]",
     'command = "node"',
     `args = ["${memoryServerPath}"]`,
     "enabled = true",
     "startup_timeout_sec = 5",
     "",
     "# OMX Code Intelligence MCP Server (LSP diagnostics, AST search)",
-    "[mcp_servers.omx_code_intel]",
+    "[mcp_servers.omk_code_intel]",
     'command = "node"',
     `args = ["${codeIntelServerPath}"]`,
     "enabled = true",
     "startup_timeout_sec = 10",
     "",
     "# OMX Trace MCP Server (agent flow timeline & statistics)",
-    "[mcp_servers.omx_trace]",
+    "[mcp_servers.omk_trace]",
     'command = "node"',
     `args = ["${traceServerPath}"]`,
     "enabled = true",
     "startup_timeout_sec = 5",
     "",
     "# OMX Team MCP Server (team job lifecycle: start, status, wait, cleanup)",
-    "[mcp_servers.omx_team_run]",
+    "[mcp_servers.omk_team_run]",
     'command = "node"',
     `args = ["${teamServerPath}"]`,
     "enabled = true",
@@ -771,7 +771,7 @@ function getOmxTablesBlock(pkgRoot: string, includeTui = true): string {
           "",
           "# OMK TUI StatusLine (Kimi Code CLI)",
           "[tui]",
-          OMX_TUI_STATUS_LINE,
+          OMK_TUI_STATUS_LINE,
           "",
         ]
       : []),

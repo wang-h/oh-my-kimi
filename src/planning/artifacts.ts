@@ -46,7 +46,7 @@ function readMatchingPaths(dir: string, pattern: RegExp): string[] {
 
 export function readPlanningArtifacts(cwd: string): PlanningArtifacts {
   const plansDir = omxPlansDir(cwd);
-  const specsDir = join(cwd, '.omx', 'specs');
+  const specsDir = join(cwd, '.omk', 'specs');
 
   return {
     plansDir,

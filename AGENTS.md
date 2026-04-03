@@ -91,7 +91,7 @@ Rules:
 - Child agents should report recommended handoffs upward.
 - Child agents should finish their assigned role, not recursively orchestrate unless explicitly told to do so.
 - Prefer inheriting the leader model by omitting `spawn_agent.model` unless a task truly requires a different model.
-- Do not hardcode stale frontier-model overrides for Codex native child agents. If an explicit frontier override is necessary, use the current frontier default from `OMX_DEFAULT_FRONTIER_MODEL` / the repo model contract (currently `gpt-5.4`), not older values such as `gpt-5.2`.
+- Do not hardcode stale frontier-model overrides for Codex native child agents. If an explicit frontier override is necessary, use the current frontier default from `OMK_DEFAULT_FRONTIER_MODEL` / the repo model contract (currently `gpt-5.4`), not older values such as `gpt-5.2`.
 - Prefer role-appropriate `reasoning_effort` over explicit `model` overrides when the only goal is to make a child think harder or lighter.
 </child_agent_protocol>
 
@@ -160,7 +160,7 @@ Detection rules:
 
 Ralph / Ralplan execution gate:
 - Enforce **ralplan-first** when ralph is active and planning is not complete.
-- Planning is complete only after both `.omx/plans/prd-*.md` and `.omx/plans/test-spec-*.md` exist.
+- Planning is complete only after both `.omk/plans/prd-*.md` and `.omk/plans/test-spec-*.md` exist.
 - Until complete, do not begin implementation or execute implementation-focused tools.
 </keyword_detection>
 
@@ -194,12 +194,12 @@ Terminal states: `complete`, `failed`, `cancelled`.
 <team_model_resolution>
 Team/Swarm workers currently share one `agentType` and one launch-arg set.
 Model precedence:
-1. Explicit model in `OMX_TEAM_WORKER_LAUNCH_ARGS`
+1. Explicit model in `OMK_TEAM_WORKER_LAUNCH_ARGS`
 2. Inherited leader `--model`
-3. Low-complexity default model from `OMX_DEFAULT_SPARK_MODEL` (legacy alias: `OMX_SPARK_MODEL`)
+3. Low-complexity default model from `OMK_DEFAULT_SPARK_MODEL` (legacy alias: `OMK_SPARK_MODEL`)
 
 Normalize model flags to one canonical `--model <value>` entry.
-Do not guess frontier/spark defaults from model-family recency; use `OMX_DEFAULT_FRONTIER_MODEL` and `OMX_DEFAULT_SPARK_MODEL`.
+Do not guess frontier/spark defaults from model-family recency; use `OMK_DEFAULT_FRONTIER_MODEL` and `OMK_DEFAULT_SPARK_MODEL`.
 </team_model_resolution>
 
 <!-- OMX:MODELS:START -->
@@ -235,7 +235,7 @@ Mode selection:
 - Do not change modes casually; switch only when evidence shows the current lane is mismatched or blocked.
 
 Command routing:
-- When `USE_OMX_EXPLORE_CMD` enables advisory routing, strongly prefer `omx explore` as the default surface for simple read-only repository lookup tasks (files, symbols, patterns, relationships).
+- When `USE_OMK_EXPLORE_CMD` enables advisory routing, strongly prefer `omx explore` as the default surface for simple read-only repository lookup tasks (files, symbols, patterns, relationships).
 - For simple file/symbol lookups, use `omx explore` FIRST before attempting full code analysis.
 
 When to use what:
@@ -276,7 +276,7 @@ Anti-slop workflow:
 
 Visual iteration gate:
 - For visual tasks, run `$visual-verdict` every iteration before the next edit.
-- Persist verdict JSON in `.omx/state/{scope}/ralph-progress.json`.
+- Persist verdict JSON in `.omk/state/{scope}/ralph-progress.json`.
 
 Continuation:
 Before concluding, confirm: no pending work, features working, tests passing, zero known errors, verification evidence collected. If not, continue.
@@ -294,12 +294,12 @@ Do not cancel while recoverable work remains.
 ---
 
 <state_management>
-OMX persists runtime state under `.omx/`:
-- `.omx/state/` — mode state
-- `.omx/notepad.md` — session notes
-- `.omx/project-memory.json` — cross-session memory
-- `.omx/plans/` — plans
-- `.omx/logs/` — logs
+OMX persists runtime state under `.omk/`:
+- `.omk/state/` — mode state
+- `.omk/notepad.md` — session notes
+- `.omk/project-memory.json` — cross-session memory
+- `.omk/plans/` — plans
+- `.omk/logs/` — logs
 
 Available MCP groups include state/memory tools, code-intel tools, and trace tools.
 

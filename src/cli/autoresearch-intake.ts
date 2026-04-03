@@ -104,11 +104,11 @@ function normalizeKeepPolicy(raw: string): AutoresearchKeepPolicy {
 }
 
 function buildArtifactDir(repoRoot: string, slug: string): string {
-  return join(repoRoot, '.omx', 'specs', `${AUTORESEARCH_ARTIFACT_DIR_PREFIX}${slug}`);
+  return join(repoRoot, '.omk', 'specs', `${AUTORESEARCH_ARTIFACT_DIR_PREFIX}${slug}`);
 }
 
 function buildDraftArtifactPath(repoRoot: string, slug: string): string {
-  return join(repoRoot, '.omx', 'specs', `${DEEP_INTERVIEW_DRAFT_PREFIX}${slug}.md`);
+  return join(repoRoot, '.omk', 'specs', `${DEEP_INTERVIEW_DRAFT_PREFIX}${slug}.md`);
 }
 
 function buildResultPath(repoRoot: string, slug: string): string {
@@ -218,7 +218,7 @@ export async function writeAutoresearchDraftArtifact(input: {
   }
 
   const launchReady = blockedReasons.length === 0;
-  const specsDir = join(input.repoRoot, '.omx', 'specs');
+  const specsDir = join(input.repoRoot, '.omk', 'specs');
   await mkdir(specsDir, { recursive: true });
   const path = buildDraftArtifactPath(input.repoRoot, slug);
   const content = buildAutoresearchDraftArtifactContent(compileTarget, input.seedInputs || {}, launchReady, blockedReasons);
@@ -366,7 +366,7 @@ async function readPersistedResult(resultPath: string): Promise<AutoresearchDeep
 }
 
 export async function listAutoresearchDeepInterviewDraftPaths(repoRoot: string): Promise<string[]> {
-  const specsDir = join(repoRoot, '.omx', 'specs');
+  const specsDir = join(repoRoot, '.omk', 'specs');
   if (!existsSync(specsDir)) return [];
   const entries = await readdir(specsDir, { withFileTypes: true });
   return entries
@@ -375,7 +375,7 @@ export async function listAutoresearchDeepInterviewDraftPaths(repoRoot: string):
 }
 
 export async function listAutoresearchDeepInterviewResultPaths(repoRoot: string): Promise<string[]> {
-  const specsDir = join(repoRoot, '.omx', 'specs');
+  const specsDir = join(repoRoot, '.omk', 'specs');
   if (!existsSync(specsDir)) return [];
 
   const entries = await readdir(specsDir, { withFileTypes: true });

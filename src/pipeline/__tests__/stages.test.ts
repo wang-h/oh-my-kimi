@@ -26,7 +26,7 @@ function makeCtx(overrides: Partial<StageContext> = {}): StageContext {
 }
 
 async function setup(): Promise<string> {
-  tempDir = await mkdtemp(join(tmpdir(), 'omx-stages-test-'));
+  tempDir = await mkdtemp(join(tmpdir(), 'omk-stages-test-'));
   return tempDir;
 }
 
@@ -64,7 +64,7 @@ describe('RALPLAN Stage', () => {
   });
 
   it('canSkip returns false when plans directory is empty', async () => {
-    const plansDir = join(tempDir, '.omx', 'plans');
+    const plansDir = join(tempDir, '.omk', 'plans');
     await mkdir(plansDir, { recursive: true });
 
     const stage = createRalplanStage();
@@ -72,7 +72,7 @@ describe('RALPLAN Stage', () => {
   });
 
   it('canSkip returns false when only a prd- plan file exists', async () => {
-    const plansDir = join(tempDir, '.omx', 'plans');
+    const plansDir = join(tempDir, '.omk', 'plans');
     await mkdir(plansDir, { recursive: true });
     await writeFile(join(plansDir, 'prd-my-feature.md'), '# Plan\n');
 
@@ -81,7 +81,7 @@ describe('RALPLAN Stage', () => {
   });
 
   it('canSkip returns true when both prd and test spec plan files exist', async () => {
-    const plansDir = join(tempDir, '.omx', 'plans');
+    const plansDir = join(tempDir, '.omk', 'plans');
     await mkdir(plansDir, { recursive: true });
     await writeFile(join(plansDir, 'prd-my-feature.md'), '# Plan\n');
     await writeFile(join(plansDir, 'test-spec-my-feature.md'), '# Test Spec\n');
@@ -91,7 +91,7 @@ describe('RALPLAN Stage', () => {
   });
 
   it('surfaces deep-interview specs in ralplan artifacts for downstream traceability', async () => {
-    const specsDir = join(tempDir, '.omx', 'specs');
+    const specsDir = join(tempDir, '.omk', 'specs');
     await mkdir(specsDir, { recursive: true });
     await writeFile(join(specsDir, 'deep-interview-my-feature.md'), '# Deep Interview Spec\n');
 
@@ -107,7 +107,7 @@ describe('RALPLAN Stage', () => {
     const stage = createRalplanStage({
       executor: {
         async draft() {
-          const plansDir = join(tempDir, '.omx', 'plans');
+          const plansDir = join(tempDir, '.omk', 'plans');
           await mkdir(plansDir, { recursive: true });
           const prdPath = join(plansDir, 'prd-runtime.md');
           await writeFile(prdPath, '# Runtime Plan\n');
@@ -134,7 +134,7 @@ describe('RALPLAN Stage', () => {
   });
 
   it('canSkip returns false for non-prd plan files', async () => {
-    const plansDir = join(tempDir, '.omx', 'plans');
+    const plansDir = join(tempDir, '.omk', 'plans');
     await mkdir(plansDir, { recursive: true });
     await writeFile(join(plansDir, 'autopilot-spec.md'), '# Spec\n');
 

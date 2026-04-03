@@ -1,7 +1,7 @@
 # oh-my-kimi (OMK)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omx-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
+  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omk-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
   <br>
   <em>你的 Kimi 并不孤单。</em>
 </p>
@@ -13,15 +13,19 @@
 
 > **[GitHub](https://github.com/wang-h/oh-my-kimi)** | **[入门文档](./docs/getting-started.html)** | **[兼容性说明](./docs/oh-my-kimi-v1-compatibility.md)** | **[OpenClaw 集成指南](./docs/openclaw-integration.zh.md)**
 
-面向 **Kimi Code CLI** 的多智能体编排层，`omk` 是主命令名，`omx` 目前保留为兼容别名。
+> **项目致谢：** `oh-my-kimi` 源自 [Yeachan-Heo/oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex) 的 Kimi-first 分叉版本，原项目与上游设计工作应归功于 **Yeachan-Heo**。
+>
+> **当前说明：** 本 fork 由 **hao**（`wang-h`）维护；`oh-my-kimi` 的迁移、品牌替换与适配工作是在 **oh-my-codex** 的基础上完成的，迁移过程中也明确使用了 **OpenAI Codex / Codex CLI 工作流** 来协助执行与推进。
+
+面向 **Kimi Code CLI** 的多智能体编排层，`omk` 是主命令名，`omk` 目前保留为兼容别名。
 
 ## v0.9.0 新特性 — Spark Initiative
 
-Spark Initiative 是一次强化 OMX 原生探索与检查路径的版本发布。
+Spark Initiative 是一次强化 OMK 原生探索与检查路径的版本发布。
 
-- **`omx explore` 原生 harness** —— 通过 Rust 原生 harness 更快、更严格地执行只读仓库探索。
-- **`omx sparkshell`** —— 面向操作者的原生检查界面，支持长输出摘要与 tmux pane 捕获。
-- **跨平台原生发布资产** —— `omx-explore-harness`、`omx-sparkshell` 与 `native-release-manifest.json` 的 hydration 路径现已纳入发布流水线。
+- **`omk explore` 原生 harness** —— 通过 Rust 原生 harness 更快、更严格地执行只读仓库探索。
+- **`omk sparkshell`** —— 面向操作者的原生检查界面，支持长输出摘要与 tmux pane 捕获。
+- **跨平台原生发布资产** —— `omk-explore-harness`、`omk-sparkshell` 与 `native-release-manifest.json` 的 hydration 路径现已纳入发布流水线。
 - **增强的 CI/CD** —— 为 `build` job 增加显式 Rust toolchain 设置，并加入 `cargo fmt --check` 与 `cargo clippy -- -D warnings`。
 
 详情请参阅 [v0.9.0 发布说明](./docs/release-notes-0.9.0.md) 和 [发布正文](./docs/release-body-0.9.0.md)。
@@ -53,7 +57,7 @@ omk team shutdown <team-name>
 
 ## 核心模型
 
-OMX 安装并连接以下层：
+OMK 安装并连接以下层：
 
 ```text
 User
@@ -69,7 +73,7 @@ User
 
 ```bash
 omk                # 启动 Kimi（在 tmux 中附带 HUD）
-omk setup          # 按作用域安装 prompt/skill/config + 项目 .omx + 作用域专属 AGENTS.md
+omk setup          # 按作用域安装 prompt/skill/config + 项目 .omk + 作用域专属 AGENTS.md
 omk doctor         # 安装/运行时诊断
 omk doctor --team  # Team/swarm 诊断
 omk team ...       # 启动/状态/恢复/关闭 tmux 团队 worker
@@ -84,12 +88,12 @@ omk help
 
 ## Hooks 扩展（附加表面）
 
-OMX 现在包含用于插件脚手架和验证的 `omx hooks`。
+OMK 现在包含用于插件脚手架和验证的 `omk hooks`。
 
-- `omx tmux-hook` 继续支持且未更改。
-- `omx hooks` 是附加的，不会替代 tmux-hook 工作流。
-- 插件文件位于 `.omx/hooks/*.mjs`。
-- 插件默认关闭；使用 `OMX_HOOK_PLUGINS=1` 启用。
+- `omk tmux-hook` 继续支持且未更改。
+- `omk hooks` 是附加的，不会替代 tmux-hook 工作流。
+- 插件文件位于 `.omk/hooks/*.mjs`。
+- 插件默认关闭；使用 `OMK_HOOK_PLUGINS=1` 启用。
 
 完整的扩展工作流和事件模型请参阅 `docs/hooks-extension.md`。
 
@@ -115,14 +119,14 @@ OMX 现在包含用于插件脚手架和验证的 `omx hooks`。
 要限制此行为，请设置允许的根目录列表：
 
 ```bash
-export OMX_MCP_WORKDIR_ROOTS="/path/to/project:/path/to/another-root"
+export OMK_MCP_WORKDIR_ROOTS="/path/to/project:/path/to/another-root"
 ```
 
 设置后，超出这些根目录的 `workingDirectory` 值将被拒绝。
 
 ## Codex-First Prompt 控制
 
-默认情况下，OMX 注入：
+默认情况下，OMK 注入：
 
 ```text
 -c model_instructions_file="<cwd>/AGENTS.md"
@@ -134,8 +138,8 @@ export OMX_MCP_WORKDIR_ROOTS="/path/to/project:/path/to/another-root"
 控制：
 
 ```bash
-OMX_BYPASS_DEFAULT_SYSTEM_PROMPT=0 omk     # 禁用 AGENTS.md 注入
-OMX_MODEL_INSTRUCTIONS_FILE=/path/to/instructions.md omk
+OMK_BYPASS_DEFAULT_SYSTEM_PROMPT=0 omk     # 禁用 AGENTS.md 注入
+OMK_MODEL_INSTRUCTIONS_FILE=/path/to/instructions.md omk
 ```
 
 ## 团队模式
@@ -167,26 +171,26 @@ Team cleanup now follows one standalone path; legacy linked-Ralph shutdown handl
 团队 worker 的 Worker CLI 选择：
 
 ```bash
-OMX_TEAM_WORKER_CLI=auto    # 默认；当 worker --model 包含 "claude" 时使用 claude
-OMX_TEAM_WORKER_CLI=kimi    # 如后续支持可改为 Kimi worker；当前仍以兼容层为主
-OMX_TEAM_WORKER_CLI=claude  # 强制 Claude CLI worker
-OMX_TEAM_WORKER_CLI_MAP=codex,codex,claude,claude  # 每个 worker 的 CLI 混合（长度=1 或 worker 数量）
-OMX_TEAM_AUTO_INTERRUPT_RETRY=0  # 可选：禁用自适应 queue->resend 回退
+OMK_TEAM_WORKER_CLI=auto    # 默认；当 worker --model 包含 "claude" 时使用 claude
+OMK_TEAM_WORKER_CLI=kimi    # 如后续支持可改为 Kimi worker；当前仍以兼容层为主
+OMK_TEAM_WORKER_CLI=claude  # 强制 Claude CLI worker
+OMK_TEAM_WORKER_CLI_MAP=codex,codex,claude,claude  # 每个 worker 的 CLI 混合（长度=1 或 worker 数量）
+OMK_TEAM_AUTO_INTERRUPT_RETRY=0  # 可选：禁用自适应 queue->resend 回退
 ```
 
 注意：
-- Worker 启动参数仍通过 `OMX_TEAM_WORKER_LAUNCH_ARGS` 共享。
-- `OMX_TEAM_WORKER_CLI_MAP` 覆盖 `OMX_TEAM_WORKER_CLI` 以实现每个 worker 的选择。
+- Worker 启动参数仍通过 `OMK_TEAM_WORKER_LAUNCH_ARGS` 共享。
+- `OMK_TEAM_WORKER_CLI_MAP` 覆盖 `OMK_TEAM_WORKER_CLI` 以实现每个 worker 的选择。
 - 触发器提交默认使用自适应重试（queue/submit，需要时使用安全的 clear-line+resend 回退）。
-- 在 Claude worker 模式下，OMX 以普通 `claude` 启动 worker（无额外启动参数），并忽略显式的 `--model` / `--config` / `--effort` 覆盖，使 Claude 使用默认 `settings.json`。
+- 在 Claude worker 模式下，OMK 以普通 `claude` 启动 worker（无额外启动参数），并忽略显式的 `--model` / `--config` / `--effort` 覆盖，使 Claude 使用默认 `settings.json`。
 
-## `omx setup` 写入的内容
+## `omk setup` 写入的内容
 
-- `.omx/setup-scope.json`（持久化的设置作用域）
+- `.omk/setup-scope.json`（持久化的设置作用域）
 - 依赖作用域的安装：
-  - `user`：`~/.codex/prompts/`、`~/.codex/skills/`、`~/.codex/config.toml`、`~/.omx/agents/`、`~/.codex/AGENTS.md`
-  - `project`：`./.codex/prompts/`、`./.codex/skills/`、`./.codex/config.toml`、`./.omx/agents/`、`./AGENTS.md`
-- 启动行为：如果持久化的作用域是 `project`，`omx` 启动时自动使用 `CODEX_HOME=./.codex`（除非 `CODEX_HOME` 已设置）。
+  - `user`：`~/.codex/prompts/`、`~/.codex/skills/`、`~/.codex/config.toml`、`~/.omk/agents/`、`~/.codex/AGENTS.md`
+  - `project`：`./.codex/prompts/`、`./.codex/skills/`、`./.codex/config.toml`、`./.omk/agents/`、`./AGENTS.md`
+- 启动行为：如果持久化的作用域是 `project`，`omk` 启动时自动使用 `CODEX_HOME=./.codex`（除非 `CODEX_HOME` 已设置）。
 - 启动指令会合并 `~/.codex/AGENTS.md`（或被覆盖的 `CODEX_HOME/AGENTS.md`）与项目 `./AGENTS.md`，然后附加运行时 overlay。
 - 现有 `AGENTS.md` 文件绝不会被静默覆盖：交互式 TTY 下 setup 会先询问是否替换；非交互模式下除非传入 `--force`，否则会跳过替换（活动会话安全检查仍然适用）。
 - `config.toml` 更新（两种作用域均适用）：
@@ -197,7 +201,7 @@ OMX_TEAM_AUTO_INTERRUPT_RETRY=0  # 可选：禁用自适应 queue->resend 回退
   - MCP 服务器条目（`omx_state`、`omx_memory`、`omx_code_intel`、`omx_trace`）
   - `[tui] status_line`
 - 作用域专属 `AGENTS.md`
-- `.omx/` 运行时目录和 HUD 配置
+- `.omk/` 运行时目录和 HUD 配置
 
 ## 代理和技能
 
@@ -212,7 +216,7 @@ OMX_TEAM_AUTO_INTERRUPT_RETRY=0  # 可选：禁用自适应 queue->resend 回退
 
 ```text
 oh-my-kimi/
-  bin/omx.js
+  bin/omk.js
   src/
     cli/
     team/
@@ -242,7 +246,7 @@ npm test
 ## 文档
 
 - **[完整文档](https://github.com/wang-h/oh-my-kimi#readme)** — 完整指南
-- **[CLI 参考](https://github.com/wang-h/oh-my-kimi#command-reference)** — 所有 `omx` 命令、标志和工具
+- **[CLI 参考](https://github.com/wang-h/oh-my-kimi#command-reference)** — 所有 `omk` 命令、标志和工具
 - **[通知指南](https://github.com/wang-h/oh-my-kimi#notifications)** — Discord、Telegram、Slack 和 webhook 设置
 - **[推荐工作流](https://github.com/wang-h/oh-my-kimi#recommended-workflows)** — 用于常见任务的经过实战检验的 skill 链
 - **[发行说明](https://github.com/wang-h/oh-my-kimi#release-notes)** — 每个版本的新功能

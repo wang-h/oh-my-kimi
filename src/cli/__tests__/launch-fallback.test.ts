@@ -36,7 +36,7 @@ function shouldSkipForSpawnPermissions(err: string): boolean {
 
 describe('omx launch fallback when tmux is unavailable', () => {
   it('launches codex directly without tmux ENOENT noise', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-launch-fallback-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-launch-fallback-'));
     try {
       const home = join(wd, 'home');
       const fakeBin = join(wd, 'bin');
@@ -56,9 +56,9 @@ describe('omx launch fallback when tmux is unavailable', () => {
         {
           HOME: home,
           PATH: `${fakeBin}:/usr/bin:/bin`,
-          OMX_AUTO_UPDATE: '0',
-          OMX_NOTIFY_FALLBACK: '0',
-          OMX_HOOK_DERIVED_SIGNALS: '0',
+          OMK_AUTO_UPDATE: '0',
+          OMK_NOTIFY_FALLBACK: '0',
+          OMK_HOOK_DERIVED_SIGNALS: '0',
         },
       );
 

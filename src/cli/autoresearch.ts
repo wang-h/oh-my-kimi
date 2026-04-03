@@ -39,24 +39,24 @@ Usage:
 
 Arguments:
   (no args)        Launch an interactive Codex session that activates deep-interview --autoresearch,
-                   writes .omx/specs artifacts, then launches only after explicit confirmation.
+                   writes .omk/specs artifacts, then launches only after explicit confirmation.
   --topic/...      Seed the deep-interview intake with draft values; still requires refinement/confirmation before launch.
   init             Bare init is an interactive deep-interview alias on TTYs; init with flags is the expert scaffold path.
   run              Execute a crystallized autoresearch mission, preferring tmux split-pane launch when available.
   <mission-dir>    Directory inside a git repository containing mission.md and sandbox.md
-  <run-id>         Existing autoresearch run id from .omx/logs/autoresearch/<run-id>/manifest.json
+  <run-id>         Existing autoresearch run id from .omk/logs/autoresearch/<run-id>/manifest.json
 
 Behavior:
-  - deep-interview intake writes canonical artifacts under .omx/specs before launch
+  - deep-interview intake writes canonical artifacts under .omk/specs before launch
   - validates mission.md and sandbox.md
   - requires sandbox.md YAML frontmatter with evaluator.command and evaluator.format=json
   - fresh launch creates a run-tagged autoresearch/<slug>/<run-tag> lane
-  - supervisor records baseline, candidate, keep/discard/reset, and results artifacts under .omx/logs/autoresearch/
+  - supervisor records baseline, candidate, keep/discard/reset, and results artifacts under .omk/logs/autoresearch/
   - run prefers interview|autoresearch split-pane launch inside tmux, with foreground fallback on failure
   - --resume loads the authoritative per-run manifest and continues from the last kept commit
 `;
 
-const AUTORESEARCH_APPEND_INSTRUCTIONS_ENV = 'OMX_AUTORESEARCH_APPEND_INSTRUCTIONS_FILE';
+const AUTORESEARCH_APPEND_INSTRUCTIONS_ENV = 'OMK_AUTORESEARCH_APPEND_INSTRUCTIONS_FILE';
 const AUTORESEARCH_MAX_CONSECUTIVE_NOOPS = 3;
 
 function buildAutoresearchDeepInterviewAppendix(): string {
@@ -65,7 +65,7 @@ function buildAutoresearchDeepInterviewAppendix(): string {
     'You are in OMX autoresearch intake mode.',
     'Run the deep-interview skill in autoresearch mode and clarify the research mission before launch.',
     'Do not start tmux, do not launch `omx autoresearch`, and do not bypass the user confirmation boundary.',
-    'When the user confirms launch and the evaluator is concrete, persist canonical artifacts under `.omx/specs/` using the contracts in `src/cli/autoresearch-intake.ts`.',
+    'When the user confirms launch and the evaluator is concrete, persist canonical artifacts under `.omk/specs/` using the contracts in `src/cli/autoresearch-intake.ts`.',
     '- Required outputs: `deep-interview-autoresearch-{slug}.md`, `autoresearch-{slug}/mission.md`, `autoresearch-{slug}/sandbox.md`, `autoresearch-{slug}/result.json`.',
     '- If the evaluator is still a placeholder or the user wants to refine further, keep interviewing instead of finalizing launch-ready output.',
     '</autoresearch_deep_interview_mode>',
@@ -75,7 +75,7 @@ function buildAutoresearchDeepInterviewAppendix(): string {
 async function writeAutoresearchDeepInterviewAppendixFile(repoRoot: string): Promise<string> {
   const { mkdir, writeFile } = await import('node:fs/promises');
   const { join } = await import('node:path');
-  const dir = join(repoRoot, '.omx', 'autoresearch');
+  const dir = join(repoRoot, '.omk', 'autoresearch');
   await mkdir(dir, { recursive: true });
   const path = join(dir, 'deep-interview-session-instructions.md');
   await writeFile(path, `${buildAutoresearchDeepInterviewAppendix()}\n`, 'utf-8');
@@ -108,7 +108,7 @@ async function runGuidedAutoresearchDeepInterview(
     excludeDraftPaths: existingDraftPaths,
   });
   if (!result) {
-    throw new Error('autoresearch deep-interview did not produce .omx/specs launch artifacts.');
+    throw new Error('autoresearch deep-interview did not produce .omk/specs launch artifacts.');
   }
   if (!result.launchReady) {
     throw new Error(
@@ -347,7 +347,7 @@ function launchAutoresearchInSplitPane(args: {
     return false;
   }
 
-  if (sessionName && process.env.OMX_MOUSE !== '0') {
+  if (sessionName && process.env.OMK_MOUSE !== '0') {
     enableMouseScrolling(sessionName);
   }
   if (existingHudPaneIds.length === 0) {

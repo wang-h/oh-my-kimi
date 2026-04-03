@@ -28,7 +28,7 @@ function shouldSkipForSpawnPermissions(err?: string): boolean {
 
 describe('omx doctor invalid config detection', () => {
   it('fails when config.toml contains duplicate [tui] tables', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-doctor-invalid-config-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-doctor-invalid-config-'));
     try {
       const home = join(wd, 'home');
       const codexDir = join(home, '.codex');

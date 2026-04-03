@@ -109,7 +109,7 @@ Patch release for degraded-state auto-nudge recovery, tighter team control-plane
 ### Verified
 - **Commit-window review** — parallel module review across `main...dev` found `3` main-only merge commits (`#995`, `#997`, `#1000`) but no main-only patch content after cherry-pick elimination, so the shipped release delta is entirely on the `dev` side.
 - **Targeted hook + watcher regression suite** — `notify-fallback-watcher` and `notify-hook auto-nudge` pass with the degraded-state coverage (`49/49` passing).
-- **Real tmux smoke for degraded auto-nudge** — a live Codex pane received `yes, proceed [OMX_TMUX_INJECT]` from the fallback watcher after a 5s stalled-turn window with only HUD state available.
+- **Real tmux smoke for degraded auto-nudge** — a live Codex pane received `yes, proceed [OMK_TMUX_INJECT]` from the fallback watcher after a 5s stalled-turn window with only HUD state available.
 - **Real tmux smoke for Ralph anti-spam** — two back-to-back fallback watcher ticks did not emit repeated `Ralph loop active continue` sends; the persisted state stayed in cooldown (`startup_cooldown`).
 
 ## [0.11.6] - 2026-03-21
@@ -194,7 +194,7 @@ Version bump for release.
 - **Packed-install smoke deps bootstrapped in worktrees** — worktree-based CI now correctly bootstraps smoke test dependencies for packed installs. (PR [#919](https://github.com/Yeachan-Heo/oh-my-codex/pull/919), closes [#917](https://github.com/Yeachan-Heo/oh-my-codex/issues/917))
 - **Deep-interview launch for autoresearch intake** — autoresearch intake now correctly uses the deep-interview launch path. (PR [#915](https://github.com/Yeachan-Heo/oh-my-codex/pull/915), closes [#911](https://github.com/Yeachan-Heo/oh-my-codex/issues/911))
 - **musl Linux assets preferred before glibc** — native asset resolution now prefers musl-linked Linux binaries over glibc for broader compatibility. (PRs [#914](https://github.com/Yeachan-Heo/oh-my-codex/pull/914), [#907](https://github.com/Yeachan-Heo/oh-my-codex/pull/907))
-- **Autoresearch worktree paths use project-local `.omx/`** — worktrees are now created under `.omx/worktrees/` instead of global paths. (PR [#913](https://github.com/Yeachan-Heo/oh-my-codex/pull/913))
+- **Autoresearch worktree paths use project-local `.omk/`** — worktrees are now created under `.omk/worktrees/` instead of global paths. (PR [#913](https://github.com/Yeachan-Heo/oh-my-codex/pull/913))
 - **Stale obsolete native agents cleaned up** — removed leftover native agent files that were no longer in use. (PR [#899](https://github.com/Yeachan-Heo/oh-my-codex/pull/899))
 - **Skill agent generation stopped** — setup no longer generates agent files for skills, reducing file bloat. (PR [#897](https://github.com/Yeachan-Heo/oh-my-codex/pull/897))
 - **`__dirname` ESM error in autoresearch guided flow** — resolved CommonJS `__dirname` reference in ESM context. (PR [#903](https://github.com/Yeachan-Heo/oh-my-codex/pull/903))
@@ -222,7 +222,7 @@ Version bump for release.
 
 ### Fixed
 - **Autoresearch now bypasses approvals and sandbox by default** — prevents autonomous runs from stalling on approval/sandbox prompts unless callers already supplied their own flags. (PR [#856](https://github.com/Yeachan-Heo/oh-my-codex/pull/856), closes [#855](https://github.com/Yeachan-Heo/oh-my-codex/issues/855))
-- **Autoresearch worktree cleanliness ignores `.omx/` runtime artifacts** — avoids false dirty-worktree failures caused by session state and other runtime files. (PR [#858](https://github.com/Yeachan-Heo/oh-my-codex/pull/858), closes [#857](https://github.com/Yeachan-Heo/oh-my-codex/issues/857))
+- **Autoresearch worktree cleanliness ignores `.omk/` runtime artifacts** — avoids false dirty-worktree failures caused by session state and other runtime files. (PR [#858](https://github.com/Yeachan-Heo/oh-my-codex/pull/858), closes [#857](https://github.com/Yeachan-Heo/oh-my-codex/issues/857))
 - **Installed skills are deduplicated across project and user scopes** — project-local skills now take precedence and shadowed duplicates are filtered from composed AGENTS/team instructions. (PR [#864](https://github.com/Yeachan-Heo/oh-my-codex/pull/864), closes [#861](https://github.com/Yeachan-Heo/oh-my-codex/issues/861))
 - **Team worker readiness detection matches Codex 0.114.0 startup behavior** — accepts the new welcome-helper text and uses a safer ready wait path to reduce false startup failures. (PR [#868](https://github.com/Yeachan-Heo/oh-my-codex/pull/868), closes [#866](https://github.com/Yeachan-Heo/oh-my-codex/issues/866))
 
@@ -254,7 +254,7 @@ Version bump for release.
 - **Post-ralplan team context preserved** — team follow-up context no longer lost after ralplan completes. (PR [#833](https://github.com/Yeachan-Heo/oh-my-codex/pull/833))
 - **Pipeline planning artifact checks unified** — planning-complete artifact detection now uses a single consistent check. (PR [#828](https://github.com/Yeachan-Heo/oh-my-codex/pull/828), issue [#827](https://github.com/Yeachan-Heo/oh-my-codex/issues/827))
 - **Config.toml merge fix** — existing notify and tui entries are now preserved during config merge. (PR [#826](https://github.com/Yeachan-Heo/oh-my-codex/pull/826), issue [#825](https://github.com/Yeachan-Heo/oh-my-codex/issues/825))
-- **Project .omx gitignore sync** — fixed gitignore sync for project-scoped `.omx` directories. (PR [#824](https://github.com/Yeachan-Heo/oh-my-codex/pull/824), issue [#823](https://github.com/Yeachan-Heo/oh-my-codex/issues/823))
+- **Project .omk gitignore sync** — fixed gitignore sync for project-scoped `.omk` directories. (PR [#824](https://github.com/Yeachan-Heo/oh-my-codex/pull/824), issue [#823](https://github.com/Yeachan-Heo/oh-my-codex/issues/823))
 - **Team HUD full-width** — team HUD layout now spans the full terminal width. (PR [#822](https://github.com/Yeachan-Heo/oh-my-codex/pull/822), issue [#822](https://github.com/Yeachan-Heo/oh-my-codex/issues/822))
 - **tmux mouse state leak** — stopped leaking server-global mouse state across sessions. (PR [#820](https://github.com/Yeachan-Heo/oh-my-codex/pull/820), issue [#817](https://github.com/Yeachan-Heo/oh-my-codex/issues/817))
 - **Sparkshell glibc fallback** — sparkshell now falls back gracefully when encountering glibc mismatch on older Linux systems. (PR [#813](https://github.com/Yeachan-Heo/oh-my-codex/pull/813), issue [#812](https://github.com/Yeachan-Heo/oh-my-codex/issues/812))
@@ -280,7 +280,7 @@ Version bump for release.
 ### Added
 - **`omx explore` native harness and packaging flow** — OMX now ships a dedicated read-only exploration entrypoint backed by a Rust harness, packaged/source fallback logic, and release-aware native asset resolution. (commit `fb07c3c`)
 - **`omx sparkshell` operator-facing native sidecar** — added a direct shell-native specialist surface plus explicit tmux-pane summarization support for operator inspection workflows. (commit `71858c3`)
-- **Cross-platform native release publishing** — release automation now publishes native archives for both `omx-explore-harness` and `omx-sparkshell`, with generated release-manifest metadata and a packed-install smoke gate. (commit `23d1cf5`, `559089f`)
+- **Cross-platform native release publishing** — release automation now publishes native archives for both `omk-explore-harness` and `omk-sparkshell`, with generated release-manifest metadata and a packed-install smoke gate. (commit `23d1cf5`, `559089f`)
 - **`build:full` one-shot build path** — added a release-oriented build command that compiles TypeScript plus the packaged explore harness and sparkshell binaries, and validated it in CI. (commit `d12e5f4`, `99ce264`)
 
 ### Changed
@@ -694,7 +694,7 @@ Hotfix: team shutdown `--force` flag was not being parsed from CLI arguments.
 - Dynamic team worker scaling — Phase 1 manual `scale_up` / `scale_down` mid-session (#363).
 - Per-worker idle notification forwarded to leader pane (#335).
 - Prompt-mode worker launch transport for interactive team workflows (#264).
-- Worker model defaults resolved from config with `OMX_TEAM_WORKER_CLI_MAP` (#263).
+- Worker model defaults resolved from config with `OMK_TEAM_WORKER_CLI_MAP` (#263).
 - Worker hard cap raised to 20 (#343).
 - Team shutdown gated on unresolved tasks to prevent premature teardown (#320, #322).
 - MSYS2 / Git Bash tmux worker support (#266).
@@ -821,12 +821,12 @@ Hotfix: team shutdown `--force` flag was not being parsed from CLI arguments.
 - Added a new "What's New in 0.6.0" section to the docs site homepage with highlights for mixed Codex/Claude teammates and reliability updates.
 
 ### Changed
-- Clarified `skills/team/SKILL.md` docs that `N:agent-type` selects worker role prompts (not CLI choice), and documented `OMX_TEAM_WORKER_CLI` / `OMX_TEAM_WORKER_CLI_MAP` usage for launching Claude teammates.
+- Clarified `skills/team/SKILL.md` docs that `N:agent-type` selects worker role prompts (not CLI choice), and documented `OMK_TEAM_WORKER_CLI` / `OMK_TEAM_WORKER_CLI_MAP` usage for launching Claude teammates.
 
 ## [0.6.0] - 2026-02-23
 
 ### Added
-- Mixed team worker CLI routing via `OMX_TEAM_WORKER_CLI_MAP` so a single `$team` run can launch Codex and Claude workers together (e.g. `codex,codex,claude,claude`).
+- Mixed team worker CLI routing via `OMK_TEAM_WORKER_CLI_MAP` so a single `$team` run can launch Codex and Claude workers together (e.g. `codex,codex,claude,claude`).
 - Leader-side all-workers-idle nudge fallback for Claude teams, so leader notifications still fire even when worker-side Codex hooks are unavailable.
 - Adaptive trigger submit retry guard helper and tests to reduce false-positive resend escalation.
 
@@ -836,8 +836,8 @@ Hotfix: team shutdown `--force` flag was not being parsed from CLI arguments.
 
 ### Fixed
 - Pre-assigned worker tasks can now be claimed by their assigned owner in `pending` state, unblocking Codex worker bootstrap claim flow.
-- `OMX_TEAM_WORKER_CLI_MAP` parsing now rejects empty entries and reports map-specific validation errors.
-- `OMX_TEAM_WORKER_CLI_MAP=auto` now resolves from launch args/model detection and no longer inherits `OMX_TEAM_WORKER_CLI` overrides unexpectedly.
+- `OMK_TEAM_WORKER_CLI_MAP` parsing now rejects empty entries and reports map-specific validation errors.
+- `OMK_TEAM_WORKER_CLI_MAP=auto` now resolves from launch args/model detection and no longer inherits `OMK_TEAM_WORKER_CLI` overrides unexpectedly.
 - Team leader nudge targeting now prioritizes `leader_pane_id`, improving reliability with mixed/Claude worker setups.
 
 ## [0.5.1] - 2026-02-23
@@ -846,7 +846,7 @@ Hotfix: team shutdown `--force` flag was not being parsed from CLI arguments.
 - **Native worktree orchestration for team mode**: Workers now launch in git worktrees with canonical state-root metadata, enabling true isolation for parallel team workstreams.
 - **Cross-worktree team state resolution**: MCP state tools and the notify hook resolve team state across worktrees, so the leader always sees the correct shared state regardless of which worktree a worker is running in.
 - **`omx ralph` CLI subcommand**: `omx ralph "<task>"` starts a ralph persistence loop directly from the command line, removing the need to manually invoke the skill inside a session (closes #153).
-- **Scoped ralph state with canonical persistence migration**: Ralph state is now scoped per session/worktree and migrated from legacy flat paths to the canonical `.omx/state/sessions/` layout automatically.
+- **Scoped ralph state with canonical persistence migration**: Ralph state is now scoped per session/worktree and migrated from legacy flat paths to the canonical `.omk/state/sessions/` layout automatically.
 - **Claim-safe team transition tool for MCP interop**: New `team_transition_task` MCP tool applies state transitions atomically with claim-token verification, preventing race conditions between concurrent workers.
 - **Clean tmux pane output before notifications**: Notification content is sanitized (ANSI escapes, tmux artifacts stripped) before being sent to notification integrations, eliminating garbled messages.
 - **Startup codebase map injection hook**: Session start injects a lightweight file-tree snapshot into the agent context so workers have structural awareness of the project without extra exploration turns (closes #136).
@@ -931,7 +931,7 @@ Hotfix: team shutdown `--force` flag was not being parsed from CLI arguments.
 ### Added
 - Added broader auto-nudge stall detection patterns (for example: "next I can", "say go", and "keep driving") with a focused last-lines hot zone.
 - Added worker-idle aggregation notifications so team leaders are alerted when all workers are idle/done (with cooldown and event logging).
-- Added automatic tmux mouse scrolling for team sessions (opt-out via `OMX_TEAM_MOUSE=0`).
+- Added automatic tmux mouse scrolling for team sessions (opt-out via `OMK_TEAM_MOUSE=0`).
 
 ### Fixed
 - Fixed worker message submission reliability by adding settle/delay timing before and during submit key rounds.
@@ -959,7 +959,7 @@ Hotfix: team shutdown `--force` flag was not being parsed from CLI arguments.
 - Updated team skill docs to describe team-scoped `worker-agents.md` composition (no project `AGENTS.md` mutation).
 
 ### Fixed
-- Preserved and restored pre-existing `OMX_MODEL_INSTRUCTIONS_FILE` values during team start rollback/shutdown to avoid clobbering leader config.
+- Preserved and restored pre-existing `OMK_MODEL_INSTRUCTIONS_FILE` values during team start rollback/shutdown to avoid clobbering leader config.
 
 ## [0.3.8] - 2026-02-15
 
@@ -988,7 +988,7 @@ Hotfix: team shutdown `--force` flag was not being parsed from CLI arguments.
 ### Added
 - Added pane-canonical tmux hook routing tests for heal/fallback behavior.
 - Added shared mode runtime context wrapper to capture mode tmux pane metadata.
-- Added tmux session name generation in `omx-<directory>-<branch>-<sessionid>` format.
+- Added tmux session name generation in `omk-<directory>-<branch>-<sessionid>` format.
 
 ### Changed
 - Switched tmux hook targeting to pane-canonical behavior with migration from legacy session targets.

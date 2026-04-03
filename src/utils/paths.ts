@@ -233,29 +233,29 @@ async function hashSkillDirectory(
   return hashes;
 }
 
-/** oh-my-kimi state directory (.omx/state/) */
+/** oh-my-kimi state directory (.omk/state/) */
 export function omxStateDir(projectRoot?: string): string {
-  return join(projectRoot || process.cwd(), ".omx", "state");
+  return join(projectRoot || process.cwd(), ".omk", "state");
 }
 
-/** oh-my-kimi project memory file (.omx/project-memory.json) */
+/** oh-my-kimi project memory file (.omk/project-memory.json) */
 export function omxProjectMemoryPath(projectRoot?: string): string {
-  return join(projectRoot || process.cwd(), ".omx", "project-memory.json");
+  return join(projectRoot || process.cwd(), ".omk", "project-memory.json");
 }
 
-/** oh-my-kimi notepad file (.omx/notepad.md) */
+/** oh-my-kimi notepad file (.omk/notepad.md) */
 export function omxNotepadPath(projectRoot?: string): string {
-  return join(projectRoot || process.cwd(), ".omx", "notepad.md");
+  return join(projectRoot || process.cwd(), ".omk", "notepad.md");
 }
 
-/** oh-my-kimi plans directory (.omx/plans/) */
+/** oh-my-kimi plans directory (.omk/plans/) */
 export function omxPlansDir(projectRoot?: string): string {
-  return join(projectRoot || process.cwd(), ".omx", "plans");
+  return join(projectRoot || process.cwd(), ".omk", "plans");
 }
 
-/** oh-my-kimi logs directory (.omx/logs/) */
+/** oh-my-kimi logs directory (.omk/logs/) */
 export function omxLogsDir(projectRoot?: string): string {
-  return join(projectRoot || process.cwd(), ".omx", "logs");
+  return join(projectRoot || process.cwd(), ".omk", "logs");
 }
 
 /** Get the package root directory (where agents/, skills/, prompts/ live) */

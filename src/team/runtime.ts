@@ -682,7 +682,7 @@ async function prepareShutdownMergeReport(
       return {
         workerName: worker.name,
         worktreePath,
-        reportPath: join(worktreePath, '.omx', 'diff.md'),
+        reportPath: join(worktreePath, '.omk', 'diff.md'),
         sourceRef: null,
         syntheticCommit: null,
         diffText: getWorktreeDiffText(worktreePath),
@@ -703,7 +703,7 @@ async function prepareShutdownMergeReport(
       return {
         workerName: worker.name,
         worktreePath,
-        reportPath: join(worktreePath, '.omx', 'diff.md'),
+        reportPath: join(worktreePath, '.omk', 'diff.md'),
         sourceRef: null,
         syntheticCommit: null,
         diffText: getWorktreeDiffText(worktreePath),
@@ -718,7 +718,7 @@ async function prepareShutdownMergeReport(
   const sourceRef = sourceRefResult.ok && sourceRefResult.stdout ? sourceRefResult.stdout : null;
   const diffText = getWorktreeDiffText(worktreePath);
   const summaryText = summarizeWorktreeDiffWithSparkShell(worktreePath);
-  const reportPath = join(worktreePath, '.omx', 'diff.md');
+  const reportPath = join(worktreePath, '.omk', 'diff.md');
 
   let mergeOutcome: WorkerShutdownMergeReport['mergeOutcome'] = 'skipped';
   let mergeDetail = 'worktree merge skipped';
@@ -752,7 +752,7 @@ async function prepareShutdownMergeReport(
     mergeDetail,
   };
 
-  await mkdir(join(worktreePath, '.omx'), { recursive: true });
+  await mkdir(join(worktreePath, '.omk'), { recursive: true });
   await writeFile(reportPath, renderWorktreeMergeReport(report), 'utf-8');
   process.stdout.write(`${renderWorktreeMergeReport(report)}\n`);
   return report;
@@ -765,7 +765,7 @@ async function prepareWorkerWorktreeShutdownReports(config: TeamConfig, leaderCw
       await prepareShutdownMergeReport(worker, leaderCwd);
     } catch (error) {
       const worktreePath = resolve(worker.worktree_path);
-      const reportPath = join(worktreePath, '.omx', 'diff.md');
+      const reportPath = join(worktreePath, '.omk', 'diff.md');
       const fallback = [
         `# Worker ${worker.name} shutdown report`,
         '',
@@ -775,7 +775,7 @@ async function prepareWorkerWorktreeShutdownReports(config: TeamConfig, leaderCw
         `- merge_detail: ${String(error)}`,
         '',
       ].join('\n');
-      await mkdir(join(worktreePath, '.omx'), { recursive: true }).catch(() => {});
+      await mkdir(join(worktreePath, '.omk'), { recursive: true }).catch(() => {});
       await writeFile(reportPath, fallback, 'utf-8').catch(() => {});
       process.stdout.write(`${fallback}\n`);
     }
@@ -824,10 +824,10 @@ function resolveEffectiveTeamWorktreeMode(
   return { enabled: false };
 }
 
-const MODEL_INSTRUCTIONS_FILE_ENV = 'OMX_MODEL_INSTRUCTIONS_FILE';
-const TEAM_STATE_ROOT_ENV = 'OMX_TEAM_STATE_ROOT';
-const TEAM_LEADER_CWD_ENV = 'OMX_TEAM_LEADER_CWD';
-const WORKTREE_TRIGGER_STATE_ROOT = '$OMX_TEAM_STATE_ROOT';
+const MODEL_INSTRUCTIONS_FILE_ENV = 'OMK_MODEL_INSTRUCTIONS_FILE';
+const TEAM_STATE_ROOT_ENV = 'OMK_TEAM_STATE_ROOT';
+const TEAM_LEADER_CWD_ENV = 'OMK_TEAM_LEADER_CWD';
+const WORKTREE_TRIGGER_STATE_ROOT = '$OMK_TEAM_STATE_ROOT';
 const STARTUP_EVIDENCE_TIMEOUT_MS = 2_000;
 const STARTUP_EVIDENCE_POLL_MS = 100;
 
@@ -847,7 +847,7 @@ function resolveInstructionStateRoot(worktreePath?: string | null): string | und
 }
 
 function resolveWorkerReadyTimeoutMs(env: NodeJS.ProcessEnv): number {
-  const raw = env.OMX_TEAM_READY_TIMEOUT_MS;
+  const raw = env.OMK_TEAM_READY_TIMEOUT_MS;
   const parsed = Number.parseInt(String(raw ?? ''), 10);
   if (Number.isFinite(parsed) && parsed >= 5_000) return parsed;
   return 45_000;
@@ -883,7 +883,7 @@ function resolveGovernancePolicy(
 }
 
 async function assertNestedTeamAllowed(cwd: string): Promise<void> {
-  const workerContext = parseTeamWorkerContext(process.env.OMX_TEAM_WORKER);
+  const workerContext = parseTeamWorkerContext(process.env.OMK_TEAM_WORKER);
   if (!workerContext) return;
 
   for (const candidateCwd of resolveManifestLookupCwds(cwd)) {
@@ -957,7 +957,7 @@ export async function waitForClaudeStartupEvidence(params: {
 }
 
 function shouldSkipWorkerReadyWait(env: NodeJS.ProcessEnv): boolean {
-  return env.OMX_TEAM_SKIP_READY_WAIT === '1';
+  return env.OMK_TEAM_SKIP_READY_WAIT === '1';
 }
 
 function setTeamModelInstructionsFile(teamName: string, filePath: string): void {
@@ -1180,12 +1180,12 @@ export function resolveWorkerLaunchArgsFromEnv(
   const fallbackModel = resolveAgentDefaultModel(agentType, env.CODEX_HOME);
 
   // Detect if an explicit reasoning override exists before resolving (for log source labelling)
-  const preEnvArgs = splitWorkerLaunchArgs(env.OMX_TEAM_WORKER_LAUNCH_ARGS);
+  const preEnvArgs = splitWorkerLaunchArgs(env.OMK_TEAM_WORKER_LAUNCH_ARGS);
   const preAllArgs = [...preEnvArgs, ...inheritedArgs];
   const hasExplicitReasoning = parseTeamWorkerLaunchArgs(preAllArgs).reasoningOverride !== null;
 
   const resolved = resolveTeamWorkerLaunchArgs({
-    existingRaw: env.OMX_TEAM_WORKER_LAUNCH_ARGS,
+    existingRaw: env.OMK_TEAM_WORKER_LAUNCH_ARGS,
     inheritedArgs,
     fallbackModel,
     preferredReasoning,
@@ -1215,7 +1215,7 @@ function resolveEffectiveWorkerCliForStartupLog(
   resolvedLaunchArgs: string[],
   env: NodeJS.ProcessEnv,
 ): 'codex' | 'claude' | 'gemini' {
-  const rawCliMap = String(env.OMX_TEAM_WORKER_CLI_MAP ?? '').trim();
+  const rawCliMap = String(env.OMK_TEAM_WORKER_CLI_MAP ?? '').trim();
   if (rawCliMap !== '') {
     const entries = rawCliMap
       .split(',')
@@ -1224,7 +1224,7 @@ function resolveEffectiveWorkerCliForStartupLog(
     if (entries.length > 0) {
       const autoCli = resolveTeamWorkerCli(resolvedLaunchArgs, {
         ...env,
-        OMX_TEAM_WORKER_CLI: 'auto',
+        OMK_TEAM_WORKER_CLI: 'auto',
       });
       const resolvedMap = entries.map((entry): 'codex' | 'claude' | 'gemini' | null => {
         if (entry === 'auto') return autoCli;
@@ -1322,7 +1322,7 @@ export async function startTeam(
   }
 
   // 2. Team name is already sanitized above.
-  let sessionName = `omx-team-${sanitized}`;
+  let sessionName = `omk-team-${sanitized}`;
   const overlay = generateWorkerOverlay(sanitized);
   let workerInstructionsPath: string | null = null;
   let sessionCreated = false;
@@ -1330,7 +1330,7 @@ export async function startTeam(
   let createdLeaderPaneId: string | undefined;
   let config: TeamConfig | null = null;
   const sharedWorkerLaunchArgs = resolveTeamWorkerLaunchArgs({
-    existingRaw: process.env.OMX_TEAM_WORKER_LAUNCH_ARGS,
+    existingRaw: process.env.OMK_TEAM_WORKER_LAUNCH_ARGS,
     fallbackModel: resolveAgentDefaultModel(agentType, process.env.CODEX_HOME),
   });
   const workerCliPlan = resolveTeamWorkerCliPlan(workerCount, sharedWorkerLaunchArgs, process.env);
@@ -1346,7 +1346,7 @@ export async function startTeam(
       workerCount,
       leaderCwd,
       DEFAULT_MAX_WORKERS,
-      { ...process.env, OMX_TEAM_DISPLAY_MODE: displayMode, OMX_TEAM_WORKER_LAUNCH_MODE: workerLaunchMode },
+      { ...process.env, OMK_TEAM_DISPLAY_MODE: displayMode, OMK_TEAM_WORKER_LAUNCH_MODE: workerLaunchMode },
       {
         leader_cwd: leaderCwd,
         team_state_root: teamStateRoot,
@@ -1479,13 +1479,13 @@ export async function startTeam(
         [MODEL_INSTRUCTIONS_FILE_ENV]: plan.instructionsFilePath,
       };
       if (plan.workerWorkspace.worktreePath) {
-        env.OMX_TEAM_WORKTREE_PATH = plan.workerWorkspace.worktreePath;
+        env.OMK_TEAM_WORKTREE_PATH = plan.workerWorkspace.worktreePath;
       }
       if (plan.workerWorkspace.worktreeBranch) {
-        env.OMX_TEAM_WORKTREE_BRANCH = plan.workerWorkspace.worktreeBranch;
+        env.OMK_TEAM_WORKTREE_BRANCH = plan.workerWorkspace.worktreeBranch;
       }
       if (typeof plan.workerWorkspace.worktreeDetached === 'boolean') {
-        env.OMX_TEAM_WORKTREE_DETACHED = plan.workerWorkspace.worktreeDetached ? '1' : '0';
+        env.OMK_TEAM_WORKTREE_DETACHED = plan.workerWorkspace.worktreeDetached ? '1' : '0';
       }
       return {
         cwd: plan.workerWorkspace.cwd,
@@ -2159,7 +2159,7 @@ export async function shutdownTeam(teamName: string, cwd: string, options: Shutd
   if (!config) {
     // No config -- just try to kill tmux session and clean up
     try {
-      destroyTeamSession(`omx-team-${sanitized}`);
+      destroyTeamSession(`omk-team-${sanitized}`);
     } catch (err) {
       process.stderr.write(`[team/runtime] operation failed: ${err}\n`);
     }
@@ -2451,7 +2451,7 @@ export async function resumeTeam(teamName: string, cwd: string): Promise<TeamRun
 }
 
 async function findActiveTeams(cwd: string, leaderSessionId: string): Promise<string[]> {
-  const root = join(cwd, '.omx', 'state', 'team');
+  const root = join(cwd, '.omk', 'state', 'team');
   if (!existsSync(root)) return [];
   const sessions = new Set(listTeamSessions());
   const entries = await readdir(root, { withFileTypes: true });
@@ -2466,7 +2466,7 @@ async function findActiveTeams(cwd: string, leaderSessionId: string): Promise<st
     const workerLaunchMode = cfg?.worker_launch_mode
       ?? manifest?.policy?.worker_launch_mode
       ?? 'interactive';
-    const tmuxSession = (manifest?.tmux_session || cfg?.tmux_session || `omx-team-${teamName}`).split(':')[0];
+    const tmuxSession = (manifest?.tmux_session || cfg?.tmux_session || `omk-team-${teamName}`).split(':')[0];
     if (leaderSessionId) {
       const ownerSessionId = manifest?.leader?.session_id?.trim() ?? '';
       if (ownerSessionId && ownerSessionId !== leaderSessionId) continue;
@@ -2483,10 +2483,10 @@ async function findActiveTeams(cwd: string, leaderSessionId: string): Promise<st
 }
 
 async function resolveLeaderSessionId(cwd: string): Promise<string> {
-  const fromEnv = process.env.OMX_SESSION_ID || process.env.CODEX_SESSION_ID || process.env.SESSION_ID;
+  const fromEnv = process.env.OMK_SESSION_ID || process.env.CODEX_SESSION_ID || process.env.SESSION_ID;
   if (fromEnv && fromEnv.trim() !== '') return fromEnv.trim();
 
-  const p = join(cwd, '.omx', 'state', 'session.json');
+  const p = join(cwd, '.omk', 'state', 'session.json');
   if (!existsSync(p)) return '';
   try {
     const raw = await readFile(p, 'utf-8');

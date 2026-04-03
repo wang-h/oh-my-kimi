@@ -7,7 +7,7 @@ import { readModeState, startMode } from '../base.js';
 
 describe('modes/base deep-interview contract integration', () => {
   it('startMode persists deep-interview state', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-mode-deep-interview-contract-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-mode-deep-interview-contract-'));
     try {
       const started = await startMode('deep-interview', 'clarify a vague request', 3, wd);
       assert.equal(started.mode, 'deep-interview');
@@ -24,7 +24,7 @@ describe('modes/base deep-interview contract integration', () => {
 
 describe('modes/base autoresearch contract integration', () => {
   it('startMode blocks autoresearch when ralph is active', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-mode-autoresearch-contract-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-mode-autoresearch-contract-'));
     try {
       await startMode('ralph', 'demo', 5, wd);
       await assert.rejects(
@@ -37,7 +37,7 @@ describe('modes/base autoresearch contract integration', () => {
   });
 
   it('startMode persists autoresearch state when no exclusive conflict exists', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-mode-autoresearch-contract-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-mode-autoresearch-contract-'));
     try {
       const started = await startMode('autoresearch', 'demo mission', 1, wd);
       assert.equal(started.mode, 'autoresearch');

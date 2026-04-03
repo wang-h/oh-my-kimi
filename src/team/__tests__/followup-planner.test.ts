@@ -11,7 +11,7 @@ import {
 
 describe('followup-planner', () => {
   it('resolves available agent types from explicit prompt directories', async () => {
-    const dir = await mkdtemp(join(tmpdir(), 'omx-followup-roster-'));
+    const dir = await mkdtemp(join(tmpdir(), 'omk-followup-roster-'));
     try {
       await writeFile(join(dir, 'executor.md'), '# Executor');
       await writeFile(join(dir, 'architect.md'), '# Architect');
@@ -26,7 +26,7 @@ describe('followup-planner', () => {
 
 
   it('includes team-executor when the prompt is available', async () => {
-    const dir = await mkdtemp(join(tmpdir(), 'omx-followup-roster-'));
+    const dir = await mkdtemp(join(tmpdir(), 'omk-followup-roster-'));
     try {
       await writeFile(join(dir, 'executor.md'), '# Executor');
       await writeFile(join(dir, 'team-executor.md'), '# Team Executor');

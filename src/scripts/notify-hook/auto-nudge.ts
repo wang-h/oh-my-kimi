@@ -348,7 +348,7 @@ export function normalizeAutoNudgeConfig(raw) {
 
 export async function loadAutoNudgeConfig() {
   const codexHomePath = process.env.CODEX_HOME || join(homedir(), '.codex');
-  const configPath = join(codexHomePath, '.omx-config.json');
+  const configPath = join(codexHomePath, '.omk-config.json');
   const raw = await readJsonIfExists(configPath, null);
   if (!raw || typeof raw !== 'object') return normalizeAutoNudgeConfig(null);
   return normalizeAutoNudgeConfig(raw.autoNudge);
@@ -437,7 +437,7 @@ function resolveInvocationSessionId(payload) {
   return safeString(
     payload?.session_id
     || payload?.['session-id']
-    || process.env.OMX_SESSION_ID
+    || process.env.OMK_SESSION_ID
     || process.env.CODEX_SESSION_ID
     || process.env.SESSION_ID
     || '',
@@ -459,9 +459,9 @@ function buildExpectedManagedTmuxSessionName(cwd, sessionId) {
   const dirName = basename(cwd);
   const grandparentPath = dirname(parentPath);
   const grandparentDir = basename(grandparentPath);
-  const repoDir = parentDir.endsWith('.omx-worktrees')
-    ? parentDir.slice(0, -'.omx-worktrees'.length)
-    : parentDir === 'worktrees' && grandparentDir === '.omx'
+  const repoDir = parentDir.endsWith('.omk-worktrees')
+    ? parentDir.slice(0, -'.omk-worktrees'.length)
+    : parentDir === 'worktrees' && grandparentDir === '.omk'
       ? basename(dirname(grandparentPath))
       : null;
   const dirToken = repoDir
@@ -479,8 +479,8 @@ function buildExpectedManagedTmuxSessionName(cwd, sessionId) {
   } catch {
     // best effort only
   }
-  const sessionToken = sanitizeTmuxToken(safeString(sessionId).replace(/^omx-/, ''));
-  const name = `omx-${dirToken}-${branchToken}-${sessionToken}`;
+  const sessionToken = sanitizeTmuxToken(safeString(sessionId).replace(/^omk-/, ''));
+  const name = `omk-${dirToken}-${branchToken}-${sessionToken}`;
   return name.length > 120 ? name.slice(0, 120) : name;
 }
 
@@ -534,7 +534,7 @@ function processHasAncestorPid(targetPid, currentPid = process.pid) {
 }
 
 async function isManagedOmxSessionForAutoNudge(cwd, payload) {
-  if (safeString(process.env.OMX_TEAM_WORKER || '').trim() !== '') return true;
+  if (safeString(process.env.OMK_TEAM_WORKER || '').trim() !== '') return true;
 
   const invocationSessionId = resolveInvocationSessionId(payload);
   if (!invocationSessionId) return false;

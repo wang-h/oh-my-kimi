@@ -100,7 +100,7 @@
 | review | DONE | ~/.codex/skills/review/SKILL.md |
 | ralph-init | DONE | ~/.codex/skills/ralph-init/SKILL.md |
 | ~~release~~ | REMOVED (v0.5.0) | — |
-| omx-setup | DONE | ~/.codex/skills/omx-setup/SKILL.md |
+| omk-setup | DONE | ~/.codex/skills/omk-setup/SKILL.md |
 | configure-notifications | DONE | ~/.codex/skills/configure-notifications/SKILL.md |
 | ~~configure-telegram~~ | MERGED -> configure-notifications | — |
 | ~~configure-discord~~ | MERGED -> configure-notifications | — |
@@ -127,7 +127,7 @@
 | Stop | notify config + postLaunch cleanup | FULL |
 | SessionEnd | omx postLaunch lifecycle phase | PARTIAL (post-exit cleanup) |
 
-`*` FULL via terminal automation workaround (default-enabled in `v0.2.3` generated `.omx/tmux-hook.json`), not native hook context injection.
+`*` FULL via terminal automation workaround (default-enabled in `v0.2.3` generated `.omk/tmux-hook.json`), not native hook context injection.
 
 ### Infrastructure
 

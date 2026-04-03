@@ -33,7 +33,7 @@ function shouldSkipForSpawnPermissions(err: string): boolean {
 
 describe('omx setup (gh star hint)', () => {
   it('prints a star hint when GitHub CLI is configured', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-setup-gh-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-setup-gh-'));
     try {
       const fakeBin = join(wd, 'bin');
       await mkdir(fakeBin, { recursive: true });
@@ -60,7 +60,7 @@ describe('omx setup (gh star hint)', () => {
   });
 
   it('does not print a star hint when GitHub CLI is missing', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-setup-gh-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-setup-gh-'));
     try {
       const home = join(wd, 'home');
       await mkdir(home, { recursive: true });

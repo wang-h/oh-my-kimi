@@ -21,7 +21,7 @@ const CTRL_O_RE = /ctrl\+o to expand/i;
 const BOX_DRAWING_RE = /^[\s─═│║┌┐└┘┬┴├┤╔╗╚╝╠╣╦╩╬╟╢╤╧╪━┃┏┓┗┛┣┫┳┻╋┠┨┯┷┿╂]+$/;
 
 /** OMX HUD status lines: [OMX#...] or [OMX] (unversioned) */
-const OMX_HUD_RE = /\[OMX[#\]]/;
+const OMK_HUD_RE = /\[OMX[#\]]/;
 
 /** Bypass-permissions indicator lines starting with ⏵ */
 const BYPASS_PERM_RE = /^⏵/;
@@ -67,7 +67,7 @@ export function parseTmuxTail(raw: string): string {
     if (SPINNER_LINE_RE.test(trimmed)) continue;
     if (CTRL_O_RE.test(trimmed)) continue;
     if (BOX_DRAWING_RE.test(trimmed)) continue;
-    if (OMX_HUD_RE.test(trimmed)) continue;
+    if (OMK_HUD_RE.test(trimmed)) continue;
     if (BYPASS_PERM_RE.test(trimmed)) continue;
     if (BARE_PROMPT_RE.test(trimmed)) continue;
 

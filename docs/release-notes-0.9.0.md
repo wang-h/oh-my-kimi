@@ -9,20 +9,20 @@ Contributors: Yeachan-Heo, Bellman, 2233admin, Seunghwan Eom, hoky1227.
 
 ## Highlights
 
-### Spark Initiative: `omx explore` and `omx sparkshell`
+### Spark Initiative: `omk explore` and `omk sparkshell`
 
-OMX now has a stronger native fast path for repository discovery and shell-native inspection.
+OMK now has a stronger native fast path for repository discovery and shell-native inspection.
 
 This release:
-- introduces `omx explore` as the default read-only exploration entrypoint
+- introduces `omk explore` as the default read-only exploration entrypoint
 - adds the Rust-backed explore harness plus packaging and source-fallback flow
-- introduces `omx sparkshell <command> [args...]` as an explicit operator-facing native sidecar
-- allows qualifying read-only shell-native `omx explore` tasks to route through `omx sparkshell`
+- introduces `omk sparkshell <command> [args...]` as an explicit operator-facing native sidecar
+- allows qualifying read-only shell-native `omk explore` tasks to route through `omk sparkshell`
 - keeps the explore path intentionally constrained: shell-only, read-only, and allowlisted
 
 Representative changes:
-- `fb07c3c` — feat: add omx explore harness and packaging flow
-- `71858c3` — feat: add omx sparkshell and team inspection metadata
+- `fb07c3c` — feat: add omk explore harness and packaging flow
+- `71858c3` — feat: add omk sparkshell and team inspection metadata
 - `e8e7594` — feat(explore): route qualifying read-only shell tasks via sparkshell
 - `dc83dfd` — fix(explore): harden sparkshell fallback paths
 - `25bdd23` — docs(guidance): refine explore and sparkshell usage
@@ -31,11 +31,11 @@ Representative changes:
 
 For `0.9.0`, the important distribution contract is:
 
-- users can install OMX normally with `npm install -g oh-my-codex`
+- users can install OMK normally with `npm install -g oh-my-codex`
 - the npm package intentionally does **not** bundle all native binaries directly
 - tagged releases publish cross-platform native archives for:
-  - `omx-explore-harness`
-  - `omx-sparkshell`
+  - `omk-explore-harness`
+  - `omk-sparkshell`
 - packaged installs hydrate the matching native binary from the GitHub Release assets through `native-release-manifest.json`
 - CI now validates the Rust path more directly with:
   - explicit Rust toolchain setup in the full build lane
@@ -46,10 +46,10 @@ This keeps npm installs simple for users while still shipping verified cross-pla
 
 ### Native release assets are now first-class
 
-`0.9.0` also upgrades OMX's release shape so the new native surfaces are publishable and consumable across platforms.
+`0.9.0` also upgrades OMK's release shape so the new native surfaces are publishable and consumable across platforms.
 
 This release:
-- unifies cross-platform native publishing for `omx-explore-harness` and `omx-sparkshell`
+- unifies cross-platform native publishing for `omk-explore-harness` and `omk-sparkshell`
 - generates a native release manifest with per-target metadata and checksums
 - adds packed-install smoke verification to the release workflow
 - validates `build:full` directly in CI
@@ -67,13 +67,13 @@ Representative changes:
 The sparkshell line is not just a hidden backend. It is now part of the operator story.
 
 This release:
-- exposes `omx sparkshell --tmux-pane <pane-id> --tail-lines <100-1000>` for explicit pane summarization
+- exposes `omk sparkshell --tmux-pane <pane-id> --tail-lines <100-1000>` for explicit pane summarization
 - surfaces sparkshell inspection metadata in team status flows
 - makes long-output summarization more predictable
 - adds stress coverage for noisy and adversarial output
 
 Representative changes:
-- `71858c3` — feat: add omx sparkshell and team inspection metadata
+- `71858c3` — feat: add omk sparkshell and team inspection metadata
 - `b890123` — fix: force low reasoning for sparkshell summaries (#781)
 - `a653376` — test: add explore and sparkshell stress coverage
 
@@ -90,13 +90,13 @@ Alongside the spark-focused work, `dev` also picked up supporting improvements t
 
 ## Upgrade notes
 
-- If you use project-scoped OMX installs, rerun:
+- If you use project-scoped OMK installs, rerun:
 
 ```bash
-omx setup --force --scope project
+omk setup --force --scope project
 ```
 
-- Expect `omx explore` and `omx sparkshell` packaged installs to rely on release-asset hydration when no explicit binary override or repo-local artifact is present.
+- Expect `omk explore` and `omk sparkshell` packaged installs to rely on release-asset hydration when no explicit binary override or repo-local artifact is present.
 - `npm pack` intentionally does **not** ship staged native binaries; native archives are attached to the GitHub Release and consumed through the native-asset workflow.
 
 ## Compare stats
@@ -110,7 +110,7 @@ omx setup --force --scope project
 - [#784](https://github.com/Yeachan-Heo/oh-my-codex/pull/784) — cross-platform native publishing and release-pipeline follow-through
 - [#785](https://github.com/Yeachan-Heo/oh-my-codex/pull/785) — team runtime lifecycle and cleanup hardening
 - [#786](https://github.com/Yeachan-Heo/oh-my-codex/pull/786) — nested help routing cleanup
-- [#787](https://github.com/Yeachan-Heo/oh-my-codex/pull/787) — centralized OMX default model resolution
+- [#787](https://github.com/Yeachan-Heo/oh-my-codex/pull/787) — centralized OMK default model resolution
 - [#788](https://github.com/Yeachan-Heo/oh-my-codex/pull/788) — HUD branch/config loading hardening
 - [#789](https://github.com/Yeachan-Heo/oh-my-codex/pull/789) — distribute generated aspect tasks across workers
 - [#793](https://github.com/Yeachan-Heo/oh-my-codex/pull/793) — Windows Codex command shim probing fix

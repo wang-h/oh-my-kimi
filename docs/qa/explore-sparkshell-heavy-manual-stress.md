@@ -1,4 +1,4 @@
-# Heavy / Manual Stress Lane: `omx-explore` and `omx-sparkshell`
+# Heavy / Manual Stress Lane: `omk-explore` and `omk-sparkshell`
 
 Date: **2026-03-11**
 Scope: opt-in/manual stress scenarios that complement the deterministic CI lane in:
@@ -25,12 +25,12 @@ The following command forms were verified during this doc pass:
 
 | Command | Result |
 |---|---|
-| `node bin/omx.js explore --help` | PASS |
-| `node bin/omx.js sparkshell --help` | PASS |
-| `node bin/omx.js sparkshell git --version` | PASS |
-| `node bin/omx.js version` | PASS |
-| `for i in $(seq 1 20); do node bin/omx.js sparkshell git --version; done` | PASS (bounded sample verified locally) |
-| `seq 1 5 | xargs -I{} -P5 node bin/omx.js sparkshell git --version` | PASS (bounded sample verified locally) |
+| `node bin/omk.js explore --help` | PASS |
+| `node bin/omk.js sparkshell --help` | PASS |
+| `node bin/omk.js sparkshell git --version` | PASS |
+| `node bin/omk.js version` | PASS |
+| `for i in $(seq 1 20); do node bin/omk.js sparkshell git --version; done` | PASS (bounded sample verified locally) |
+| `seq 1 5 | xargs -I{} -P5 node bin/omk.js sparkshell git --version` | PASS (bounded sample verified locally) |
 
 Environment limitation during this doc pass:
 - `tmux -V` worked, but detached tmux socket access failed with `error connecting to /tmp/tmux-1000/default (Operation not permitted)`, so the `--tmux-pane` examples below are **documented but not end-to-end verified in this session**.
@@ -67,7 +67,7 @@ npm run test:sparkshell
 - Evidence quality is partly operator-judged: the summary must preserve the facts that matter, not exact wording.
 
 **Goal**
-- Confirm `omx-sparkshell --tmux-pane` preserves operator-critical facts when pane tails are large and noisy.
+- Confirm `omk-sparkshell --tmux-pane` preserves operator-critical facts when pane tails are large and noisy.
 - Confirm the summary/fallback path still points the operator to the right next action.
 
 **Setup**
@@ -84,7 +84,7 @@ Suggested must-preserve facts:
 **Command shape**
 
 ```bash
-omx sparkshell --tmux-pane <pane-id> --tail-lines 400
+omk sparkshell --tmux-pane <pane-id> --tail-lines 400
 ```
 
 **Evidence to capture**
@@ -116,19 +116,19 @@ omx sparkshell --tmux-pane <pane-id> --tail-lines 400
 Verified direct-command example:
 
 ```bash
-node bin/omx.js sparkshell git --version
+node bin/omk.js sparkshell git --version
 ```
 
 Suggested repeated-run shape:
 
 ```bash
-for i in $(seq 1 20); do node bin/omx.js sparkshell git --version; done
+for i in $(seq 1 20); do node bin/omk.js sparkshell git --version; done
 ```
 
 Suggested concurrent-run shape:
 
 ```bash
-seq 1 5 | xargs -I{} -P5 node bin/omx.js sparkshell git --version
+seq 1 5 | xargs -I{} -P5 node bin/omk.js sparkshell git --version
 ```
 
 **Evidence to capture**
@@ -149,7 +149,7 @@ seq 1 5 | xargs -I{} -P5 node bin/omx.js sparkshell git --version
 - Review requires semantic inspection against predeclared must-preserve facts.
 
 **Goal**
-- Stress `omx-explore` and `omx-sparkshell` summarization with outputs that bury signal under distractors.
+- Stress `omk-explore` and `omk-sparkshell` summarization with outputs that bury signal under distractors.
 
 **Setup**
 1. Build 3-10 text fixtures with:
@@ -193,8 +193,8 @@ Suggested corpus dimensions:
 Useful direct-command baseline:
 
 ```bash
-node bin/omx.js sparkshell --help
-node bin/omx.js explore --help
+node bin/omk.js sparkshell --help
+node bin/omk.js explore --help
 ```
 
 **Evidence to capture**

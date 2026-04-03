@@ -193,25 +193,25 @@ jobs:
         run: |
           mkdir -p coverage/rust
 
-          cargo llvm-cov --workspace --summary-only | tee coverage/rust/omx-explore-summary.txt
-          cargo llvm-cov --workspace --lcov --output-path coverage/rust/omx-explore.lcov
+          cargo llvm-cov --workspace --summary-only | tee coverage/rust/omk-explore-summary.txt
+          cargo llvm-cov --workspace --lcov --output-path coverage/rust/omk-explore.lcov
 
-          cargo llvm-cov --manifest-path crates/omx-sparkshell/Cargo.toml --summary-only | tee coverage/rust/omx-sparkshell-summary.txt
-          cargo llvm-cov --manifest-path crates/omx-sparkshell/Cargo.toml --lcov --output-path coverage/rust/omx-sparkshell.lcov
+          cargo llvm-cov --manifest-path crates/omk-sparkshell/Cargo.toml --summary-only | tee coverage/rust/omk-sparkshell-summary.txt
+          cargo llvm-cov --manifest-path crates/omk-sparkshell/Cargo.toml --lcov --output-path coverage/rust/omk-sparkshell.lcov
       - name: Add Rust coverage summary to job summary
         shell: bash
         run: |
           {
             echo '## Rust Coverage Summary'
             echo ''
-            echo '### omx-explore'
+            echo '### omk-explore'
             echo '```text'
-            cat coverage/rust/omx-explore-summary.txt
+            cat coverage/rust/omk-explore-summary.txt
             echo '```'
             echo ''
-            echo '### omx-sparkshell'
+            echo '### omk-sparkshell'
             echo '```text'
-            cat coverage/rust/omx-sparkshell-summary.txt
+            cat coverage/rust/omk-sparkshell-summary.txt
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
       - name: Upload Rust coverage artifact

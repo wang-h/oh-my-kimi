@@ -33,7 +33,7 @@ function normalizeSessionState(value: Record<string, unknown>): HookPluginOmxSes
     : null;
 }
 
-export function createHookPluginOmxApi(cwd: string): HookPluginSdk['omx'] {
+export function createHookPluginOmxApi(cwd: string): HookPluginSdk['omk'] {
   return {
     session: {
       read: () => readOmxStateFile<HookPluginOmxSessionState>(

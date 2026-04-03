@@ -1,7 +1,7 @@
 # oh-my-kimi (OMK)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omx-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
+  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omk-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
   <br>
   <em>Start Kimi stronger, then let OMK add better prompts, workflows, and runtime help when the work grows.</em>
 </p>
@@ -15,16 +15,20 @@
 **Website:** https://wang-h.github.io/oh-my-kimi-website/  
 **Docs:** [Getting Started](./docs/getting-started.html) · [Agents](./docs/agents.html) · [Skills](./docs/skills.html) · [Integrations](./docs/integrations.html) · [Demo](./DEMO.md) · [OpenClaw guide](./docs/openclaw-integration.md)
 
+> **Attribution:** oh-my-kimi is a Kimi-first fork derived from [Yeachan-Heo/oh-my-codex](https://github.com/Yeachan-Heo/oh-my-codex). The original project and upstream design work are credited to **Yeachan-Heo**.
+>
+> **Fork note:** this fork is maintained by **hao** (`wang-h`). The porting, branding, and adaptation work for oh-my-kimi was carried out on top of the oh-my-codex foundation, with substantial execution help from **OpenAI Codex / Codex CLI workflows** during the migration process.
+
 > **Port status:** this repository is now the Kimi-first fork. The main runtime, setup path, and focused verification suite have been moved to Kimi-first behavior. For the current compatibility boundary and unsupported disclosures, see the [oh-my-kimi v1 compatibility guide](./docs/oh-my-kimi-v1-compatibility.md).
 
 OMK is a workflow layer for Kimi Code CLI.
-`omk` is the primary command name; `omx` is currently kept as a compatibility alias during migration.
+`omk` is the primary command name; `omk` is currently kept as a compatibility alias during migration.
 
 It keeps Kimi Code CLI as the execution engine and makes it easier to:
 - start a stronger Kimi session by default
 - run one consistent workflow from clarification to completion
 - invoke the canonical skills with `$deep-interview`, `$ralplan`, `$team`, and `$ralph`
-- keep project guidance, plans, logs, and state in `.omx/`
+- keep project guidance, plans, logs, and state in `.omk/`
 
 ## Recommended default flow
 
@@ -54,7 +58,7 @@ Use OMK if you already like Kimi Code and want a better day-to-day runtime aroun
 - a standard workflow built around `$deep-interview`, `$ralplan`, `$team`, and `$ralph`
 - specialist roles and supporting skills when the task needs them
 - project guidance through scoped `AGENTS.md`
-- durable state under `.omx/` for plans, logs, memory, and mode tracking
+- durable state under `.omk/` for plans, logs, memory, and mode tracking
 
 If you want plain Kimi Code CLI with no extra workflow layer, you probably do not need OMK.
 
@@ -95,7 +99,7 @@ It adds a better working layer around it:
 - **Kimi Code CLI** does the actual agent work
 - **OMK role keywords** make useful roles reusable
 - **OMK skills** make common workflows reusable
-- **`.omx/`** stores plans, logs, memory, and runtime state
+- **`.omk/`** stores plans, logs, memory, and runtime state
 
 Most users should think of OMK as **better task routing + better workflow + better runtime**, not as a command surface to operate manually all day.
 
@@ -144,7 +148,7 @@ These are operator/support surfaces:
 - `omk setup` installs prompts, skills, config, and AGENTS scaffolding
 - `omk doctor` verifies the install when something seems wrong
 - `omk hud --watch` is a monitoring/status surface, not the primary user workflow
-- `omx ...` still works as a temporary alias while the port is being cleaned up
+- `omk ...` still works as a temporary alias while the port is being cleaned up
 
 ### Explore and sparkshell
 

@@ -11,7 +11,7 @@ This is a **targeted patch release** focused on team-provider expansion, safer d
 - `$team` / team runtime can now launch **Gemini CLI workers** alongside Codex and Claude (`#576`, `#579`, related issue `#573`).
 - Default frontier-model fallback is now routed through **`DEFAULT_FRONTIER_MODEL`** instead of hardcoded model strings (`#583`).
 - Setup/install is stricter about shipping only the right skills, now ships **`configure-notifications`** canonically, and cleans stale legacy skill dirs on `--force` (`#575`, `#580`, `#584`, closes `#574`).
-- `omx setup` now skips the deprecated **`[tui]`** config section for Codex CLI `>= 0.107.0` (`#572`, fixes `#564`).
+- `omk setup` now skips the deprecated **`[tui]`** config section for Codex CLI `>= 0.107.0` (`#572`, fixes `#564`).
 - Fixed two additional patch-level bugs: unresolved OpenClaw placeholders (`#581`, closes `#578`) and keyword detection ordering/`/prompts` guarding (`#582`).
 
 ---
@@ -20,7 +20,7 @@ This is a **targeted patch release** focused on team-provider expansion, safer d
 
 ### 1) Team mode: Gemini CLI worker support
 
-OMX team mode now supports **Gemini** as a worker CLI provider in addition to Codex and Claude.
+OMK team mode now supports **Gemini** as a worker CLI provider in addition to Codex and Claude.
 
 Included in this update:
 - Gemini worker launch support in runtime/session resolution
@@ -87,7 +87,7 @@ Two additional correctness fixes landed in this release:
 
 ### Related issues tagged in this release
 - #564 — setup/config breakage caused by deprecated `[tui]` generation on newer Codex CLI versions
-- #573 — feat(team): add Gemini CLI worker support to OMX team mode
+- #573 — feat(team): add Gemini CLI worker support to OMK team mode
 - #574 — setup should skip non-installable catalog skills and clean stale shipped dirs
 - #578 — unresolved placeholder leakage in OpenClaw hook instruction templates
 

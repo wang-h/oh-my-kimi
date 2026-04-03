@@ -1,14 +1,14 @@
 /**
  * Model Configuration
  *
- * Reads per-mode model overrides and default-env overrides from .omx-config.json.
+ * Reads per-mode model overrides and default-env overrides from .omk-config.json.
  *
  * Config format:
  * {
  *   "env": {
- *     "OMX_DEFAULT_FRONTIER_MODEL": "your-frontier-model",
- *     "OMX_DEFAULT_STANDARD_MODEL": "your-standard-model",
- *     "OMX_DEFAULT_SPARK_MODEL": "your-spark-model"
+ *     "OMK_DEFAULT_FRONTIER_MODEL": "your-frontier-model",
+ *     "OMK_DEFAULT_STANDARD_MODEL": "your-standard-model",
+ *     "OMK_DEFAULT_SPARK_MODEL": "your-spark-model"
  *   },
  *   "models": {
  *     "default": "o4-mini",
@@ -16,7 +16,7 @@
  *   }
  * }
  *
- * Resolution: mode-specific > "default" key > OMX_DEFAULT_FRONTIER_MODEL > DEFAULT_FRONTIER_MODEL
+ * Resolution: mode-specific > "default" key > OMK_DEFAULT_FRONTIER_MODEL > DEFAULT_FRONTIER_MODEL
  */
 
 import { readFileSync, existsSync } from 'fs';
@@ -36,13 +36,13 @@ interface OmxConfigFile {
   models?: ModelsConfig;
 }
 
-export const OMX_DEFAULT_FRONTIER_MODEL_ENV = 'OMX_DEFAULT_FRONTIER_MODEL';
-export const OMX_DEFAULT_STANDARD_MODEL_ENV = 'OMX_DEFAULT_STANDARD_MODEL';
-export const OMX_DEFAULT_SPARK_MODEL_ENV = 'OMX_DEFAULT_SPARK_MODEL';
-export const OMX_SPARK_MODEL_ENV = 'OMX_SPARK_MODEL';
+export const OMK_DEFAULT_FRONTIER_MODEL_ENV = 'OMK_DEFAULT_FRONTIER_MODEL';
+export const OMK_DEFAULT_STANDARD_MODEL_ENV = 'OMK_DEFAULT_STANDARD_MODEL';
+export const OMK_DEFAULT_SPARK_MODEL_ENV = 'OMK_DEFAULT_SPARK_MODEL';
+export const OMK_SPARK_MODEL_ENV = 'OMK_SPARK_MODEL';
 
 function readOmxConfigFile(codexHomeOverride?: string): OmxConfigFile | null {
-  const configPath = join(codexHomeOverride || codexHome(), '.omx-config.json');
+  const configPath = join(codexHomeOverride || codexHome(), '.omk-config.json');
   if (!existsSync(configPath)) return null;
   try {
     const raw = JSON.parse(readFileSync(configPath, 'utf-8'));
@@ -108,31 +108,31 @@ export function getEnvConfiguredMainDefaultModel(
   env: NodeJS.ProcessEnv = process.env,
   codexHomeOverride?: string,
 ): string | undefined {
-  return normalizeConfiguredValue(env[OMX_DEFAULT_FRONTIER_MODEL_ENV])
-    ?? readConfigEnvValue(OMX_DEFAULT_FRONTIER_MODEL_ENV, codexHomeOverride);
+  return normalizeConfiguredValue(env[OMK_DEFAULT_FRONTIER_MODEL_ENV])
+    ?? readConfigEnvValue(OMK_DEFAULT_FRONTIER_MODEL_ENV, codexHomeOverride);
 }
 
 export function getEnvConfiguredStandardDefaultModel(
   env: NodeJS.ProcessEnv = process.env,
   codexHomeOverride?: string,
 ): string | undefined {
-  return normalizeConfiguredValue(env[OMX_DEFAULT_STANDARD_MODEL_ENV])
-    ?? readConfigEnvValue(OMX_DEFAULT_STANDARD_MODEL_ENV, codexHomeOverride);
+  return normalizeConfiguredValue(env[OMK_DEFAULT_STANDARD_MODEL_ENV])
+    ?? readConfigEnvValue(OMK_DEFAULT_STANDARD_MODEL_ENV, codexHomeOverride);
 }
 
 export function getEnvConfiguredSparkDefaultModel(
   env: NodeJS.ProcessEnv = process.env,
   codexHomeOverride?: string,
 ): string | undefined {
-  return normalizeConfiguredValue(env[OMX_DEFAULT_SPARK_MODEL_ENV])
-    ?? normalizeConfiguredValue(env[OMX_SPARK_MODEL_ENV])
-    ?? readConfigEnvValue(OMX_DEFAULT_SPARK_MODEL_ENV, codexHomeOverride)
-    ?? readConfigEnvValue(OMX_SPARK_MODEL_ENV, codexHomeOverride);
+  return normalizeConfiguredValue(env[OMK_DEFAULT_SPARK_MODEL_ENV])
+    ?? normalizeConfiguredValue(env[OMK_SPARK_MODEL_ENV])
+    ?? readConfigEnvValue(OMK_DEFAULT_SPARK_MODEL_ENV, codexHomeOverride)
+    ?? readConfigEnvValue(OMK_SPARK_MODEL_ENV, codexHomeOverride);
 }
 
 /**
  * Get the envvar-backed main/default model.
- * Resolution: OMX_DEFAULT_FRONTIER_MODEL > DEFAULT_FRONTIER_MODEL
+ * Resolution: OMK_DEFAULT_FRONTIER_MODEL > DEFAULT_FRONTIER_MODEL
  */
 export function getMainDefaultModel(codexHomeOverride?: string): string {
   return getEnvConfiguredMainDefaultModel(process.env, codexHomeOverride)
@@ -141,7 +141,7 @@ export function getMainDefaultModel(codexHomeOverride?: string): string {
 
 /**
  * Get the envvar-backed standard/default subagent model.
- * Resolution: OMX_DEFAULT_STANDARD_MODEL > DEFAULT_STANDARD_MODEL
+ * Resolution: OMK_DEFAULT_STANDARD_MODEL > DEFAULT_STANDARD_MODEL
  */
 export function getStandardDefaultModel(codexHomeOverride?: string): string {
   return getEnvConfiguredStandardDefaultModel(process.env, codexHomeOverride)
@@ -150,7 +150,7 @@ export function getStandardDefaultModel(codexHomeOverride?: string): string {
 
 /**
  * Get the configured model for a specific mode.
- * Resolution: mode-specific override > "default" key > OMX_DEFAULT_FRONTIER_MODEL > DEFAULT_FRONTIER_MODEL
+ * Resolution: mode-specific override > "default" key > OMK_DEFAULT_FRONTIER_MODEL > DEFAULT_FRONTIER_MODEL
  */
 export function getModelForMode(mode: string, codexHomeOverride?: string): string {
   const models = readModelsBlock(codexHomeOverride);
@@ -171,7 +171,7 @@ const TEAM_LOW_COMPLEXITY_MODEL_KEYS = [
 
 /**
  * Get the envvar-backed spark/low-complexity default model.
- * Resolution: OMX_DEFAULT_SPARK_MODEL > OMX_SPARK_MODEL > explicit low-complexity key(s) > DEFAULT_SPARK_MODEL
+ * Resolution: OMK_DEFAULT_SPARK_MODEL > OMK_SPARK_MODEL > explicit low-complexity key(s) > DEFAULT_SPARK_MODEL
  */
 export function getSparkDefaultModel(codexHomeOverride?: string): string {
   return getEnvConfiguredSparkDefaultModel(process.env, codexHomeOverride)
@@ -181,7 +181,7 @@ export function getSparkDefaultModel(codexHomeOverride?: string): string {
 
 /**
  * Get the low-complexity team worker model.
- * Resolution: explicit low-complexity key(s) > OMX_DEFAULT_SPARK_MODEL > OMX_SPARK_MODEL > DEFAULT_SPARK_MODEL
+ * Resolution: explicit low-complexity key(s) > OMK_DEFAULT_SPARK_MODEL > OMK_SPARK_MODEL > DEFAULT_SPARK_MODEL
  */
 export function getTeamLowComplexityModel(codexHomeOverride?: string): string {
   return readTeamLowComplexityOverride(codexHomeOverride) ?? getSparkDefaultModel(codexHomeOverride);

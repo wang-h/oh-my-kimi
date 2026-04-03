@@ -72,7 +72,7 @@ function parseScopeArg(args: string[]): AgentScope | undefined {
 }
 
 function inferMutationScope(cwd = process.cwd()): AgentScope {
-  const persistedScopePath = join(cwd, '.omx', 'setup-scope.json');
+  const persistedScopePath = join(cwd, '.omk', 'setup-scope.json');
   if (existsSync(persistedScopePath)) {
     try {
       const parsed = JSON.parse(readFileSync(persistedScopePath, 'utf8')) as { scope?: string };

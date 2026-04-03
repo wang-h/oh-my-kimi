@@ -8,7 +8,7 @@ It is intentionally evidence-based: it distinguishes the **target v1 behavior** 
 The current checkout is partially migrated to Kimi-first behavior, but the documentation and some metadata still lag the implementation.
 The review lane confirmed the current state below:
 
-- `package.json` now identifies the package as `oh-my-kimi`, describes Kimi Code CLI, and exposes `omk` plus a temporary `omx` alias.
+- `package.json` now identifies the package as `oh-my-kimi`, describes Kimi Code CLI, and exposes `omk` plus a temporary `omk` alias.
 - `src/utils/paths.ts` now resolves provider paths through `.kimi` / `KIMI_HOME` with legacy `CODEX_HOME` fallback.
 - `src/config/generator.ts` now emits Kimi-first top-level comments and developer instructions.
 - `README.md` still documents a mostly Codex-first install and runtime story.
@@ -33,24 +33,24 @@ These are the evidence-backed reasons the port can reasonably target skills, AGE
 | Surface | Target v1 status | Current repo state | Review / documentation requirement |
 | --- | --- | --- | --- |
 | Skills discovery | adapted | path layer migrated; docs lag | Document Kimi skills discovery and any `--skills-dir` override story. |
-| `AGENTS.md` orchestration contract | adapted | mixed | Preserve OMX workflow semantics, but retarget runtime wording to Kimi where appropriate. |
-| `.omx/` persistence | supported | already portable | Keep `.omx/` state stable; do not move it into provider-specific homes. |
+| `AGENTS.md` orchestration contract | adapted | mixed | Preserve OMK workflow semantics, but retarget runtime wording to Kimi where appropriate. |
+| `.omk/` persistence | supported | already portable | Keep `.omk/` state stable; do not move it into provider-specific homes. |
 | Ralph loop semantics | adapted | evidence present; user docs lag | Tie the Kimi story to `--max-ralph-iterations` and keep unsupported claims out of user docs. |
 | GitHub integration path | adapted | not yet documented clearly | Describe Kimi MCP/plugin parity as an integration path, not a guaranteed 1:1 clone of every existing workflow. |
 | Native agents / subagents | adapted or unsupported | Codex-oriented implementation remains | Only claim support if Kimi agent-file generation is actually implemented; otherwise document the gap explicitly. |
-| In-product `$team` runtime | unsupported unless proven otherwise | tmux/Codex-specific today | Separate the external OMX team workflow used to build this project from the product feature shipped to end users. |
+| In-product `$team` runtime | unsupported unless proven otherwise | tmux/Codex-specific today | Separate the external OMK team workflow used to build this project from the product feature shipped to end users. |
 
 ## Provider-boundary review checklist
 
 ### Branding and packaging
 - Rename project/package/install copy from `oh-my-codex` to `oh-my-kimi`.
 - Replace OpenAI Codex CLI positioning with Kimi Code positioning.
-- If a compatibility alias is kept, document `omk` as primary and explain the `omx` alias explicitly.
+- If a compatibility alias is kept, document `omk` as primary and explain the `omk` alias explicitly.
 
 ### Paths and setup
 - Remove hardcoded `~/.codex` and `CODEX_HOME` assumptions from user-facing documentation unless they are part of a clearly named compatibility layer.
 - Document the provider-resolved Kimi home/config/skills/agents locations.
-- Keep `.omx/` project state described as stable and provider-agnostic.
+- Keep `.omk/` project state described as stable and provider-agnostic.
 
 ### Generated config and instructions
 - Ensure generated developer instructions stop describing Codex as the runtime target when Kimi is intended.
@@ -68,7 +68,7 @@ The documentation lane is ready to sign off when all of the following are true:
 1. README/install docs are Kimi-first.
 2. The compatibility matrix is present and linked from user-facing docs.
 3. Unsupported or deferred surfaces are called out explicitly.
-4. Path guidance explains what moves to Kimi-specific directories and what stays in `.omx/`.
+4. Path guidance explains what moves to Kimi-specific directories and what stays in `.omk/`.
 5. Local validation evidence includes a captured `kimi --help` pass.
 6. Docs do not advertise Codex-only behavior as if it already works on Kimi.
 

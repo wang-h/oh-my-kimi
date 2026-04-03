@@ -6,7 +6,7 @@ export function sanitizeHookPluginName(name: string): string {
 }
 
 export function hookPluginRootDir(cwd: string, pluginName: string): string {
-  return join(cwd, '.omx', 'state', 'hooks', 'plugins', sanitizeHookPluginName(pluginName));
+  return join(cwd, '.omk', 'state', 'hooks', 'plugins', sanitizeHookPluginName(pluginName));
 }
 
 export function hookPluginTmuxStatePath(cwd: string, pluginName: string): string {
@@ -19,9 +19,9 @@ export function hookPluginDataPath(cwd: string, pluginName: string): string {
 
 export function hookPluginLogPath(cwd: string, now = new Date()): string {
   const day = now.toISOString().slice(0, 10);
-  return join(cwd, '.omx', 'logs', `hooks-${day}.jsonl`);
+  return join(cwd, '.omk', 'logs', `hooks-${day}.jsonl`);
 }
 
 export function omxRootStateFilePath(cwd: string, fileName: string): string {
-  return join(cwd, '.omx', 'state', fileName);
+  return join(cwd, '.omk', 'state', fileName);
 }

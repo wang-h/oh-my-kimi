@@ -55,13 +55,13 @@ ls -la ~/.codex/hooks/*.sh 2>/dev/null
 # Check if AGENTS.md exists
 ls -la ~/.codex/AGENTS.md 2>/dev/null
 
-# Check for OMX marker
-grep -q "oh-my-kimi Multi-Agent System" ~/.codex/AGENTS.md 2>/dev/null && echo "Has OMX config" || echo "Missing OMX config"
+# Check for OMK marker
+grep -q "oh-my-kimi Multi-Agent System" ~/.codex/AGENTS.md 2>/dev/null && echo "Has OMK config" || echo "Missing OMK config"
 ```
 
 **Diagnosis**:
 - If missing: CRITICAL - AGENTS.md not configured
-- If missing OMX marker: WARN - outdated AGENTS.md
+- If missing OMK marker: WARN - outdated AGENTS.md
 
 ### Step 5: Check for Stale Plugin Cache
 
@@ -94,7 +94,7 @@ ls -la ~/.agents/skills/ 2>/dev/null
 **Diagnosis**:
 - If `~/.codex/agents/` exists with oh-my-kimi-related files: WARN - legacy agents (now provided by plugin)
 - If `~/.codex/commands/` exists with oh-my-kimi-related files: WARN - legacy commands (now provided by plugin)
-- If `${CODEX_HOME:-~/.codex}/skills/` exists with OMX skills: OK - canonical current user skill root
+- If `${CODEX_HOME:-~/.codex}/skills/` exists with OMK skills: OK - canonical current user skill root
 - If `~/.agents/skills/` exists: WARN - historical legacy skill root that can overlap with `${CODEX_HOME:-~/.codex}/skills/` and cause duplicate Enable/Disable Skills entries
 
 Look for files like:
@@ -109,7 +109,7 @@ Look for files like:
 After running all checks, output a report:
 
 ```
-## OMX Doctor Report
+## OMK Doctor Report
 
 ### Summary
 [HEALTHY / ISSUES FOUND]

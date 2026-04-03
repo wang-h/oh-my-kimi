@@ -48,8 +48,8 @@ const DEFAULT_CONFIG: TmuxHookConfig = {
   allowed_modes: ['ralph', 'ultrawork', 'team'],
   cooldown_ms: 15000,
   max_injections_per_session: 200,
-  prompt_template: 'Continue from current mode state. [OMX_TMUX_INJECT]',
-  marker: '[OMX_TMUX_INJECT]',
+  prompt_template: 'Continue from current mode state. [OMK_TMUX_INJECT]',
+  marker: '[OMK_TMUX_INJECT]',
   dry_run: false,
   log_level: 'info',
   skip_if_scrolling: true,
@@ -57,7 +57,7 @@ const DEFAULT_CONFIG: TmuxHookConfig = {
 
 const HELP = `
 Usage:
-  omx tmux-hook init       Create .omx/tmux-hook.json
+  omx tmux-hook init       Create .omk/tmux-hook.json
   omx tmux-hook status     Show config + runtime state summary
   omx tmux-hook validate   Validate config and tmux target reachability
   omx tmux-hook test       Run a synthetic notify-hook turn (end-to-end)
@@ -89,7 +89,7 @@ export async function tmuxHookCommand(args: string[]): Promise<void> {
 }
 
 function omxDir(cwd = process.cwd()): string {
-  return join(cwd, '.omx');
+  return join(cwd, '.omk');
 }
 
 function tmuxHookConfigPath(cwd = process.cwd()): string {
@@ -195,7 +195,7 @@ async function loadConfigForCommand(
         console.log(`Detected tmux session: ${initResult.detectedSession}`);
       }
       if (initResult.usedPlaceholderTarget) {
-        console.log('Could not auto-detect a tmux target. Edit `.omx/tmux-hook.json` when ready.');
+        console.log('Could not auto-detect a tmux target. Edit `.omk/tmux-hook.json` when ready.');
         if (commandName === 'validate') {
           console.log('Validation skipped until `target.value` is configured.');
         }
@@ -461,5 +461,5 @@ async function testTmuxHook(args: string[]): Promise<void> {
   console.log('tmux-hook test: notify-hook executed.');
   console.log(`thread_id=${threadId}`);
   console.log(`turn_id=${turnId}`);
-  console.log('Check: .omx/logs/tmux-hook-YYYY-MM-DD.jsonl for skip/reason codes.');
+  console.log('Check: .omk/logs/tmux-hook-YYYY-MM-DD.jsonl for skip/reason codes.');
 }

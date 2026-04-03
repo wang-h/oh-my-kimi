@@ -10,17 +10,17 @@ import {
   installNativeAgentConfigs,
 } from "../native-config.js";
 
-const originalStandardModel = process.env.OMX_DEFAULT_STANDARD_MODEL;
+const originalStandardModel = process.env.OMK_DEFAULT_STANDARD_MODEL;
 
 beforeEach(() => {
-  process.env.OMX_DEFAULT_STANDARD_MODEL = "gpt-5.4-mini";
+  process.env.OMK_DEFAULT_STANDARD_MODEL = "gpt-5.4-mini";
 });
 
 afterEach(() => {
   if (typeof originalStandardModel === "string") {
-    process.env.OMX_DEFAULT_STANDARD_MODEL = originalStandardModel;
+    process.env.OMK_DEFAULT_STANDARD_MODEL = originalStandardModel;
   } else {
-    delete process.env.OMX_DEFAULT_STANDARD_MODEL;
+    delete process.env.OMK_DEFAULT_STANDARD_MODEL;
   }
 });
 
@@ -64,13 +64,13 @@ describe("agents/native-config", () => {
 
     const prompt = "Instruction line";
     const exactMiniYaml = generateAgentToml(agent, prompt, {
-      env: { OMX_DEFAULT_STANDARD_MODEL: "gpt-5.4-mini" } as NodeJS.ProcessEnv,
+      env: { OMK_DEFAULT_STANDARD_MODEL: "gpt-5.4-mini" } as NodeJS.ProcessEnv,
     });
     const frontierYaml = generateAgentToml(agent, prompt, {
-      env: { OMX_DEFAULT_STANDARD_MODEL: "gpt-5.4" } as NodeJS.ProcessEnv,
+      env: { OMK_DEFAULT_STANDARD_MODEL: "gpt-5.4" } as NodeJS.ProcessEnv,
     });
     const tunedYaml = generateAgentToml(agent, prompt, {
-      env: { OMX_DEFAULT_STANDARD_MODEL: "gpt-5.4-mini-tuned" } as NodeJS.ProcessEnv,
+      env: { OMK_DEFAULT_STANDARD_MODEL: "gpt-5.4-mini-tuned" } as NodeJS.ProcessEnv,
     });
 
     assert.match(exactMiniYaml, /# resolved_model: gpt-5\.4-mini/);
@@ -80,7 +80,7 @@ describe("agents/native-config", () => {
   });
 
   it("installs only agents with prompt files and skips existing files without force", async () => {
-    const root = await mkdtemp(join(tmpdir(), "omx-native-config-"));
+    const root = await mkdtemp(join(tmpdir(), "omk-native-config-"));
     const promptsDir = join(root, "prompts");
     const outDir = join(root, "agents-out");
 
@@ -117,14 +117,14 @@ describe("agents/native-config", () => {
   });
 
   it("keeps standard agents off a custom gpt-5.2 root model", async () => {
-    const root = await mkdtemp(join(tmpdir(), "omx-native-config-root-model-"));
+    const root = await mkdtemp(join(tmpdir(), "omk-native-config-root-model-"));
     const codexHome = join(root, ".codex");
     const promptsDir = join(root, "prompts");
     const outDir = join(codexHome, "agents");
     const previousCodexHome = process.env.CODEX_HOME;
 
     try {
-      delete process.env.OMX_DEFAULT_STANDARD_MODEL;
+      delete process.env.OMK_DEFAULT_STANDARD_MODEL;
       process.env.CODEX_HOME = codexHome;
       await mkdir(promptsDir, { recursive: true });
       await mkdir(codexHome, { recursive: true });
@@ -138,20 +138,20 @@ describe("agents/native-config", () => {
     } finally {
       if (typeof previousCodexHome === "string") process.env.CODEX_HOME = previousCodexHome;
       else delete process.env.CODEX_HOME;
-      process.env.OMX_DEFAULT_STANDARD_MODEL = "gpt-5.4-mini";
+      process.env.OMK_DEFAULT_STANDARD_MODEL = "gpt-5.4-mini";
       await rm(root, { recursive: true, force: true });
     }
   });
 
   it("keeps executor on the frontier lane so an explicit gpt-5.2 root model still applies there", async () => {
-    const root = await mkdtemp(join(tmpdir(), "omx-native-config-executor-model-"));
+    const root = await mkdtemp(join(tmpdir(), "omk-native-config-executor-model-"));
     const codexHome = join(root, ".codex");
     const promptsDir = join(root, "prompts");
     const outDir = join(codexHome, "agents");
     const previousCodexHome = process.env.CODEX_HOME;
 
     try {
-      delete process.env.OMX_DEFAULT_STANDARD_MODEL;
+      delete process.env.OMK_DEFAULT_STANDARD_MODEL;
       process.env.CODEX_HOME = codexHome;
       await mkdir(promptsDir, { recursive: true });
       await mkdir(codexHome, { recursive: true });
@@ -164,7 +164,7 @@ describe("agents/native-config", () => {
     } finally {
       if (typeof previousCodexHome === "string") process.env.CODEX_HOME = previousCodexHome;
       else delete process.env.CODEX_HOME;
-      process.env.OMX_DEFAULT_STANDARD_MODEL = "gpt-5.4-mini";
+      process.env.OMK_DEFAULT_STANDARD_MODEL = "gpt-5.4-mini";
       await rm(root, { recursive: true, force: true });
     }
   });

@@ -127,7 +127,7 @@ describe('cleanupOmxMcpProcesses', () => {
 
 describe('cleanupStaleTmpDirectories', () => {
   const tmpEntries = [
-    { name: 'omx-stale-a', isDirectory: () => true },
+    { name: 'omk-stale-a', isDirectory: () => true },
     { name: 'omc-stale-b', isDirectory: () => true },
     { name: 'oh-my-codex-fresh', isDirectory: () => true },
     { name: 'oh-my-codex-file', isDirectory: () => false },
@@ -162,7 +162,7 @@ describe('cleanupStaleTmpDirectories', () => {
       /Dry run: would remove 2 stale OMX \/tmp directories:/,
     );
     assert.match(lines.join('\n'), /\/tmp\/omc-stale-b/);
-    assert.match(lines.join('\n'), /\/tmp\/omx-stale-a/);
+    assert.match(lines.join('\n'), /\/tmp\/omk-stale-a/);
     assert.doesNotMatch(lines.join('\n'), /oh-my-codex-fresh/);
     assert.doesNotMatch(lines.join('\n'), /other-stale/);
   });
@@ -189,9 +189,9 @@ describe('cleanupStaleTmpDirectories', () => {
     });
 
     assert.equal(removedCount, 2);
-    assert.deepEqual(removedPaths, ['/tmp/omc-stale-b', '/tmp/omx-stale-a']);
+    assert.deepEqual(removedPaths, ['/tmp/omc-stale-b', '/tmp/omk-stale-a']);
     assert.match(lines.join('\n'), /Removed stale \/tmp directory: \/tmp\/omc-stale-b/);
-    assert.match(lines.join('\n'), /Removed stale \/tmp directory: \/tmp\/omx-stale-a/);
+    assert.match(lines.join('\n'), /Removed stale \/tmp directory: \/tmp\/omk-stale-a/);
     assert.match(lines.join('\n'), /Removed 2 stale OMX \/tmp directories\./);
   });
 });

@@ -28,7 +28,7 @@ function shouldSkipForSpawnPermissions(err?: string): boolean {
 }
 
 function resolveCompatTarget(): { command: string; argsPrefix: string[] } {
-  const override = process.env.OMX_COMPAT_TARGET?.trim();
+  const override = process.env.OMK_COMPAT_TARGET?.trim();
   const targetPath = override
     ? (isAbsolute(override) ? override : resolve(process.cwd(), override))
     : defaultTarget;
@@ -51,7 +51,7 @@ function runCompatTarget(cwd: string, argv: string[], envOverrides: Record<strin
 }
 
 function normalizeInstallDoctorOutput(text: string, home: string, cwd: string): string {
-  const repoStateDir = join(cwd, '.omx', 'state').replace(/\\/g, '/');
+  const repoStateDir = join(cwd, '.omk', 'state').replace(/\\/g, '/');
   return text
     .replaceAll(join(home, '.codex').replace(/\\/g, '/'), '<CODEX_HOME>')
     .replaceAll(`/private${repoStateDir}`, '<REPO_STATE_DIR>')
@@ -81,7 +81,7 @@ function normalizeInstallDoctorOutput(text: string, home: string, cwd: string): 
 
 describe('compat doctor contract', () => {
   it('matches onboarding warning copy for first setup expectations', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-compat-doctor-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-compat-doctor-'));
     const home = join(wd, 'home');
     const codexHome = join(home, '.codex');
     await mkdir(codexHome, { recursive: true });
@@ -99,11 +99,11 @@ describe('compat doctor contract', () => {
   });
 
   it('matches doctor --team resume_blocker behavior', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-compat-doctor-team-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-compat-doctor-team-'));
     try {
-      const teamRoot = join(wd, '.omx', 'state', 'team', 'alpha');
+      const teamRoot = join(wd, '.omk', 'state', 'team', 'alpha');
       await mkdir(join(teamRoot, 'workers', 'worker-1'), { recursive: true });
-      await writeFile(join(teamRoot, 'config.json'), JSON.stringify({ name: 'alpha', tmux_session: 'omx-team-alpha' }));
+      await writeFile(join(teamRoot, 'config.json'), JSON.stringify({ name: 'alpha', tmux_session: 'omk-team-alpha' }));
       const fakeBin = join(wd, 'bin');
       await mkdir(fakeBin, { recursive: true });
       const tmuxPath = join(fakeBin, 'tmux');

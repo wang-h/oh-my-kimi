@@ -1,9 +1,9 @@
 # oh-my-kimi (OMK)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omx-character-spark-initiative.jpg" alt="postać oh-my-kimi" width="280">
+  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omk-character-spark-initiative.jpg" alt="postać oh-my-kimi" width="280">
   <br>
-  <em>Zacznij z Codexem jak zwykle. Gdy projekt urośnie — niech OMX wesprze resztę.</em>
+  <em>Zacznij z Codexem jak zwykle. Gdy projekt urośnie — niech OMK wesprze resztę.</em>
 </p>
 
 [![npm version](https://img.shields.io/npm/v/oh-my-kimi)](https://www.npmjs.com/package/oh-my-kimi)
@@ -14,13 +14,13 @@
 **Strona:** https://github.com/wang-h/oh-my-kimi
 **Dokumentacja:** [Pierwsze kroki](./docs/getting-started.html) · [Agenty](./docs/agents.html) · [Skille](./docs/skills.html) · [Integracje](./docs/integrations.html) · [Demo](./DEMO.md) · [Przewodnik po OpenClaw](./docs/openclaw-integration.md)
 
-OMX to nakładka na [Kimi Code CLI](https://moonshotai.github.io/kimi-cli/en/).
+OMK to nakładka na [Kimi Code CLI](https://moonshotai.github.io/kimi-cli/en/).
 
-Codex zostaje silnikiem, który wykonuje pracę. OMX daje mu lepszy kontekst, gotowe role i cykle pracy — żebyś nie zaczynał od zera przy każdej sesji. Konkretnie:
+Codex zostaje silnikiem, który wykonuje pracę. OMK daje mu lepszy kontekst, gotowe role i cykle pracy — żebyś nie zaczynał od zera przy każdej sesji. Konkretnie:
 - lepsza sesja Codexa od pierwszego uruchomienia
 - wielokrotne użycie ról i zadań przez słowa kluczowe `$name`
 - gotowe cykle pracy: `$plan`, `$ralph`, `$team`
-- plany, logi, pamięć i stan trzymane w `.omx/`
+- plany, logi, pamięć i stan trzymane w `.omk/`
 
 ## Jak zacząć
 
@@ -28,8 +28,8 @@ Jeśli chcesz po prostu zacząć:
 
 ```bash
 npm install -g oh-my-kimi oh-my-kimi
-omx setup
-omx --madmax --high
+omk setup
+omk --madmax --high
 ```
 
 Potem pracuj normalnie w Codexie:
@@ -39,17 +39,17 @@ $architect "analyze the authentication flow"
 $plan "ship this feature cleanly"
 ```
 
-To jest główna ścieżka. Uruchom OMX, wykonaj pracę w Codexie i pozwól agentowi sięgać po `$team` lub inne cykle pracy tylko wtedy, gdy zadanie naprawdę tego wymaga.
+To jest główna ścieżka. Uruchom OMK, wykonaj pracę w Codexie i pozwól agentowi sięgać po `$team` lub inne cykle pracy tylko wtedy, gdy zadanie naprawdę tego wymaga.
 
-## Do czego służy OMX
+## Do czego służy OMK
 
-Używaj OMX, jeśli lubisz Codexa i chcesz mieć wokół niego lepsze środowisko pracy:
+Używaj OMK, jeśli lubisz Codexa i chcesz mieć wokół niego lepsze środowisko pracy:
 - wielokrotne role i zadania: `$architect`, `$executor`
 - gotowe cykle pracy: `$plan`, `$ralph`, `$team`, `$deep-interview`
 - wytyczne projektu przez `AGENTS.md`
-- trwały stan w `.omx/`
+- trwały stan w `.omk/`
 
-Jeśli chcesz czystego Codexa bez żadnych dodatków, OMX pewnie nie jest dla Ciebie.
+Jeśli chcesz czystego Codexa bez żadnych dodatków, OMK pewnie nie jest dla Ciebie.
 
 ## Szybki start
 
@@ -64,7 +64,7 @@ Jeśli chcesz czystego Codexa bez żadnych dodatków, OMX pewnie nie jest dla Ci
 ### Dobra pierwsza sesja
 
 ```bash
-omx --madmax --high
+omk --madmax --high
 ```
 
 Potem wypróbuj jedną rolę i jeden skill:
@@ -78,20 +78,20 @@ Jeśli zadanie urośnie, agent może sam zdecydować o użyciu `$ralph` albo `$t
 
 ## Jak o tym myśleć
 
-OMX **nie** zastępuje Codexa.
+OMK **nie** zastępuje Codexa.
 
 To warstwa, która go otacza:
 - **Codex** wykonuje właściwą pracę
-- **Role OMX** sprawiają, że przydatne role są wielokrotnego użytku
-- **Skille OMX** dają gotowe cykle pracy
-- **`.omx/`** przechowuje plany, logi, pamięć i stan
+- **Role OMK** sprawiają, że przydatne role są wielokrotnego użytku
+- **Skille OMK** dają gotowe cykle pracy
+- **`.omk/`** przechowuje plany, logi, pamięć i stan
 
-OMX to lepsze kierowanie zadaniami i gotowe cykle pracy — nie kolejna rzecz do klikania przez cały dzień.
+OMK to lepsze kierowanie zadaniami i gotowe cykle pracy — nie kolejna rzecz do klikania przez cały dzień.
 
 ## Zacznij tutaj, jeśli jesteś nowy
 
-1. Uruchom `omx setup`
-2. Wystartuj z `omx --madmax --high`
+1. Uruchom `omk setup`
+2. Wystartuj z `omk --madmax --high`
 3. Poproś o analizę: `$architect "..."`
 4. Poproś o plan: `$plan "..."`
 5. Pozwól agentowi zdecydować, kiedy użyć `$ralph`, `$team` albo czegoś innego
@@ -107,11 +107,11 @@ OMX to lepsze kierowanie zadaniami i gotowe cykle pracy — nie kolejna rzecz do
 | `$ralph "..."` | długie zadania krok po kroku |
 | `$team "..."` | równoległa praca kilku agentów, gdy zadanie tego wymaga |
 
-`$deep-interview` przydaje się, gdy prośba jest niejasna — OMX będzie dopytywał o intencję, zakres i granice decyzji, zanim przekaże pracę dalej do `$plan`, `$ralph`, `$team` albo `$autopilot`.
+`$deep-interview` przydaje się, gdy prośba jest niejasna — OMK będzie dopytywał o intencję, zakres i granice decyzji, zanim przekaże pracę dalej do `$plan`, `$ralph`, `$team` albo `$autopilot`.
 
 Kiedy to ma sens:
 - masz pomysł na nowy projekt, ale jeszcze nie wiesz dokładnie, czego chcesz
-- chcesz, żeby OMX najpierw przejrzał repo, a dopiero potem zadał pytania z konkretnymi cytatami
+- chcesz, żeby OMK najpierw przejrzał repo, a dopiero potem zadał pytania z konkretnymi cytatami
 - wolisz doprecyzowywać po jednym pytaniu naraz zamiast od razu planować
 
 ## Zaawansowane / dla operatorów
@@ -120,37 +120,37 @@ Poniższe funkcje są przydatne, ale nie są główną ścieżką.
 
 ### Tryb zespołowy
 
-Używaj trybu zespołowego, gdy konkretnie potrzebujesz trwałej koordynacji z tmuxem i gałęziami roboczymi — nie jako domyślnego sposobu pracy z OMX.
+Używaj trybu zespołowego, gdy konkretnie potrzebujesz trwałej koordynacji z tmuxem i gałęziami roboczymi — nie jako domyślnego sposobu pracy z OMK.
 
 ```bash
-omx team 3:executor "fix the failing tests with verification"
-omx team status <team-name>
-omx team resume <team-name>
-omx team shutdown <team-name>
+omk team 3:executor "fix the failing tests with verification"
+omk team status <team-name>
+omk team resume <team-name>
+omk team shutdown <team-name>
 ```
 
 ### Setup, doctor i HUD
 
-- `omx setup` — instaluje prompty, skille, konfigurację i strukturę plików AGENTS
-- `omx doctor` — sprawdza instalację, gdy coś nie działa
-- `omx hud --watch` — podgląd stanu i postępu, nie główny cykl pracy
+- `omk setup` — instaluje prompty, skille, konfigurację i strukturę plików AGENTS
+- `omk doctor` — sprawdza instalację, gdy coś nie działa
+- `omk hud --watch` — podgląd stanu i postępu, nie główny cykl pracy
 
 ### Explore i sparkshell
 
-- `omx explore --prompt "..."` — przeszukuje repo tylko do odczytu
-- `omx sparkshell <command>` — inspekcja w shellu i ograniczona weryfikacja
+- `omk explore --prompt "..."` — przeszukuje repo tylko do odczytu
+- `omk sparkshell <command>` — inspekcja w shellu i ograniczona weryfikacja
 
 Przykłady:
 
 ```bash
-omx explore --prompt "find where team state is written"
-omx sparkshell git status
-omx sparkshell --tmux-pane %12 --tail-lines 400
+omk explore --prompt "find where team state is written"
+omk sparkshell git status
+omk sparkshell --tmux-pane %12 --tail-lines 400
 ```
 
 ### Wymagania platformowe dla trybu zespołowego
 
-`omx team` wymaga tmux lub odpowiednika:
+`omk team` wymaga tmux lub odpowiednika:
 
 | Platforma | Instalacja |
 | --- | --- |
@@ -165,10 +165,10 @@ omx sparkshell --tmux-pane %12 --tail-lines 400
 
 ### Intel Mac: wysokie użycie CPU przez `syspolicyd` / `trustd` podczas uruchamiania
 
-Na niektórych komputerach Intel Mac uruchamianie OMX — zwłaszcza z `--madmax --high` — może powodować skok użycia CPU przez `syspolicyd` i `trustd`. Dzieje się tak, gdy macOS Gatekeeper weryfikuje wiele procesów naraz.
+Na niektórych komputerach Intel Mac uruchamianie OMK — zwłaszcza z `--madmax --high` — może powodować skok użycia CPU przez `syspolicyd` i `trustd`. Dzieje się tak, gdy macOS Gatekeeper weryfikuje wiele procesów naraz.
 
 Jeśli to widzisz:
-- `xattr -dr com.apple.quarantine $(which omx)`
+- `xattr -dr com.apple.quarantine $(which omk)`
 - dodaj terminal do listy Developer Tools w ustawieniach bezpieczeństwa macOS
 - ogranicz współbieżność, np. unikając `--madmax --high`
 

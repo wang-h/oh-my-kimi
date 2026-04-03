@@ -92,7 +92,7 @@ export function buildAutoresearchDeepInterviewPrompt(
     'Run the deep-interview skill in autoresearch mode for `omx autoresearch`.',
     'Guide the user through research topic definition, evaluator readiness, keep policy, and slug/session naming.',
     'Do not launch tmux or run `omx autoresearch` yourself.',
-    'When the user confirms launch and the evaluator is concrete, write/update these canonical artifacts under `.omx/specs/`:',
+    'When the user confirms launch and the evaluator is concrete, write/update these canonical artifacts under `.omk/specs/`:',
     '- `deep-interview-autoresearch-{slug}.md`',
     '- `autoresearch-{slug}/mission.md`',
     '- `autoresearch-{slug}/sandbox.md`',
@@ -252,7 +252,7 @@ export function spawnAutoresearchTmux(missionDir: string, slug: string): void {
     throw new Error('tmux is required for background autoresearch execution. Install tmux and try again.');
   }
 
-  const sessionName = `omx-autoresearch-${slug}`;
+  const sessionName = `omk-autoresearch-${slug}`;
   const hasSession = spawnSync('tmux', ['has-session', '-t', sessionName], { stdio: 'pipe',
       windowsHide: true,
     });

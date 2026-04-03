@@ -25,8 +25,8 @@ describe('sparkshell packaging scaffold', () => {
   it('registers native helper scripts but keeps staged native artifacts out of npm releases', () => {
     const packageJsonPath = join(process.cwd(), 'package.json');
     const pkg = JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as PackageJson;
-    const binaryName = platform() === 'win32' ? 'omx-sparkshell.exe' : 'omx-sparkshell';
-    const stagedRoot = mkdtempSync(join(tmpdir(), 'omx-sparkshell-stage-'));
+    const binaryName = platform() === 'win32' ? 'omk-sparkshell.exe' : 'omk-sparkshell';
+    const stagedRoot = mkdtempSync(join(tmpdir(), 'omk-sparkshell-stage-'));
     const packagedBinaryRelativePath = join(`${platform()}-${arch()}`, binaryName);
     const packagedBinaryPath = join(stagedRoot, packagedBinaryRelativePath);
 
@@ -44,8 +44,8 @@ describe('sparkshell packaging scaffold', () => {
     const testScriptSource = readFileSync(testScriptPath, 'utf-8');
     assert.equal(existsSync(buildScriptPath), true, 'expected build sparkshell helper script to exist');
     assert.equal(existsSync(testScriptPath), true, 'expected test sparkshell helper script to exist');
-    assert.match(testScriptSource, /'crates', 'omx-sparkshell', 'Cargo\.toml'/);
-    assert.doesNotMatch(testScriptSource, /'native', 'omx-sparkshell', 'Cargo\.toml'/);
+    assert.match(testScriptSource, /'crates', 'omk-sparkshell', 'Cargo\.toml'/);
+    assert.doesNotMatch(testScriptSource, /'native', 'omk-sparkshell', 'Cargo\.toml'/);
 
     try {
       rmSync(packagedBinaryPath, { force: true });
@@ -54,8 +54,8 @@ describe('sparkshell packaging scaffold', () => {
         encoding: 'utf-8',
         env: {
           ...process.env,
-          OMX_SPARKSHELL_MANIFEST: join(process.cwd(), 'crates', 'omx-sparkshell', 'Cargo.toml'),
-          OMX_SPARKSHELL_STAGE_DIR: stagedRoot,
+          OMK_SPARKSHELL_MANIFEST: join(process.cwd(), 'crates', 'omk-sparkshell', 'Cargo.toml'),
+          OMK_SPARKSHELL_STAGE_DIR: stagedRoot,
         },
       });
       assert.equal(buildResult.status, 0, buildResult.stderr || buildResult.stdout);

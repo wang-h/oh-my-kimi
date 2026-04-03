@@ -110,7 +110,7 @@ interface SetupBackupContext {
 
 interface ManagedConfigResult {
   finalConfig: string;
-  omxManagesTui: boolean;
+  omkManagesTui: boolean;
 }
 
 interface LegacySkillOverlapNotice {
@@ -123,7 +123,7 @@ export interface SkillFrontmatterMetadata {
   description: string;
 }
 
-const PROJECT_OMX_GITIGNORE_ENTRY = ".omx/";
+const PROJECT_OMK_GITIGNORE_ENTRY = ".omk/";
 
 function applyScopePathRewritesToAgentsTemplate(
   content: string,
@@ -182,12 +182,12 @@ function getBackupContext(
   const timestamp = new Date().toISOString().replace(/[:]/g, "-");
   if (scope === "project") {
     return {
-      backupRoot: join(projectRoot, ".omx", "backups", "setup", timestamp),
+      backupRoot: join(projectRoot, ".omk", "backups", "setup", timestamp),
       baseRoot: projectRoot,
     };
   }
   return {
-    backupRoot: join(homedir(), ".omx", "backups", "setup", timestamp),
+    backupRoot: join(homedir(), ".omk", "backups", "setup", timestamp),
     baseRoot: homedir(),
   };
 }
@@ -363,7 +363,7 @@ function isSetupScope(value: string): value is SetupScope {
   return SETUP_SCOPES.includes(value as SetupScope);
 }
 function getScopeFilePath(projectRoot: string): string {
-  return join(projectRoot, ".omx", "setup-scope.json");
+  return join(projectRoot, ".omk", "setup-scope.json");
 }
 
 export function resolveScopeDirectories(
@@ -563,13 +563,13 @@ async function ensureProjectOmxGitignore(
     ? await readFile(gitignorePath, "utf-8")
     : "";
 
-  if (hasGitignoreEntry(existing, PROJECT_OMX_GITIGNORE_ENTRY)) {
+  if (hasGitignoreEntry(existing, PROJECT_OMK_GITIGNORE_ENTRY)) {
     return "unchanged";
   }
 
   const nextContent = destinationExists
-    ? `${existing}${existing.endsWith("\n") || existing.length === 0 ? "" : "\n"}${PROJECT_OMX_GITIGNORE_ENTRY}\n`
-    : `${PROJECT_OMX_GITIGNORE_ENTRY}\n`;
+    ? `${existing}${existing.endsWith("\n") || existing.length === 0 ? "" : "\n"}${PROJECT_OMK_GITIGNORE_ENTRY}\n`
+    : `${PROJECT_OMK_GITIGNORE_ENTRY}\n`;
 
   if (
     await ensureBackup(gitignorePath, destinationExists, backupContext, options)
@@ -583,7 +583,7 @@ async function ensureProjectOmxGitignore(
 
   if (options.verbose) {
     console.log(
-      `  ${options.dryRun ? "would update" : destinationExists ? "updated" : "created"} .gitignore (${PROJECT_OMX_GITIGNORE_ENTRY})`,
+      `  ${options.dryRun ? "would update" : destinationExists ? "updated" : "created"} .gitignore (${PROJECT_OMK_GITIGNORE_ENTRY})`,
     );
   }
 
@@ -619,7 +619,7 @@ export async function setup(options: SetupOptions = {}): Promise<void> {
   const resolvedScope = await resolveSetupScope(projectRoot, requestedScope);
   const scopeDirs = resolveScopeDirectories(resolvedScope.scope, projectRoot);
   const scopeSourceMessage =
-    resolvedScope.source === "persisted" ? " (from .omx/setup-scope.json)" : "";
+    resolvedScope.source === "persisted" ? " (from .omk/setup-scope.json)" : "";
   const backupContext = getBackupContext(resolvedScope.scope, projectRoot);
 
   console.log("oh-my-kimi setup");
@@ -659,11 +659,11 @@ export async function setup(options: SetupOptions = {}): Promise<void> {
     );
     if (gitignoreResult === "created") {
       console.log(
-        "  Created .gitignore with .omx/ so local OMX runtime state stays out of source control.\n",
+        "  Created .gitignore with .omk/ so local OMX runtime state stays out of source control.\n",
       );
     } else if (gitignoreResult === "updated") {
       console.log(
-        "  Added .omx/ to .gitignore so local OMX runtime state stays out of source control.\n",
+        "  Added .omk/ to .gitignore so local OMX runtime state stays out of source control.\n",
       );
     }
   }
@@ -924,18 +924,18 @@ export async function setup(options: SetupOptions = {}): Promise<void> {
 
   // Step 8: Configure HUD
   console.log("[8/8] Configuring HUD...");
-  const hudConfigPath = join(projectRoot, ".omx", "hud-config.json");
+  const hudConfigPath = join(projectRoot, ".omk", "hud-config.json");
   if (force || !existsSync(hudConfigPath)) {
     if (!dryRun) {
       const defaultHudConfig = { preset: "focused" };
       await writeFile(hudConfigPath, JSON.stringify(defaultHudConfig, null, 2));
     }
-    if (verbose) console.log("  Wrote .omx/hud-config.json");
+    if (verbose) console.log("  Wrote .omk/hud-config.json");
     console.log("  HUD config created (preset: focused).");
   } else {
     console.log("  HUD config already exists (use --force to overwrite).");
   }
-  if (managedConfig.omxManagesTui) {
+  if (managedConfig.omkManagesTui) {
     console.log("  StatusLine configured in config.toml via [tui] section for Kimi Code CLI.");
   } else {
     console.log("  Kimi Code CLI manages [tui]; OMK left that section untouched.");
@@ -975,7 +975,7 @@ export async function setup(options: SetupOptions = {}): Promise<void> {
     "  5. Native agent defaults configured in config.toml [agents] and Kimi agent files written to .kimi/agents/",
   );
   console.log(
-    '  6. "omx explore" and "omx sparkshell" can hydrate native release binaries on first use; source installs still allow repo-local fallbacks and OMX_EXPLORE_BIN / OMX_SPARKSHELL_BIN overrides',
+    '  6. "omx explore" and "omx sparkshell" can hydrate native release binaries on first use; source installs still allow repo-local fallbacks and OMK_EXPLORE_BIN / OMK_SPARKSHELL_BIN overrides',
   );
   if (isGitHubCliConfigured()) {
     console.log("\nSupport the project: gh repo star Yeachan-Heo/oh-my-codex");
@@ -1505,7 +1505,7 @@ async function updateManagedConfig(
   let modelOverride: string | undefined;
   const codexVersion =
     options.codexVersionProbe?.() ?? probeInstalledCodexVersion();
-  const omxManagesTui = shouldOmxManageTuiFromCodexVersion(codexVersion);
+  const omkManagesTui = shouldOmxManageTuiFromCodexVersion(codexVersion);
 
   if (currentModel === LEGACY_SETUP_MODEL) {
     const shouldPrompt =
@@ -1522,7 +1522,7 @@ async function updateManagedConfig(
   }
 
   const finalConfig = buildMergedConfig(existing, pkgRoot, {
-    includeTui: omxManagesTui,
+    includeTui: omkManagesTui,
     modelOverride,
     sharedMcpServers: sharedMcpRegistry.servers,
     sharedMcpRegistrySource: sharedMcpRegistry.sourcePath,
@@ -1532,7 +1532,7 @@ async function updateManagedConfig(
 
   if (!changed) {
     summary.unchanged += 1;
-    return { finalConfig, omxManagesTui };
+    return { finalConfig, omkManagesTui };
   }
 
   if (
@@ -1567,7 +1567,7 @@ async function updateManagedConfig(
       `  ${options.dryRun ? "would update" : "updated"} config ${configPath}`,
     );
   }
-  return { finalConfig, omxManagesTui };
+  return { finalConfig, omkManagesTui };
 }
 
 function getClaudeCodeSettingsPath(homeDir = homedir()): string {

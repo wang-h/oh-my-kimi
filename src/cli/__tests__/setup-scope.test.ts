@@ -48,7 +48,7 @@ function shouldSkipForSpawnPermissions(err: string): boolean {
 
 describe("omx setup scope behavior", () => {
   it("accepts --scope project form", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-scope-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-scope-"));
     try {
       const home = join(wd, "home");
       await mkdir(home, { recursive: true });
@@ -81,9 +81,9 @@ describe("omx setup scope behavior", () => {
   });
 
   it("uses persisted setup scope when --scope is omitted", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-scope-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-scope-"));
     try {
-      const omxDir = join(wd, ".omx");
+      const omxDir = join(wd, ".omk");
       const home = join(wd, "home");
       await mkdir(omxDir, { recursive: true });
       await mkdir(home, { recursive: true });
@@ -97,7 +97,7 @@ describe("omx setup scope behavior", () => {
       assert.equal(res.status, 0, res.stderr || res.stdout);
       assert.match(
         res.stdout,
-        /Using setup scope: project \(from \.omx\/setup-scope\.json\)/,
+        /Using setup scope: project \(from \.omk\/setup-scope\.json\)/,
       );
     } finally {
       await rm(wd, { recursive: true, force: true });
@@ -105,13 +105,13 @@ describe("omx setup scope behavior", () => {
   });
 
   it("doctor respects persisted project setup scope paths", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-doctor-scope-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-doctor-scope-"));
     try {
       const home = join(wd, "home");
       await mkdir(home, { recursive: true });
-      await mkdir(join(wd, ".omx"), { recursive: true });
+      await mkdir(join(wd, ".omk"), { recursive: true });
       await writeFile(
-        join(wd, ".omx", "setup-scope.json"),
+        join(wd, ".omk", "setup-scope.json"),
         JSON.stringify({ scope: "project" }),
       );
 
@@ -119,7 +119,7 @@ describe("omx setup scope behavior", () => {
       await mkdir(join(wd, ".codex", "skills", "sample-skill"), {
         recursive: true,
       });
-      await mkdir(join(wd, ".omx", "state"), { recursive: true });
+      await mkdir(join(wd, ".omk", "state"), { recursive: true });
       await writeFile(
         join(wd, ".codex", "prompts", "executor.md"),
         "# executor\n",
@@ -130,7 +130,7 @@ describe("omx setup scope behavior", () => {
       );
       await writeFile(
         join(wd, ".codex", "config.toml"),
-        'omx_enabled = true\n[mcp_servers.omx_state]\ncommand = "node"\n',
+        'omx_enabled = true\n[mcp_servers.omk_state]\ncommand = "node"\n',
       );
 
       const res = runOmx(wd, ["doctor"], { HOME: home });
@@ -138,7 +138,7 @@ describe("omx setup scope behavior", () => {
       assert.equal(res.status, 0, res.stderr || res.stdout);
       assert.match(
         res.stdout,
-        /Resolved setup scope: project \(from \.omx\/setup-scope\.json\)/,
+        /Resolved setup scope: project \(from \.omk\/setup-scope\.json\)/,
       );
       assert.match(
         res.stdout,
@@ -153,7 +153,7 @@ describe("omx setup scope behavior", () => {
   });
 
   it("does not persist setup scope on --dry-run", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-scope-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-scope-"));
     try {
       const home = join(wd, "home");
       await mkdir(home, { recursive: true });
@@ -162,14 +162,14 @@ describe("omx setup scope behavior", () => {
       });
       if (shouldSkipForSpawnPermissions(res.error)) return;
       assert.equal(res.status, 0, res.stderr || res.stdout);
-      assert.equal(existsSync(join(wd, ".omx", "setup-scope.json")), false);
+      assert.equal(existsSync(join(wd, ".omk", "setup-scope.json")), false);
     } finally {
       await rm(wd, { recursive: true, force: true });
     }
   });
 
   it("project scope writes prompts/skills/config/native-agents under cwd", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-scope-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-scope-"));
     try {
       const home = join(wd, "home");
       await mkdir(home, { recursive: true });
@@ -181,7 +181,7 @@ describe("omx setup scope behavior", () => {
       const localSkills = join(wd, ".kimi", "skills");
       const localConfig = join(wd, ".kimi", "config.toml");
       const localAgents = join(wd, ".kimi", "agents");
-      const scopeFile = join(wd, ".omx", "setup-scope.json");
+      const scopeFile = join(wd, ".omk", "setup-scope.json");
       const agentsMdPath = join(wd, "AGENTS.md");
 
       assert.equal(existsSync(localPrompts), true);
@@ -190,7 +190,7 @@ describe("omx setup scope behavior", () => {
       assert.equal(existsSync(localAgents), true);
       assert.equal(existsSync(join(localAgents, "executor.toml")), true);
       assert.equal(
-        existsSync(join(localSkills, "omx-setup", "SKILL.md")),
+        existsSync(join(localSkills, "omk-setup", "SKILL.md")),
         true,
       );
       assert.equal(
@@ -212,7 +212,7 @@ describe("omx setup scope behavior", () => {
       assert.match(configToml, /^max_threads = 6$/m);
       assert.match(configToml, /^max_depth = 2$/m);
       assert.match(configToml, /^\[env\]$/m);
-      assert.match(configToml, /^USE_OMX_EXPLORE_CMD = "1"$/m);
+      assert.match(configToml, /^USE_OMK_EXPLORE_CMD = "1"$/m);
       const agentsMd = await readFile(agentsMdPath, "utf-8");
       assert.match(agentsMd, /prompts\/\*\.md/);
       assert.match(agentsMd, /\.\/\.kimi\/skills/);
@@ -226,7 +226,7 @@ describe("omx setup scope behavior", () => {
   });
 
   it("defaults to user scope in non-interactive runs when no scope is persisted", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-scope-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-scope-"));
     try {
       const home = join(wd, "home");
       const existingAgents = "# keep my project agents instructions\n";
@@ -245,9 +245,9 @@ describe("omx setup scope behavior", () => {
       assert.equal(existsSync(join(home, ".kimi", "skills")), true);
       assert.equal(existsSync(join(home, ".kimi", "agents")), true);
       assert.equal(existsSync(join(home, ".kimi", "AGENTS.md")), true);
-      assert.equal(existsSync(join(wd, ".omx", "setup-scope.json")), true);
+      assert.equal(existsSync(join(wd, ".omk", "setup-scope.json")), true);
       const persistedScope = JSON.parse(
-        await readFile(join(wd, ".omx", "setup-scope.json"), "utf-8"),
+        await readFile(join(wd, ".omk", "setup-scope.json"), "utf-8"),
       ) as { scope: string };
       assert.equal(persistedScope.scope, "user");
       const agentsMd = await readFile(
@@ -265,7 +265,7 @@ describe("omx setup scope behavior", () => {
   });
 
   it("doctor does not warn about missing project AGENTS.md for user scope", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-doctor-user-scope-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-doctor-user-scope-"));
     try {
       const home = join(wd, "home");
       await mkdir(join(home, ".codex", "prompts"), { recursive: true });
@@ -273,9 +273,9 @@ describe("omx setup scope behavior", () => {
         recursive: true,
       });
       await mkdir(join(home, ".codex", "agents"), { recursive: true });
-      await mkdir(join(wd, ".omx", "state"), { recursive: true });
+      await mkdir(join(wd, ".omk", "state"), { recursive: true });
       await writeFile(
-        join(wd, ".omx", "setup-scope.json"),
+        join(wd, ".omk", "setup-scope.json"),
         JSON.stringify({ scope: "user" }),
       );
       await writeFile(join(home, ".codex", "AGENTS.md"), "# user agents\n");
@@ -289,7 +289,7 @@ describe("omx setup scope behavior", () => {
       );
       await writeFile(
         join(home, ".codex", "config.toml"),
-        'omx_enabled = true\n[mcp_servers.omx_state]\ncommand = "node"\n',
+        'omx_enabled = true\n[mcp_servers.omk_state]\ncommand = "node"\n',
       );
 
       const res = runOmx(wd, ["doctor"], {
@@ -300,7 +300,7 @@ describe("omx setup scope behavior", () => {
       assert.equal(res.status, 0, res.stderr || res.stdout);
       assert.match(
         res.stdout,
-        /Resolved setup scope: user \(from \.omx\/setup-scope\.json\)/,
+        /Resolved setup scope: user \(from \.omk\/setup-scope\.json\)/,
       );
       assert.match(
         res.stdout,
@@ -312,9 +312,9 @@ describe("omx setup scope behavior", () => {
   });
 
   it('migrates legacy "project-local" persisted scope to "project"', async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-scope-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-scope-"));
     try {
-      const omxDir = join(wd, ".omx");
+      const omxDir = join(wd, ".omk");
       const home = join(wd, "home");
       await mkdir(omxDir, { recursive: true });
       await mkdir(home, { recursive: true });
@@ -340,7 +340,7 @@ describe("omx setup scope behavior", () => {
   });
 
   it("skips overwriting existing AGENTS.md in non-interactive runs without --force", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-scope-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-scope-"));
     try {
       const home = join(wd, "home");
       const existingAgents = "# custom agents instructions\n\nkeep this file\n";
@@ -359,7 +359,7 @@ describe("omx setup scope behavior", () => {
   });
 
   it("still refreshes existing AGENTS.md with --force", async () => {
-    const wd = await mkdtemp(join(tmpdir(), "omx-setup-scope-"));
+    const wd = await mkdtemp(join(tmpdir(), "omk-setup-scope-"));
     try {
       const home = join(wd, "home");
       await mkdir(home, { recursive: true });

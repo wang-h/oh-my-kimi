@@ -4,7 +4,7 @@
  * Intercepts agent turn completions to automatically delegate recently modified
  * files to the code-simplifier agent for cleanup and simplification.
  *
- * Opt-in via ~/.omx/config.json: { "codeSimplifier": { "enabled": true } }
+ * Opt-in via ~/.omk/config.json: { "codeSimplifier": { "enabled": true } }
  * Default: disabled (opt-in only)
  */
 
@@ -40,15 +40,15 @@ const DEFAULT_MAX_FILES = 10;
 export const TRIGGER_MARKER_FILENAME = 'code-simplifier-triggered.marker';
 
 /**
- * Read the global OMX config from ~/.omx/config.json.
+ * Read the global OMX config from ~/.omk/config.json.
  * Returns null if the file does not exist or cannot be parsed.
  *
  * @param configDir - Optional override for the home directory. When provided,
- *   the config is read from `<configDir>/.omx/config.json` instead of
- *   `~/.omx/config.json`. Useful for testing without relying on `os.homedir()`.
+ *   the config is read from `<configDir>/.omk/config.json` instead of
+ *   `~/.omk/config.json`. Useful for testing without relying on `os.homedir()`.
  */
 export function readOmxConfig(configDir?: string): OmxGlobalConfig | null {
-  const configPath = join(configDir ?? homedir(), '.omx', 'config.json');
+  const configPath = join(configDir ?? homedir(), '.omk', 'config.json');
 
   if (!existsSync(configPath)) {
     return null;

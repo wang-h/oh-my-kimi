@@ -18,9 +18,9 @@ export const ASK_USAGE = [
 const ASK_PROVIDERS = ['claude', 'gemini'] as const;
 type AskProvider = typeof ASK_PROVIDERS[number];
 const ASK_PROVIDER_SET = new Set<string>(ASK_PROVIDERS);
-const ASK_ADVISOR_SCRIPT_ENV = 'OMX_ASK_ADVISOR_SCRIPT';
+const ASK_ADVISOR_SCRIPT_ENV = 'OMK_ASK_ADVISOR_SCRIPT';
 const ASK_AGENT_PROMPT_FLAG = '--agent-prompt';
-const ASK_ORIGINAL_TASK_ENV = 'OMX_ASK_ORIGINAL_TASK';
+const ASK_ORIGINAL_TASK_ENV = 'OMK_ASK_ORIGINAL_TASK';
 const SAFE_ROLE_PATTERN = /^[a-z][a-z0-9-]*$/;
 
 export interface ParsedAskArgs {
@@ -40,7 +40,7 @@ function resolveAskPromptsDir(cwd: string, env: NodeJS.ProcessEnv = process.env)
   }
 
   try {
-    const scopePath = join(cwd, '.omx', 'setup-scope.json');
+    const scopePath = join(cwd, '.omk', 'setup-scope.json');
     if (existsSync(scopePath)) {
       const parsed = JSON.parse(readFileSync(scopePath, 'utf-8')) as Partial<{ scope: string }>;
       if (parsed.scope === 'project' || parsed.scope === 'project-local') {

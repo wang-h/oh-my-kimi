@@ -17,7 +17,7 @@ import {
 import { readModeState } from '../../modes/base.js';
 
 async function initRepo(): Promise<string> {
-  const cwd = await mkdtemp(join(tmpdir(), 'omx-autoresearch-runtime-'));
+  const cwd = await mkdtemp(join(tmpdir(), 'omk-autoresearch-runtime-'));
   execFileSync('git', ['init'], { cwd, stdio: 'ignore' });
   execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd, stdio: 'ignore' });
   execFileSync('git', ['config', 'user.name', 'Test User'], { cwd, stdio: 'ignore' });
@@ -63,7 +63,7 @@ describe('autoresearch runtime', () => {
     const repo = await initRepo();
     try {
       const contract = await makeContract(repo);
-      const instructions = buildAutoresearchInstructions(contract, { runId: 'missions-demo-20260314t000000z', iteration: 1, baselineCommit: 'abc1234', lastKeptCommit: 'abc1234', resultsFile: 'results.tsv', candidateFile: '.omx/logs/autoresearch/missions-demo-20260314t000000z/candidate.json', keepPolicy: 'score_improvement' });
+      const instructions = buildAutoresearchInstructions(contract, { runId: 'missions-demo-20260314t000000z', iteration: 1, baselineCommit: 'abc1234', lastKeptCommit: 'abc1234', resultsFile: 'results.tsv', candidateFile: '.omk/logs/autoresearch/missions-demo-20260314t000000z/candidate.json', keepPolicy: 'score_improvement' });
       assert.match(instructions, /exactly one experiment cycle/i);
       assert.match(instructions, /required output field: pass/i);
       assert.match(instructions, /optional output field: score/i);
@@ -75,14 +75,14 @@ describe('autoresearch runtime', () => {
     }
   });
 
-  it('allows untracked .omx runtime files when checking reset safety', async () => {
+  it('allows untracked .omk runtime files when checking reset safety', async () => {
     const repo = await initRepo();
     try {
-      await mkdir(join(repo, '.omx', 'logs'), { recursive: true });
-      await mkdir(join(repo, '.omx', 'state'), { recursive: true });
-      await writeFile(join(repo, '.omx', 'logs', 'hooks-2026-03-15.jsonl'), '{}\n', 'utf-8');
-      await writeFile(join(repo, '.omx', 'metrics.json'), '{}\n', 'utf-8');
-      await writeFile(join(repo, '.omx', 'state', 'hud-state.json'), '{}\n', 'utf-8');
+      await mkdir(join(repo, '.omk', 'logs'), { recursive: true });
+      await mkdir(join(repo, '.omk', 'state'), { recursive: true });
+      await writeFile(join(repo, '.omk', 'logs', 'hooks-2026-03-15.jsonl'), '{}\n', 'utf-8');
+      await writeFile(join(repo, '.omk', 'metrics.json'), '{}\n', 'utf-8');
+      await writeFile(join(repo, '.omk', 'state', 'hud-state.json'), '{}\n', 'utf-8');
 
       assert.doesNotThrow(() => assertResetSafeWorktree(repo));
     } finally {
@@ -96,7 +96,7 @@ describe('autoresearch runtime', () => {
       const contract = await makeContract(repo);
       await mkdir(join(repo, 'node_modules', 'fixture-dep'), { recursive: true });
       await writeFile(join(repo, 'node_modules', 'fixture-dep', 'index.js'), 'export default 1;\n', 'utf-8');
-      const worktreePath = join(repo, '.omx', 'worktrees', 'autoresearch-missions-demo-20260314t000000z');
+      const worktreePath = join(repo, '.omk', 'worktrees', 'autoresearch-missions-demo-20260314t000000z');
       execFileSync('git', ['worktree', 'add', '-b', 'autoresearch/missions-demo/20260314t000000z', worktreePath, 'HEAD'], {
         cwd: repo,
         stdio: 'ignore',
@@ -166,7 +166,7 @@ describe('autoresearch parity decisions', () => {
     const repo = await initRepo();
     try {
       const contract = await makeContract(repo);
-      const worktreePath = join(repo, '.omx', 'worktrees', 'autoresearch-missions-demo-20260314t010000z');
+      const worktreePath = join(repo, '.omk', 'worktrees', 'autoresearch-missions-demo-20260314t010000z');
       execFileSync('git', ['worktree', 'add', '-b', 'autoresearch/missions-demo/20260314t010000z', worktreePath, 'HEAD'], {
         cwd: repo,
         stdio: 'ignore',

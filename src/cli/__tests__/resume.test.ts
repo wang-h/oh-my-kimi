@@ -32,7 +32,7 @@ function runOmx(
 
 describe('omx resume', () => {
   it('forwards --last to codex resume through the normal launch wrapper', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-resume-cli-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-resume-cli-'));
     try {
       const home = join(wd, 'home');
       const fakeBin = join(wd, 'bin');
@@ -46,9 +46,9 @@ describe('omx resume', () => {
       const result = runOmx(wd, ['resume', '--last'], {
         HOME: home,
         PATH: `${fakeBin}:/usr/bin:/bin`,
-        OMX_AUTO_UPDATE: '0',
-        OMX_NOTIFY_FALLBACK: '0',
-        OMX_HOOK_DERIVED_SIGNALS: '0',
+        OMK_AUTO_UPDATE: '0',
+        OMK_NOTIFY_FALLBACK: '0',
+        OMK_HOOK_DERIVED_SIGNALS: '0',
       });
 
       assert.equal(result.status, 0, result.error || result.stderr || result.stdout);
@@ -59,7 +59,7 @@ describe('omx resume', () => {
   });
 
   it('passes resume --help through to codex instead of printing top-level omx help', async () => {
-    const wd = await mkdtemp(join(tmpdir(), 'omx-resume-cli-'));
+    const wd = await mkdtemp(join(tmpdir(), 'omk-resume-cli-'));
     try {
       const home = join(wd, 'home');
       const fakeBin = join(wd, 'bin');
@@ -73,9 +73,9 @@ describe('omx resume', () => {
       const result = runOmx(wd, ['resume', '--help'], {
         HOME: home,
         PATH: `${fakeBin}:/usr/bin:/bin`,
-        OMX_AUTO_UPDATE: '0',
-        OMX_NOTIFY_FALLBACK: '0',
-        OMX_HOOK_DERIVED_SIGNALS: '0',
+        OMK_AUTO_UPDATE: '0',
+        OMK_NOTIFY_FALLBACK: '0',
+        OMK_HOOK_DERIVED_SIGNALS: '0',
       });
 
       assert.equal(result.status, 0, result.error || result.stderr || result.stdout);

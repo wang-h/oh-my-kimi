@@ -1,7 +1,7 @@
 # oh-my-kimi (OMK)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omx-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
+  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omk-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
   <br>
   <em>你的 Codex，從不孤行。</em>
 </p>
@@ -17,11 +17,11 @@
 
 ## v0.9.0 新功能 — Spark Initiative
 
-Spark Initiative 是一個強化 OMX 原生探索與檢查路徑的版本發布。
+Spark Initiative 是一個強化 OMK 原生探索與檢查路徑的版本發布。
 
-- **`omx explore` 原生 harness** —— 以 Rust 原生 harness 更快且更嚴格地執行唯讀儲存庫探索。
-- **`omx sparkshell`** —— 面向操作員的原生檢查介面，支援長輸出摘要與 tmux pane 擷取。
-- **跨平台原生釋出資產** —— `omx-explore-harness`、`omx-sparkshell` 與 `native-release-manifest.json` 的 hydration 路徑已納入釋出流程。
+- **`omk explore` 原生 harness** —— 以 Rust 原生 harness 更快且更嚴格地執行唯讀儲存庫探索。
+- **`omk sparkshell`** —— 面向操作員的原生檢查介面，支援長輸出摘要與 tmux pane 擷取。
+- **跨平台原生釋出資產** —— `omk-explore-harness`、`omk-sparkshell` 與 `native-release-manifest.json` 的 hydration 路徑已納入釋出流程。
 - **強化的 CI/CD** —— 在 `build` job 中加入明確的 Rust toolchain 設定，並新增 `cargo fmt --check` 與 `cargo clippy -- -D warnings`。
 
 詳細內容請參閱 [v0.9.0 版本說明](./docs/release-notes-0.9.0.md) 與 [釋出正文](./docs/release-body-0.9.0.md)。
@@ -40,9 +40,9 @@ $team 3:executor "execute the approved plan in parallel"
 從終端機：
 
 ```bash
-omx team 4:executor "parallelize a multi-module refactor"
-omx team status <team-name>
-omx team shutdown <team-name>
+omk team 4:executor "parallelize a multi-module refactor"
+omk team status <team-name>
+omk team shutdown <team-name>
 ```
 
 ## 建議工作流程
@@ -53,7 +53,7 @@ omx team shutdown <team-name>
 
 ## 核心模型
 
-OMX 安裝並串接以下各層：
+OMK 安裝並串接以下各層：
 
 ```text
 使用者
@@ -62,34 +62,34 @@ OMX 安裝並串接以下各層：
     -> ~/.codex/prompts/*.md（代理提示詞目錄）
     -> ~/.codex/skills/*/SKILL.md（技能目錄）
     -> ~/.codex/config.toml（功能、通知、MCP）
-    -> .omx/（執行期狀態、記憶、計畫、日誌）
+    -> .omk/（執行期狀態、記憶、計畫、日誌）
 ```
 
 ## 主要指令
 
 ```bash
-omx                  # 啟動 Codex（可用時在 tmux 中附帶 HUD）
-omx setup            # 依範圍安裝提示詞/技能/設定 + 專案 .omx + 範圍專屬 AGENTS.md
-omx doctor           # 安裝/執行期診斷
-omx doctor --team    # 團隊/群集診斷
-omx ask ...          # 詢問本地供應商顧問（claude|gemini），結果寫入 .omx/artifacts/*
-omx team ...         # 啟動/狀態/恢復/關閉團隊工作進程（預設為互動式 tmux）
-omx status           # 顯示目前活動模式
-omx cancel           # 取消活動中的執行模式
-omx reasoning <mode> # low|medium|high|xhigh
-omx tmux-hook ...    # init|status|validate|test
-omx hooks ...        # init|status|validate|test（插件擴充工作流程）
-omx hud ...          # --watch|--json|--preset
-omx help
+omk                  # 啟動 Codex（可用時在 tmux 中附帶 HUD）
+omk setup            # 依範圍安裝提示詞/技能/設定 + 專案 .omk + 範圍專屬 AGENTS.md
+omk doctor           # 安裝/執行期診斷
+omk doctor --team    # 團隊/群集診斷
+omk ask ...          # 詢問本地供應商顧問（claude|gemini），結果寫入 .omk/artifacts/*
+omk team ...         # 啟動/狀態/恢復/關閉團隊工作進程（預設為互動式 tmux）
+omk status           # 顯示目前活動模式
+omk cancel           # 取消活動中的執行模式
+omk reasoning <mode> # low|medium|high|xhigh
+omk tmux-hook ...    # init|status|validate|test
+omk hooks ...        # init|status|validate|test（插件擴充工作流程）
+omk hud ...          # --watch|--json|--preset
+omk help
 ```
 
 Ask 指令範例：
 
 ```bash
-omx ask claude "review this diff"
-omx ask gemini "brainstorm alternatives"
-omx ask claude --agent-prompt executor "implement feature X with tests"
-omx ask gemini --agent-prompt=planner --prompt "draft a rollout plan"
+omk ask claude "review this diff"
+omk ask gemini "brainstorm alternatives"
+omk ask claude --agent-prompt executor "implement feature X with tests"
+omk ask gemini --agent-prompt=planner --prompt "draft a rollout plan"
 # 底層供應商 CLI 說明中的旗標：
 # claude -p|--print "<prompt>"
 # gemini -p|--prompt "<prompt>"
@@ -98,17 +98,17 @@ omx ask gemini --agent-prompt=planner --prompt "draft a rollout plan"
 非 tmux 團隊啟動（進階）：
 
 ```bash
-OMX_TEAM_WORKER_LAUNCH_MODE=prompt omx team 2:executor "task"
+OMK_TEAM_WORKER_LAUNCH_MODE=prompt omk team 2:executor "task"
 ```
 
 ## Hooks 擴充（附加介面）
 
-OMX 現已包含 `omx hooks`，用於插件鷹架建立與驗證。
+OMK 現已包含 `omk hooks`，用於插件鷹架建立與驗證。
 
-- `omx tmux-hook` 持續受支援，行為不變。
-- `omx hooks` 屬於附加功能，不會取代 tmux-hook 工作流程。
-- 插件檔案位於 `.omx/hooks/*.mjs`。
-- 插件預設關閉；使用 `OMX_HOOK_PLUGINS=1` 啟用。
+- `omk tmux-hook` 持續受支援，行為不變。
+- `omk hooks` 屬於附加功能，不會取代 tmux-hook 工作流程。
+- 插件檔案位於 `.omk/hooks/*.mjs`。
+- 插件預設關閉；使用 `OMK_HOOK_PLUGINS=1` 啟用。
 
 完整的擴充工作流程與事件模型，請參閱 `docs/hooks-extension.md`。
 
@@ -134,14 +134,14 @@ OMX 現已包含 `omx hooks`，用於插件鷹架建立與驗證。
 若要限制此行為，請設定允許的根目錄清單：
 
 ```bash
-export OMX_MCP_WORKDIR_ROOTS="/path/to/project:/path/to/another-root"
+export OMK_MCP_WORKDIR_ROOTS="/path/to/project:/path/to/another-root"
 ```
 
 設定後，超出這些根目錄的 `workingDirectory` 值將被拒絕。
 
 ## Codex 優先的提示詞控制
 
-預設情況下，OMX 注入：
+預設情況下，OMK 注入：
 
 ```text
 -c model_instructions_file="<cwd>/AGENTS.md"
@@ -153,8 +153,8 @@ export OMX_MCP_WORKDIR_ROOTS="/path/to/project:/path/to/another-root"
 控制方式：
 
 ```bash
-OMX_BYPASS_DEFAULT_SYSTEM_PROMPT=0 omx     # 停用 AGENTS.md 注入
-OMX_MODEL_INSTRUCTIONS_FILE=/path/to/instructions.md omx
+OMK_BYPASS_DEFAULT_SYSTEM_PROMPT=0 omk     # 停用 AGENTS.md 注入
+OMK_MODEL_INSTRUCTIONS_FILE=/path/to/instructions.md omk
 ```
 
 ## 團隊模式
@@ -170,10 +170,10 @@ OMX_MODEL_INSTRUCTIONS_FILE=/path/to/instructions.md omx
 作業指令：
 
 ```bash
-omx team <args>
-omx team status <team-name>
-omx team resume <team-name>
-omx team shutdown <team-name>
+omk team <args>
+omk team status <team-name>
+omk team resume <team-name>
+omk team shutdown <team-name>
 ```
 
 重要規則：除非要中止，否則請勿在任務仍處於 `in_progress` 狀態時關閉。
@@ -181,31 +181,31 @@ omx team shutdown <team-name>
 ### Ralph 後續流程
 
 若協調式 Team 執行之後仍需要單一負責人的持續修正 / 驗證迴圈，
-請在 Team 工作完成後另外執行 `omx ralph ...`。舊的 linked-Ralph 團隊路徑已不再是建議或支援的標準路徑。
+請在 Team 工作完成後另外執行 `omk ralph ...`。舊的 linked-Ralph 團隊路徑已不再是建議或支援的標準路徑。
 
 團隊工作進程的 Worker CLI 選擇：
 
 ```bash
-OMX_TEAM_WORKER_CLI=auto    # 預設；當 worker --model 包含 "claude" 時使用 claude
-OMX_TEAM_WORKER_CLI=codex   # 強制使用 Kimi Code CLI 工作進程
-OMX_TEAM_WORKER_CLI=claude  # 強制使用 Claude CLI 工作進程
-OMX_TEAM_WORKER_CLI_MAP=codex,codex,claude,claude  # 每個工作進程的 CLI 混合（長度為 1 或等於工作進程數量）
-OMX_TEAM_AUTO_INTERRUPT_RETRY=0  # 選用：停用自適應 queue->resend 回退機制
+OMK_TEAM_WORKER_CLI=auto    # 預設；當 worker --model 包含 "claude" 時使用 claude
+OMK_TEAM_WORKER_CLI=codex   # 強制使用 Kimi Code CLI 工作進程
+OMK_TEAM_WORKER_CLI=claude  # 強制使用 Claude CLI 工作進程
+OMK_TEAM_WORKER_CLI_MAP=codex,codex,claude,claude  # 每個工作進程的 CLI 混合（長度為 1 或等於工作進程數量）
+OMK_TEAM_AUTO_INTERRUPT_RETRY=0  # 選用：停用自適應 queue->resend 回退機制
 ```
 
 注意事項：
-- 工作進程啟動參數仍透過 `OMX_TEAM_WORKER_LAUNCH_ARGS` 共享。
-- `OMX_TEAM_WORKER_CLI_MAP` 會覆寫 `OMX_TEAM_WORKER_CLI`，以實現每個工作進程的個別選擇。
+- 工作進程啟動參數仍透過 `OMK_TEAM_WORKER_LAUNCH_ARGS` 共享。
+- `OMK_TEAM_WORKER_CLI_MAP` 會覆寫 `OMK_TEAM_WORKER_CLI`，以實現每個工作進程的個別選擇。
 - 觸發提交預設使用自適應重試（queue/submit，必要時採用安全的清除行 + 重傳回退）。
-- 在 Claude 工作進程模式下，OMX 以純 `claude` 啟動工作進程（無額外啟動參數），並忽略明確的 `--model` / `--config` / `--effort` 覆寫，讓 Claude 使用預設的 `settings.json`。
+- 在 Claude 工作進程模式下，OMK 以純 `claude` 啟動工作進程（無額外啟動參數），並忽略明確的 `--model` / `--config` / `--effort` 覆寫，讓 Claude 使用預設的 `settings.json`。
 
-## `omx setup` 寫入的內容
+## `omk setup` 寫入的內容
 
-- `.omx/setup-scope.json`（持久化的設定範圍）
+- `.omk/setup-scope.json`（持久化的設定範圍）
 - 依範圍的安裝內容：
-  - `user`：`~/.codex/prompts/`、`~/.codex/skills/`、`~/.codex/config.toml`、`~/.omx/agents/`、`~/.codex/AGENTS.md`
-  - `project`：`./.codex/prompts/`、`./.codex/skills/`、`./.codex/config.toml`、`./.omx/agents/`、`./AGENTS.md`
-- 啟動行為：若持久化範圍為 `project`，`omx` 啟動時自動使用 `CODEX_HOME=./.codex`（除非已設定 `CODEX_HOME`）。
+  - `user`：`~/.codex/prompts/`、`~/.codex/skills/`、`~/.codex/config.toml`、`~/.omk/agents/`、`~/.codex/AGENTS.md`
+  - `project`：`./.codex/prompts/`、`./.codex/skills/`、`./.codex/config.toml`、`./.omk/agents/`、`./AGENTS.md`
+- 啟動行為：若持久化範圍為 `project`，`omk` 啟動時自動使用 `CODEX_HOME=./.codex`（除非已設定 `CODEX_HOME`）。
 - 啟動指令會合併 `~/.codex/AGENTS.md`（或覆寫後的 `CODEX_HOME/AGENTS.md`）與專案 `./AGENTS.md`，然後再附加執行期 overlay。
 - 現有的 `AGENTS.md` 檔案絕不會被靜默覆寫：互動式 TTY 執行時 setup 會先詢問；非互動執行時若沒有 `--force` 就會跳過替換（仍適用活動會話安全檢查）。
 - `config.toml` 更新（兩種範圍均適用）：
@@ -216,7 +216,7 @@ OMX_TEAM_AUTO_INTERRUPT_RETRY=0  # 選用：停用自適應 queue->resend 回退
   - MCP 伺服器項目（`omx_state`、`omx_memory`、`omx_code_intel`、`omx_trace`）
   - `[tui] status_line`
 - 範圍專屬 `AGENTS.md`
-- `.omx/` 執行期目錄與 HUD 設定
+- `.omk/` 執行期目錄與 HUD 設定
 
 ## 代理與技能
 
@@ -240,7 +240,7 @@ OMX_TEAM_AUTO_INTERRUPT_RETRY=0  # 選用：停用自適應 queue->resend 回退
 
 ```text
 oh-my-kimi/
-  bin/omx.js
+  bin/omk.js
   src/
     cli/
     team/
@@ -271,7 +271,7 @@ npm test
 ## 說明文件
 
 - **[完整說明文件](https://github.com/wang-h/oh-my-kimi#readme)** — 完整指南
-- **[CLI 參考手冊](https://github.com/wang-h/oh-my-kimi#command-reference)** — 所有 `omx` 指令、旗標與工具
+- **[CLI 參考手冊](https://github.com/wang-h/oh-my-kimi#command-reference)** — 所有 `omk` 指令、旗標與工具
 - **[通知設定指南](https://github.com/wang-h/oh-my-kimi#notifications)** — Discord、Telegram、Slack 及 Webhook 設定
 - **[推薦工作流程](https://github.com/wang-h/oh-my-kimi#recommended-workflows)** — 實戰驗證的技能鏈，適用常見任務
 - **[版本發行說明](https://github.com/wang-h/oh-my-kimi#release-notes)** — 每個版本的新功能

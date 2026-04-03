@@ -46,7 +46,7 @@ omk                    # standard launch</code></pre>
       <ol>
         <li>Create or enter a project directory.</li>
         <li>Run <code>omk setup</code> to install prompts, skills, AGENTS.md, and configuration.</li>
-        <li>Start Kimi Code CLI with <code>omk</code> <span class="muted">(or the temporary <code>omx</code> alias)</span>.</li>
+        <li>Start Kimi Code CLI with <code>omk</code> <span class="muted">(or the temporary <code>omk</code> alias)</span>.</li>
         <li>Use <code>$deep-interview "clarify the auth change"</code> when intent or boundaries are still unclear.</li>
         <li>Use <code>$ralplan "approve the auth plan and review tradeoffs"</code> to lock the implementation plan.</li>
         <li>Choose <code>$ralph "carry the approved plan to completion"</code> or <code>$team 3:executor "execute the approved plan in parallel"</code> based on execution style.</li>
@@ -56,8 +56,8 @@ omk                    # standard launch</code></pre>
       <p>OMK layers project instructions by default (extends Kimi behavior, does not replace core system policies):</p>
       <pre><code>-c model_instructions_file="&lt;cwd&gt;/AGENTS.md"</code></pre>
       <p>Override behavior when needed:</p>
-      <pre><code>OMX_BYPASS_DEFAULT_SYSTEM_PROMPT=0 omk
-OMX_MODEL_INSTRUCTIONS_FILE=/path/to/instructions.md omk</code></pre>
+      <pre><code>OMK_BYPASS_DEFAULT_SYSTEM_PROMPT=0 omk
+OMK_MODEL_INSTRUCTIONS_FILE=/path/to/instructions.md omk</code></pre>
 
       <h2>Troubleshooting</h2>
       <table>

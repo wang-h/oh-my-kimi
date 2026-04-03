@@ -45,7 +45,7 @@ npm test
 If you were recently in a team worker session, clear team env vars first so tests do not inherit worker-specific state roots:
 
 ```bash
-unset OMX_TEAM_WORKER OMX_TEAM_STATE_ROOT OMX_TEAM_LEADER_CWD OMX_TEAM_WORKER_CLI OMX_TEAM_WORKER_CLI_MAP OMX_TEAM_WORKER_LAUNCH_ARGS
+unset OMK_TEAM_WORKER OMK_TEAM_STATE_ROOT OMK_TEAM_LEADER_CWD OMK_TEAM_WORKER_CLI OMK_TEAM_WORKER_CLI_MAP OMK_TEAM_WORKER_LAUNCH_ARGS
 ```
 
 ## Project structure

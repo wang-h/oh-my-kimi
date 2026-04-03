@@ -8,12 +8,12 @@ import {
   resolveAvailableAgentTypes,
 } from '../team/followup-planner.js';
 
-export const RALPH_HELP = `omx ralph - Launch Codex with ralph persistence mode active
+export const RALPH_HELP = `omk ralph - Launch Codex with ralph persistence mode active
 
 Usage:
-  omx ralph [task text...]
-  omx ralph --prd "<task text>"
-  omx ralph [ralph-options] [codex-args...] [task text...]
+  omk ralph [task text...]
+  omk ralph --prd "<task text>"
+  omk ralph [ralph-options] [codex-args...] [task text...]
 
 Options:
   --help, -h           Show this help message
@@ -22,20 +22,20 @@ Options:
   --no-deslop         Skip the final ai-slop-cleaner pass
 
 PRD mode:
-  Ralph initializes persistence artifacts in .omx/ so PRD and progress
+  Ralph initializes persistence artifacts in .omk/ so PRD and progress
   state can survive across Codex sessions. Provide task text either as
   positional words or with --prd.
 
 Common patterns:
-  omx ralph "Fix flaky notify-hook tests"
-  omx ralph --prd "Ship release checklist automation"
-  omx ralph --model gpt-5 "Refactor state hydration"
-  omx ralph -- --task-with-leading-dash
+  omk ralph "Fix flaky notify-hook tests"
+  omk ralph --prd "Ship release checklist automation"
+  omk ralph --model gpt-5 "Refactor state hydration"
+  omk ralph -- --task-with-leading-dash
 `;
 
 const VALUE_TAKING_FLAGS = new Set(['--model', '--provider', '--config', '-c', '-i', '--images-dir']);
-const RALPH_OMX_FLAGS = new Set(['--prd', '--no-deslop']);
-const RALPH_APPEND_ENV = 'OMX_RALPH_APPEND_INSTRUCTIONS_FILE';
+const RALPH_OMK_FLAGS = new Set(['--prd', '--no-deslop']);
+const RALPH_APPEND_ENV = 'OMK_RALPH_APPEND_INSTRUCTIONS_FILE';
 
 export function extractRalphTaskDescription(args: readonly string[], fallbackTask?: string): string {
   const words: string[] = [];
@@ -101,7 +101,7 @@ export function normalizeRalphCliArgs(args: readonly string[]): string[] {
 export function filterRalphCodexArgs(args: readonly string[]): string[] {
   const filtered: string[] = [];
   for (const token of args) {
-    if (RALPH_OMX_FLAGS.has(token.toLowerCase())) continue;
+    if (RALPH_OMK_FLAGS.has(token.toLowerCase())) continue;
     filtered.push(token);
   }
   return filtered;
@@ -126,11 +126,11 @@ export function buildRalphAppendInstructions(
 ): string {
   return [
     '<ralph_native_subagents>',
-    'You are in OMX Ralph persistence mode.',
+    'You are in OMK Ralph persistence mode.',
     `Primary task: ${task}`,
     'Parallelism guidance:',
     '- Prefer Codex native subagents for independent parallel subtasks.',
-    '- Treat `.omx/state/subagent-tracking.json` as the native subagent activity ledger for this session.',
+    '- Treat `.omk/state/subagent-tracking.json` as the native subagent activity ledger for this session.',
     '- Do not declare the task complete, and do not transition into final verification/completion, while active native subagent threads are still running.',
     '- Before closing a verification wave, confirm that active native subagent threads have drained.',
     ...buildRalphApprovedContextLines(options.approvedHint ?? null),
@@ -153,16 +153,16 @@ async function writeRalphSessionFiles(
   task: string,
   options: { noDeslop: boolean; approvedHint?: ApprovedExecutionLaunchHint | null },
 ): Promise<RalphSessionFiles> {
-  const dir = join(cwd, '.omx', 'ralph');
+  const dir = join(cwd, '.omk', 'ralph');
   await mkdir(dir, { recursive: true });
   const instructionsPath = join(dir, 'session-instructions.md');
   const changedFilesPath = join(dir, 'changed-files.txt');
   await writeFile(changedFilesPath, `${buildRalphChangedFilesSeedContents()}\n`);
   await writeFile(
     instructionsPath,
-    `${buildRalphAppendInstructions(task, { changedFilesPath: '.omx/ralph/changed-files.txt', noDeslop: options.noDeslop, approvedHint: options.approvedHint ?? null })}\n`,
+    `${buildRalphAppendInstructions(task, { changedFilesPath: '.omk/ralph/changed-files.txt', noDeslop: options.noDeslop, approvedHint: options.approvedHint ?? null })}\n`,
   );
-  return { instructionsPath, changedFilesPath: '.omx/ralph/changed-files.txt' };
+  return { instructionsPath, changedFilesPath: '.omk/ralph/changed-files.txt' };
 }
 
 export async function ralphCommand(args: string[]): Promise<void> {
@@ -188,7 +188,7 @@ export async function ralphCommand(args: string[]): Promise<void> {
     staffing_summary: staffingPlan.staffingSummary,
     staffing_allocations: staffingPlan.allocations,
     native_subagents_enabled: true,
-    native_subagent_tracking_path: '.omx/state/subagent-tracking.json',
+    native_subagent_tracking_path: '.omk/state/subagent-tracking.json',
     native_subagent_policy: 'Parallel Codex subagents are allowed for independent work, but phase completion must wait for active native subagent threads to finish.',
     deslop_enabled: !noDeslop,
     deslop_opt_out: noDeslop,

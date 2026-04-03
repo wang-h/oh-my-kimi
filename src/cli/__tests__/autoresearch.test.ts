@@ -33,9 +33,9 @@ function runOmx(
     encoding: 'utf-8',
     env: {
       ...process.env,
-      OMX_AUTO_UPDATE: '0',
-      OMX_NOTIFY_FALLBACK: '0',
-      OMX_HOOK_DERIVED_SIGNALS: '0',
+      OMK_AUTO_UPDATE: '0',
+      OMK_NOTIFY_FALLBACK: '0',
+      OMK_HOOK_DERIVED_SIGNALS: '0',
       ...envOverrides,
     },
   });
@@ -43,7 +43,7 @@ function runOmx(
 }
 
 async function initRepo(): Promise<string> {
-  const raw = await mkdtemp(join(tmpdir(), 'omx-autoresearch-test-'));
+  const raw = await mkdtemp(join(tmpdir(), 'omk-autoresearch-test-'));
   const cwd = realpathSync(raw);
   execFileSync('git', ['init'], { cwd, stdio: 'ignore' });
   execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd, stdio: 'ignore' });
@@ -70,7 +70,7 @@ describe('normalizeAutoresearchCodexArgs', () => {
 
 describe('omx autoresearch', () => {
   it('documents autoresearch in top-level help', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-autoresearch-help-'));
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-autoresearch-help-'));
     try {
       const result = runOmx(cwd, ['--help']);
       assert.equal(result.status, 0, result.stderr || result.stdout);
@@ -81,7 +81,7 @@ describe('omx autoresearch', () => {
   });
 
   it('routes autoresearch --help to command-local help', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-autoresearch-local-help-'));
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-autoresearch-local-help-'));
     try {
       const result = runOmx(cwd, ['autoresearch', '--help']);
       assert.equal(result.status, 0, result.stderr || result.stdout);
@@ -97,7 +97,7 @@ describe('omx autoresearch', () => {
   });
 
   it('documents --resume in command-local help', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-autoresearch-resume-help-'));
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-autoresearch-resume-help-'));
     try {
       const result = runOmx(cwd, ['autoresearch', '--help']);
       assert.equal(result.status, 0, result.stderr || result.stdout);
@@ -109,7 +109,7 @@ describe('omx autoresearch', () => {
   });
 
   it('fails fast when mission dir is missing', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-autoresearch-missing-arg-'));
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-autoresearch-missing-arg-'));
     try {
       const result = runOmx(cwd, ['autoresearch']);
       assert.notEqual(result.status, 0, result.stderr || result.stdout);
@@ -152,14 +152,14 @@ describe('omx autoresearch', () => {
 
   it('resolves guided deep-interview artifacts by seeded slug even when file mtimes predate launch timestamp', async () => {
     const repo = await initRepo();
-    const fakeBin = await mkdtemp(join(tmpdir(), 'omx-autoresearch-deep-interview-mtime-bin-'));
+    const fakeBin = await mkdtemp(join(tmpdir(), 'omk-autoresearch-deep-interview-mtime-bin-'));
     try {
       const fakeCodexPath = join(fakeBin, 'codex');
       await writeFile(
         fakeCodexPath,
         `#!/bin/sh
 if [ "$1" = "exec" ]; then
-  candidate_file=$(find "$OMX_TEST_REPO_ROOT/.omx/logs/autoresearch" -name candidate.json | head -n 1)
+  candidate_file=$(find "$OMK_TEST_REPO_ROOT/.omk/logs/autoresearch" -name candidate.json | head -n 1)
   head_commit=$(git rev-parse HEAD)
   cat >"$candidate_file" <<'EOF'
 {
@@ -174,8 +174,8 @@ EOF
   perl -0pi -e "s/HEAD_PLACEHOLDER/$head_commit/g" "$candidate_file"
   exit 0
 fi
-mkdir -p "$OMX_TEST_REPO_ROOT/.omx/specs/autoresearch-test-launch"
-cat >"$OMX_TEST_REPO_ROOT/.omx/specs/deep-interview-autoresearch-test-launch.md" <<'EOF'
+mkdir -p "$OMK_TEST_REPO_ROOT/.omk/specs/autoresearch-test-launch"
+cat >"$OMK_TEST_REPO_ROOT/.omk/specs/deep-interview-autoresearch-test-launch.md" <<'EOF'
 # Deep Interview Autoresearch Draft — test-launch
 
 ## Mission Draft
@@ -204,12 +204,12 @@ Launch-ready: yes
 - refine further
 - launch
 EOF
-cat >"$OMX_TEST_REPO_ROOT/.omx/specs/autoresearch-test-launch/mission.md" <<'EOF'
+cat >"$OMK_TEST_REPO_ROOT/.omk/specs/autoresearch-test-launch/mission.md" <<'EOF'
 # Mission
 
 Investigate flaky onboarding behavior
 EOF
-cat >"$OMX_TEST_REPO_ROOT/.omx/specs/autoresearch-test-launch/sandbox.md" <<'EOF'
+cat >"$OMK_TEST_REPO_ROOT/.omk/specs/autoresearch-test-launch/sandbox.md" <<'EOF'
 ---
 evaluator:
   command: node scripts/eval.js
@@ -217,7 +217,7 @@ evaluator:
   keep_policy: score_improvement
 ---
 EOF
-cat >"$OMX_TEST_REPO_ROOT/.omx/specs/autoresearch-test-launch/result.json" <<'EOF'
+cat >"$OMK_TEST_REPO_ROOT/.omk/specs/autoresearch-test-launch/result.json" <<'EOF'
 {
   "kind": "omx.autoresearch.deep-interview/v1",
   "compileTarget": {
@@ -227,17 +227,17 @@ cat >"$OMX_TEST_REPO_ROOT/.omx/specs/autoresearch-test-launch/result.json" <<'EO
     "slug": "test-launch",
     "repoRoot": "${repo}"
   },
-  "draftArtifactPath": "${repo}/.omx/specs/deep-interview-autoresearch-test-launch.md",
-  "missionArtifactPath": "${repo}/.omx/specs/autoresearch-test-launch/mission.md",
-  "sandboxArtifactPath": "${repo}/.omx/specs/autoresearch-test-launch/sandbox.md",
+  "draftArtifactPath": "${repo}/.omk/specs/deep-interview-autoresearch-test-launch.md",
+  "missionArtifactPath": "${repo}/.omk/specs/autoresearch-test-launch/mission.md",
+  "sandboxArtifactPath": "${repo}/.omk/specs/autoresearch-test-launch/sandbox.md",
   "launchReady": true,
   "blockedReasons": []
 }
 EOF
-touch -t 202603180000 "$OMX_TEST_REPO_ROOT/.omx/specs/deep-interview-autoresearch-test-launch.md"
-touch -t 202603180000 "$OMX_TEST_REPO_ROOT/.omx/specs/autoresearch-test-launch/mission.md"
-touch -t 202603180000 "$OMX_TEST_REPO_ROOT/.omx/specs/autoresearch-test-launch/sandbox.md"
-touch -t 202603180000 "$OMX_TEST_REPO_ROOT/.omx/specs/autoresearch-test-launch/result.json"
+touch -t 202603180000 "$OMK_TEST_REPO_ROOT/.omk/specs/deep-interview-autoresearch-test-launch.md"
+touch -t 202603180000 "$OMK_TEST_REPO_ROOT/.omk/specs/autoresearch-test-launch/mission.md"
+touch -t 202603180000 "$OMK_TEST_REPO_ROOT/.omk/specs/autoresearch-test-launch/sandbox.md"
+touch -t 202603180000 "$OMK_TEST_REPO_ROOT/.omk/specs/autoresearch-test-launch/result.json"
 `,
         'utf-8',
       );
@@ -245,7 +245,7 @@ touch -t 202603180000 "$OMX_TEST_REPO_ROOT/.omx/specs/autoresearch-test-launch/r
 
       const result = runOmx(repo, ['autoresearch', '--topic', 'Investigate flaky onboarding behavior', '--evaluator', 'node scripts/eval.js', '--slug', 'test-launch'], {
         PATH: `${fakeBin}:${process.env.PATH || ''}`,
-        OMX_TEST_REPO_ROOT: repo,
+        OMK_TEST_REPO_ROOT: repo,
       });
       assert.equal(result.status, 0, result.stderr || result.stdout);
 
@@ -261,7 +261,7 @@ touch -t 202603180000 "$OMX_TEST_REPO_ROOT/.omx/specs/autoresearch-test-launch/r
 
   it('launches interactive deep-interview intake, materializes mission files, and then prefers split-pane handoff', async () => {
     const repo = await initRepo();
-    const fakeBin = await mkdtemp(join(tmpdir(), 'omx-autoresearch-deep-interview-bin-'));
+    const fakeBin = await mkdtemp(join(tmpdir(), 'omk-autoresearch-deep-interview-bin-'));
     try {
       const codexLog = join(repo, 'codex-launch.log');
       const tmuxLog = join(repo, 'guided-tmux.log');
@@ -271,7 +271,7 @@ touch -t 202603180000 "$OMX_TEST_REPO_ROOT/.omx/specs/autoresearch-test-launch/r
         `#!/bin/sh
 printf '%s\n' "$*" >>"${codexLog}"
 if [ "$1" = "exec" ]; then
-candidate_file=$(find "$OMX_TEST_REPO_ROOT/.omx/logs/autoresearch" -name candidate.json | head -n 1)
+candidate_file=$(find "$OMK_TEST_REPO_ROOT/.omk/logs/autoresearch" -name candidate.json | head -n 1)
 head_commit=$(git rev-parse HEAD)
 cat >"$candidate_file" <<'EOF'
 {
@@ -286,9 +286,9 @@ EOF
 perl -0pi -e "s/HEAD_PLACEHOLDER/$head_commit/g" "$candidate_file"
 exit 0
 fi
-mkdir -p "$OMX_TEST_REPO_ROOT/.omx/specs/deep-int"
-mkdir -p "$OMX_TEST_REPO_ROOT/.omx/specs/autoresearch-test-launch"
-cat >"$OMX_TEST_REPO_ROOT/.omx/specs/deep-interview-autoresearch-test-launch.md" <<'EOF'
+mkdir -p "$OMK_TEST_REPO_ROOT/.omk/specs/deep-int"
+mkdir -p "$OMK_TEST_REPO_ROOT/.omk/specs/autoresearch-test-launch"
+cat >"$OMK_TEST_REPO_ROOT/.omk/specs/deep-interview-autoresearch-test-launch.md" <<'EOF'
 # Deep Interview Autoresearch Draft — test-launch
 
 ## Mission Draft
@@ -317,12 +317,12 @@ Launch-ready: yes
 - refine further
 - launch
 EOF
-cat >"$OMX_TEST_REPO_ROOT/.omx/specs/autoresearch-test-launch/mission.md" <<'EOF'
+cat >"$OMK_TEST_REPO_ROOT/.omk/specs/autoresearch-test-launch/mission.md" <<'EOF'
 # Mission
 
 Investigate flaky onboarding behavior
 EOF
-cat >"$OMX_TEST_REPO_ROOT/.omx/specs/autoresearch-test-launch/sandbox.md" <<'EOF'
+cat >"$OMK_TEST_REPO_ROOT/.omk/specs/autoresearch-test-launch/sandbox.md" <<'EOF'
 ---
 evaluator:
   command: node scripts/eval.js
@@ -330,7 +330,7 @@ evaluator:
   keep_policy: score_improvement
 ---
 EOF
-cat >"$OMX_TEST_REPO_ROOT/.omx/specs/autoresearch-test-launch/result.json" <<'EOF'
+cat >"$OMK_TEST_REPO_ROOT/.omk/specs/autoresearch-test-launch/result.json" <<'EOF'
 {
   "kind": "omx.autoresearch.deep-interview/v1",
   "compileTarget": {
@@ -340,9 +340,9 @@ cat >"$OMX_TEST_REPO_ROOT/.omx/specs/autoresearch-test-launch/result.json" <<'EO
     "slug": "test-launch",
     "repoRoot": "${repo}"
   },
-  "draftArtifactPath": "${repo}/.omx/specs/deep-interview-autoresearch-test-launch.md",
-  "missionArtifactPath": "${repo}/.omx/specs/autoresearch-test-launch/mission.md",
-  "sandboxArtifactPath": "${repo}/.omx/specs/autoresearch-test-launch/sandbox.md",
+  "draftArtifactPath": "${repo}/.omk/specs/deep-interview-autoresearch-test-launch.md",
+  "missionArtifactPath": "${repo}/.omk/specs/autoresearch-test-launch/mission.md",
+  "sandboxArtifactPath": "${repo}/.omk/specs/autoresearch-test-launch/sandbox.md",
   "launchReady": true,
   "blockedReasons": []
 }
@@ -365,7 +365,7 @@ case "$1" in
   display-message)
     case "$*" in
       *"#{pane_id}"*) printf '%%42\n' ;;
-      *"#{pane_current_path}"*) printf '%s\n' "$OMX_TEST_REPO_ROOT" ;;
+      *"#{pane_current_path}"*) printf '%s\n' "$OMK_TEST_REPO_ROOT" ;;
       *"#S"*) printf 'devsession\n' ;;
       *) printf 'devsession\n' ;;
     esac
@@ -399,7 +399,7 @@ esac
 
       const result = runOmx(repo, ['autoresearch', '--topic', 'Investigate flaky onboarding behavior', '--evaluator', 'node scripts/eval.js', '--slug', 'test-launch'], {
         PATH: `${fakeBin}:${process.env.PATH || ''}`,
-        OMX_TEST_REPO_ROOT: repo,
+        OMK_TEST_REPO_ROOT: repo,
         TMUX: '/tmp/fake-tmux,12345,0',
         TMUX_PANE: '%42',
       });
@@ -422,7 +422,7 @@ esac
 
   it('uses split-window launch for explicit run inside tmux while preserving the interview pane', async () => {
     const repo = await initRepo();
-    const fakeBin = await mkdtemp(join(tmpdir(), 'omx-autoresearch-run-split-bin-'));
+    const fakeBin = await mkdtemp(join(tmpdir(), 'omk-autoresearch-run-split-bin-'));
     try {
       const missionDir = join(repo, 'missions', 'demo');
       const tmuxLog = join(repo, 'tmux.log');
@@ -442,7 +442,7 @@ esac
       await writeFile(
         fakeCodexPath,
         `#!/bin/sh
-candidate_file=$(find "$OMX_TEST_REPO_ROOT/.omx/logs/autoresearch" -name candidate.json | head -n 1)
+candidate_file=$(find "$OMK_TEST_REPO_ROOT/.omk/logs/autoresearch" -name candidate.json | head -n 1)
 head_commit=$(git rev-parse HEAD)
 cat >"$candidate_file" <<'EOF'
 {
@@ -510,7 +510,7 @@ esac
 
       const result = runOmx(repo, ['autoresearch', 'run', missionDir, '--model', 'gpt-5'], {
         PATH: `${fakeBin}:${process.env.PATH || ''}`,
-        OMX_TEST_REPO_ROOT: repo,
+        OMK_TEST_REPO_ROOT: repo,
         TMUX: '/tmp/fake-tmux,12345,0',
         TMUX_PANE: '%9',
       });
@@ -528,7 +528,7 @@ esac
 
   it('falls back to foreground execution when tmux split-window fails', async () => {
     const repo = await initRepo();
-    const fakeBin = await mkdtemp(join(tmpdir(), 'omx-autoresearch-run-fallback-bin-'));
+    const fakeBin = await mkdtemp(join(tmpdir(), 'omk-autoresearch-run-fallback-bin-'));
     try {
       const missionDir = join(repo, 'missions', 'demo');
       await mkdir(missionDir, { recursive: true });
@@ -547,7 +547,7 @@ esac
       await writeFile(
         fakeCodexPath,
         `#!/bin/sh
-candidate_file=$(find "$OMX_TEST_REPO_ROOT/.omx/logs/autoresearch" -name candidate.json | head -n 1)
+candidate_file=$(find "$OMK_TEST_REPO_ROOT/.omk/logs/autoresearch" -name candidate.json | head -n 1)
 head_commit=$(git rev-parse HEAD)
 cat >"$candidate_file" <<'EOF'
 {
@@ -604,13 +604,13 @@ esac
 
       const result = runOmx(repo, ['autoresearch', 'run', missionDir], {
         PATH: `${fakeBin}:${process.env.PATH || ''}`,
-        OMX_TEST_REPO_ROOT: repo,
+        OMK_TEST_REPO_ROOT: repo,
         TMUX: '/tmp/fake-tmux,12345,0',
         TMUX_PANE: '%9',
       });
       assert.equal(result.status, 0, result.stderr || result.stdout);
 
-      const logsRoot = join(repo, '.omx', 'logs', 'autoresearch');
+      const logsRoot = join(repo, '.omk', 'logs', 'autoresearch');
       const [runId] = readdirSync(logsRoot, { withFileTypes: true })
         .filter(d => d.isDirectory())
         .map(d => d.name);
@@ -622,7 +622,7 @@ esac
   });
 
   it('rejects mission directories outside a git repo', async () => {
-    const cwd = await mkdtemp(join(tmpdir(), 'omx-autoresearch-outside-git-'));
+    const cwd = await mkdtemp(join(tmpdir(), 'omk-autoresearch-outside-git-'));
     try {
       await writeFile(join(cwd, 'mission.md'), '# Mission\n', 'utf-8');
       await writeFile(join(cwd, 'sandbox.md'), '---\nevaluator:\n  command: node eval.js\n---\n', 'utf-8');
@@ -692,9 +692,9 @@ esac
         '---\nevaluator:\n  command: node eval.js\n  format: json\n---\nStay inside the mission boundary.\n',
         'utf-8',
       );
-      await mkdir(join(repo, '.omx', 'state'), { recursive: true });
+      await mkdir(join(repo, '.omk', 'state'), { recursive: true });
       await writeFile(
-        join(repo, '.omx', 'state', 'ralph-state.json'),
+        join(repo, '.omk', 'state', 'ralph-state.json'),
         JSON.stringify({
           active: true,
           mode: 'ralph',
@@ -711,7 +711,7 @@ esac
       assert.notEqual(result.status, 0, result.stderr || result.stdout);
       assert.match(`${result.stderr}\n${result.stdout}`, /Cannot start autoresearch: ralph is already active/i);
 
-      const worktreesRoot = join(repo, '.omx', 'worktrees');
+      const worktreesRoot = join(repo, '.omk', 'worktrees');
       assert.equal(existsSync(worktreesRoot), false, 'expected launch to abort before creating autoresearch worktree');
     } finally {
       await rm(repo, { recursive: true, force: true });
@@ -720,7 +720,7 @@ esac
 
   it('launches codex exec for autoresearch turns without shelling out to cat', async () => {
     const repo = await initRepo();
-    const fakeBin = await mkdtemp(join(tmpdir(), 'omx-autoresearch-fake-bin-'));
+    const fakeBin = await mkdtemp(join(tmpdir(), 'omk-autoresearch-fake-bin-'));
     try {
       const missionDir = join(repo, 'missions', 'demo');
       await mkdir(missionDir, { recursive: true });
@@ -754,7 +754,7 @@ printf 'fake-codex:%s\\n' "$*" >&2
 while IFS= read -r _; do
   :
 done
-candidate_file=$(find "$OMX_TEST_REPO_ROOT/.omx/logs/autoresearch" -name candidate.json | head -n 1)
+candidate_file=$(find "$OMK_TEST_REPO_ROOT/.omk/logs/autoresearch" -name candidate.json | head -n 1)
 head_commit=$(git rev-parse HEAD)
 printf '{\\n  "status": "abort",\\n  "candidate_commit": null,\\n  "base_commit": "%s",\\n  "description": "stop after first exec",\\n  "notes": ["fake codex exec"],\\n  "created_at": "2026-03-15T00:00:00.000Z"\\n}\\n' "$head_commit" >"$candidate_file"
 `,
@@ -765,7 +765,7 @@ printf '{\\n  "status": "abort",\\n  "candidate_commit": null,\\n  "base_commit"
       const result = runOmx(
         repo,
         ['autoresearch', missionDir, '--dangerously-bypass-approvals-and-sandbox'],
-        { PATH: `${fakeBin}:${process.env.PATH || ''}`, OMX_TEST_REPO_ROOT: repo },
+        { PATH: `${fakeBin}:${process.env.PATH || ''}`, OMK_TEST_REPO_ROOT: repo },
       );
 
       assert.equal(result.status, 0, result.stderr || result.stdout);
@@ -778,7 +778,7 @@ printf '{\\n  "status": "abort",\\n  "candidate_commit": null,\\n  "base_commit"
 
   it('stops after repeated noop turns', async () => {
     const repo = await initRepo();
-    const fakeBin = await mkdtemp(join(tmpdir(), 'omx-autoresearch-noop-bin-'));
+    const fakeBin = await mkdtemp(join(tmpdir(), 'omk-autoresearch-noop-bin-'));
     try {
       const missionDir = join(repo, 'missions', 'demo');
       await mkdir(missionDir, { recursive: true });
@@ -798,7 +798,7 @@ printf '{\\n  "status": "abort",\\n  "candidate_commit": null,\\n  "base_commit"
         fakeCodexPath,
         `#!/bin/sh
 cat >/dev/null
-candidate_file=$(find "$OMX_TEST_REPO_ROOT/.omx/logs/autoresearch" -name candidate.json | head -n 1)
+candidate_file=$(find "$OMK_TEST_REPO_ROOT/.omk/logs/autoresearch" -name candidate.json | head -n 1)
 head_commit=$(git rev-parse HEAD)
 cat >"$candidate_file" <<EOF
 {
@@ -818,17 +818,17 @@ EOF
       const result = runOmx(
         repo,
         ['autoresearch', missionDir, '--dangerously-bypass-approvals-and-sandbox'],
-        { PATH: `${fakeBin}:${process.env.PATH || ''}`, OMX_TEST_REPO_ROOT: repo },
+        { PATH: `${fakeBin}:${process.env.PATH || ''}`, OMK_TEST_REPO_ROOT: repo },
       );
 
       assert.equal(result.status, 0, result.stderr || result.stdout);
 
-      const state = JSON.parse(await readFile(join(repo, '.omx', 'state', 'autoresearch-state.json'), 'utf-8')) as {
+      const state = JSON.parse(await readFile(join(repo, '.omk', 'state', 'autoresearch-state.json'), 'utf-8')) as {
         active: boolean;
       };
       assert.equal(state.active, false);
 
-      const logsRoot = join(repo, '.omx', 'logs', 'autoresearch');
+      const logsRoot = join(repo, '.omk', 'logs', 'autoresearch');
       const [runId] = readdirSync(logsRoot, { withFileTypes: true })
         .filter(d => d.isDirectory())
         .map(d => d.name);

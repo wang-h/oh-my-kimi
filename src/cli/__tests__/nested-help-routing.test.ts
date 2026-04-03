@@ -15,9 +15,9 @@ function runOmx(cwd: string, argv: string[]) {
     encoding: 'utf-8',
     env: {
       ...process.env,
-      OMX_AUTO_UPDATE: '0',
-      OMX_NOTIFY_FALLBACK: '0',
-      OMX_HOOK_DERIVED_SIGNALS: '0',
+      OMK_AUTO_UPDATE: '0',
+      OMK_NOTIFY_FALLBACK: '0',
+      OMK_HOOK_DERIVED_SIGNALS: '0',
     },
   });
 }
@@ -32,7 +32,7 @@ describe('nested help routing', () => {
     [['ralph', '--help'], /omx ralph - Launch Codex with ralph persistence mode active/i],
   ] satisfies Array<[string[], RegExp]>) {
     it(`routes ${argv.join(' ')} to command-local help`, async () => {
-      const cwd = await mkdtemp(join(tmpdir(), 'omx-nested-help-'));
+      const cwd = await mkdtemp(join(tmpdir(), 'omk-nested-help-'));
       try {
         const result = runOmx(cwd, argv);
         assert.equal(result.status, 0, result.stderr || result.stdout);

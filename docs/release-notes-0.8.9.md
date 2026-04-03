@@ -30,10 +30,10 @@ This release:
 
 ## Upgrade note
 
-If you use project-scoped OMX installs, rerun:
+If you use project-scoped OMK installs, rerun:
 
 ```bash
-omx setup --force --scope project
+omk setup --force --scope project
 ```
 
 after upgrading so managed project config/native-agent paths are refreshed.

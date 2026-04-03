@@ -15,7 +15,7 @@ import { parse as parseToml } from '@iarna/toml';
 import { resolvePackagedExploreHarnessCommand, EXPLORE_BIN_ENV } from './explore.js';
 import { getPackageRoot } from '../utils/package.js';
 import { getDefaultBridge, isBridgeEnabled } from '../runtime/bridge.js';
-import { OMX_EXPLORE_CMD_ENV, isExploreCommandRoutingEnabled } from '../hooks/explore-routing.js';
+import { OMK_EXPLORE_CMD_ENV, isExploreCommandRoutingEnabled } from '../hooks/explore-routing.js';
 import { isLeaderRuntimeStale } from '../team/leader-activity.js';
 
 interface DoctorOptions {
@@ -51,7 +51,7 @@ const LEGACY_SCOPE_MIGRATION: Record<string, DoctorSetupScope> = {
 };
 
 async function resolveDoctorScope(cwd: string): Promise<DoctorScopeResolution> {
-  const scopePath = join(cwd, '.omx', 'setup-scope.json');
+  const scopePath = join(cwd, '.omk', 'setup-scope.json');
   if (!existsSync(scopePath)) {
     return { scope: 'user', source: 'default' };
   }
@@ -106,7 +106,7 @@ export async function doctor(options: DoctorOptions = {}): Promise<void> {
   const scopeResolution = await resolveDoctorScope(cwd);
   const paths = resolveDoctorPaths(cwd, scopeResolution.scope);
   const scopeSourceMessage = scopeResolution.source === 'persisted'
-    ? ' (from .omx/setup-scope.json)'
+    ? ' (from .omk/setup-scope.json)'
     : '';
 
   console.log('oh-my-kimi doctor');
@@ -257,7 +257,7 @@ async function collectTeamDoctorIssues(cwd: string): Promise<TeamDoctorIssue[]> 
     const manifestPath = join(teamDir, 'manifest.v2.json');
     const configPath = join(teamDir, 'config.json');
 
-    let tmuxSession = `omx-team-${teamName}`;
+    let tmuxSession = `omk-team-${teamName}`;
     if (existsSync(manifestPath)) {
       try {
         const raw = await readFile(manifestPath, 'utf-8');
@@ -353,8 +353,8 @@ async function collectTeamDoctorIssues(cwd: string): Promise<TeamDoctorIssue[]> 
       if (leaderIsStale && !tmuxUnavailable) {
         // Check if any team tmux session has live worker panes
         for (const teamName of teamDirs) {
-          const session = knownTeamSessions.has(`omx-team-${teamName}`)
-            ? `omx-team-${teamName}`
+          const session = knownTeamSessions.has(`omk-team-${teamName}`)
+            ? `omk-team-${teamName}`
             : [...knownTeamSessions].find(s => s.includes(teamName));
           if (!session || !tmuxSessions.has(session)) continue;
           issues.push({
@@ -416,7 +416,7 @@ function listTeamTmuxSessions(): Set<string> | null {
   const sessions = (res.stdout || '')
     .split('\n')
     .map((s) => s.trim())
-    .filter((s) => s.startsWith('omx-team-'));
+    .filter((s) => s.startsWith('omk-team-'));
   return new Set(sessions);
 }
 
@@ -469,12 +469,12 @@ function checkNodeVersion(): Check {
 
 function checkExploreHarness(): Check {
   const packageRoot = getPackageRoot();
-  const manifestPath = join(packageRoot, 'crates', 'omx-explore', 'Cargo.toml');
+  const manifestPath = join(packageRoot, 'crates', 'omk-explore', 'Cargo.toml');
   if (!existsSync(manifestPath)) {
     return {
       name: 'Explore Harness',
       status: 'warn',
-      message: 'Rust harness sources not found in this install (omx explore unavailable until packaged or OMX_EXPLORE_BIN is set)',
+      message: 'Rust harness sources not found in this install (omx explore unavailable until packaged or OMK_EXPLORE_BIN is set)',
     };
   }
 
@@ -491,7 +491,7 @@ function checkExploreHarness(): Check {
     return {
       name: 'Explore Harness',
       status: 'warn',
-      message: `OMX_EXPLORE_BIN is set but path was not found (${override})`,
+      message: `OMK_EXPLORE_BIN is set but path was not found (${override})`,
     };
   }
 
@@ -600,13 +600,13 @@ async function checkConfig(configPath: string): Promise<Check> {
 
 
 async function checkExploreRouting(configPath: string): Promise<Check> {
-  const envValue = process.env[OMX_EXPLORE_CMD_ENV];
+  const envValue = process.env[OMK_EXPLORE_CMD_ENV];
   if (typeof envValue === 'string' && !isExploreCommandRoutingEnabled(process.env)) {
     return {
       name: 'Explore routing',
       status: 'warn',
       message:
-        'disabled by environment override; enable with USE_OMX_EXPLORE_CMD=1 (or remove the explicit opt-out)',
+        'disabled by environment override; enable with USE_OMK_EXPLORE_CMD=1 (or remove the explicit opt-out)',
     };
   }
 
@@ -621,19 +621,19 @@ async function checkExploreRouting(configPath: string): Promise<Check> {
   try {
     const content = await readFile(configPath, 'utf-8');
     const parsed = parseToml(content) as { env?: Record<string, unknown> };
-    const configuredValue = parsed?.env?.USE_OMX_EXPLORE_CMD;
+    const configuredValue = parsed?.env?.USE_OMK_EXPLORE_CMD;
 
     if (
       typeof configuredValue === 'string' &&
       !isExploreCommandRoutingEnabled({
-        USE_OMX_EXPLORE_CMD: configuredValue,
+        USE_OMK_EXPLORE_CMD: configuredValue,
       })
     ) {
       return {
         name: 'Explore routing',
         status: 'warn',
         message:
-          'disabled in config.toml [env]; set USE_OMX_EXPLORE_CMD = "1" to restore default explore-first routing',
+          'disabled in config.toml [env]; set USE_OMK_EXPLORE_CMD = "1" to restore default explore-first routing',
       };
     }
 

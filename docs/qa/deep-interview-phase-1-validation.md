@@ -3,7 +3,7 @@
 Date: **2026-03-25**
 Scope: manual transcript-style validation for the Phase 1 deep-interview questioning-strengthening pass.
 
-This lane complements the deterministic contract tests. The deep-interview skill is an instruction surface rather than a compiled runtime, so this document validates the updated question-flow contract against representative prompts and checks that the interview now applies more pressure without dropping OMX invariants.
+This lane complements the deterministic contract tests. The deep-interview skill is an instruction surface rather than a compiled runtime, so this document validates the updated question-flow contract against representative prompts and checks that the interview now applies more pressure without dropping OMK invariants.
 
 ## Validation focus
 
@@ -62,7 +62,7 @@ It also rechecks preserved invariants:
    - Assistant: asks what evidence shows the loop is the root cause rather than a symptom.
 4. **Round 3**
    - User: says refresh retries hide upstream 401 churn.
-   - Assistant: asks what decision boundary OMX may take without confirmation if the fix requires touching both middleware and session storage.
+   - Assistant: asks what decision boundary OMK may take without confirmation if the fix requires touching both middleware and session storage.
 5. **Round 4**
    - User: answers the ownership boundary.
    - Assistant: asks which auth behaviors must remain explicitly out of scope.
@@ -91,7 +91,7 @@ It also rechecks preserved invariants:
    - Assistant: uses Simplifier mode and asks what the smallest first-time-contributor success outcome is.
 4. **Round 4**
    - User: says “get the app running and submit one trivial PR.”
-   - Assistant: asks which decision boundary OMX may choose alone versus what must be escalated for approval.
+   - Assistant: asks which decision boundary OMK may choose alone versus what must be escalated for approval.
 
 **Pass criteria**
 - Question count pressure: **PASS** — the flow survives at least four rounds before any handoff.
@@ -105,10 +105,10 @@ It also rechecks preserved invariants:
 |---|---|---|
 | Ambiguity scoring | `skills/deep-interview/SKILL.md` retains the greenfield/brownfield weighting formulas | PASS |
 | Readiness gates | `Non-goals` and `Decision Boundaries` remain mandatory | PASS |
-| Snapshot / transcript / spec artifacts | `.omx/context/`, `.omx/interviews/`, `.omx/specs/` outputs remain required | PASS |
+| Snapshot / transcript / spec artifacts | `.omk/context/`, `.omk/interviews/`, `.omk/specs/` outputs remain required | PASS |
 | Handoff contracts | `$ralplan`, `$autopilot`, `$ralph`, `$team`, `Refine further` remain present | PASS |
 | Brownfield evidence-backed confirmation | Execution policy + pressure ladder still require cited evidence before confirmation | PASS |
 
 ## Outcome
 
-Manual contract-walk validation indicates Phase 1 now applies stronger pressure on all four axes while preserving OMX’s ambiguity gating, artifact generation, and handoff discipline. If later live usage still shows two or more weak axes, the PRD’s Phase 2 interviewer/crystallizer split should be reopened.
+Manual contract-walk validation indicates Phase 1 now applies stronger pressure on all four axes while preserving OMK’s ambiguity gating, artifact generation, and handoff discipline. If later live usage still shows two or more weak axes, the PRD’s Phase 2 interviewer/crystallizer split should be reopened.
