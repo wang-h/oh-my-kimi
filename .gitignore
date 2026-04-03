@@ -34,3 +34,4 @@ snapshot.json
 # OMK runtime state (auto-generated, do not commit)
 .omk/logs/
 .omk/state/
+oh-my-kimi-*.tgz
