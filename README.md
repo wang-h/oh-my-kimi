@@ -12,6 +12,7 @@
 [![Discord](https://img.shields.io/discord/1452487457085063218?color=5865F2&logo=discord&logoColor=white&label=Discord)](https://discord.gg/PUwSMR9XNk)
 
 **GitHub:** https://github.com/wang-h/oh-my-kimi  
+**Website:** https://wang-h.github.io/oh-my-kimi-website/  
 **Docs:** [Getting Started](./docs/getting-started.html) · [Agents](./docs/agents.html) · [Skills](./docs/skills.html) · [Integrations](./docs/integrations.html) · [Demo](./DEMO.md) · [OpenClaw guide](./docs/openclaw-integration.md)
 
 > **Port status:** this repository is now the Kimi-first fork. The main runtime, setup path, and focused verification suite have been moved to Kimi-first behavior. For the current compatibility boundary and unsupported disclosures, see the [oh-my-kimi v1 compatibility guide](./docs/oh-my-kimi-v1-compatibility.md).
