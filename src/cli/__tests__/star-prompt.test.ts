@@ -152,7 +152,7 @@ describe('maybePromptGithubStar', () => {
       warnFn: (message) => warns.push(message),
     });
 
-    assert.deepEqual(logs, ['[omx] Thanks for the star!']);
+    assert.deepEqual(logs, ['[omk] Thanks for the star!']);
     assert.deepEqual(warns, []);
   });
 

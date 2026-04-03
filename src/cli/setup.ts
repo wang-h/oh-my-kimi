@@ -963,7 +963,7 @@ export async function setup(options: SetupOptions = {}): Promise<void> {
     console.log();
   }
 
-  console.log('Setup complete! Run "omx doctor" to verify installation.');
+  console.log('Setup complete! Run "omk doctor" to verify installation.');
   console.log("\nNext steps:");
   console.log("  1. Start Kimi Code CLI in your project directory");
   console.log(
@@ -975,10 +975,10 @@ export async function setup(options: SetupOptions = {}): Promise<void> {
     "  5. Native agent defaults configured in config.toml [agents] and Kimi agent files written to .kimi/agents/",
   );
   console.log(
-    '  6. "omx explore" and "omx sparkshell" can hydrate native release binaries on first use; source installs still allow repo-local fallbacks and OMK_EXPLORE_BIN / OMK_SPARKSHELL_BIN overrides',
+    '  6. "omk explore" and "omk sparkshell" can hydrate native release binaries on first use; source installs still allow repo-local fallbacks and OMK_EXPLORE_BIN / OMK_SPARKSHELL_BIN overrides',
   );
   if (isGitHubCliConfigured()) {
-    console.log("\nSupport the project: gh repo star Yeachan-Heo/oh-my-codex");
+    console.log("\nSupport the project: gh repo star wang-h/oh-my-kimi");
   }
 }
 

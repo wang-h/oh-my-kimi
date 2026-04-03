@@ -421,7 +421,7 @@ function listTeamTmuxSessions(): Set<string> | null {
 }
 
 function checkCodexCli(): Check {
-  const { result } = spawnPlatformCommandSync('codex', ['--version'], {
+  const { result } = spawnPlatformCommandSync('kimi', ['--version'], {
     encoding: 'utf-8',
     stdio: ['pipe', 'pipe', 'pipe'],
   });

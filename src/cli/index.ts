@@ -460,7 +460,7 @@ function runCodexBlocking(
   launchArgs: string[],
   codexEnv: NodeJS.ProcessEnv,
 ): void {
-  const { result } = spawnPlatformCommandSync("codex", launchArgs, {
+  const { result } = spawnPlatformCommandSync("kimi", launchArgs, {
     cwd,
     stdio: "inherit",
     env: codexEnv,
@@ -472,14 +472,14 @@ function runCodexBlocking(
     const kind = classifySpawnError(errno);
     if (kind === "missing") {
       console.error(
-        "[omk] failed to launch codex: executable not found in PATH",
+        "[omk] failed to launch kimi: executable not found in PATH",
       );
     } else if (kind === "blocked") {
       console.error(
-        `[omk] failed to launch codex: executable is present but blocked in the current environment (${errno.code || "blocked"})`,
+        `[omk] failed to launch kimi: executable is present but blocked in the current environment (${errno.code || "blocked"})`,
       );
     } else {
-      console.error(`[omk] failed to launch codex: ${errno.message}`);
+      console.error(`[omk] failed to launch kimi: ${errno.message}`);
     }
     throw result.error;
   }
@@ -490,7 +490,7 @@ function runCodexBlocking(
         ? result.status
         : resolveSignalExitCode(result.signal);
     if (result.signal) {
-      console.error(`[omk] codex exited due to signal ${result.signal}`);
+      console.error(`[omk] kimi exited due to signal ${result.signal}`);
     }
   }
 }
@@ -1733,7 +1733,7 @@ function runCodex(
   }
 
   if (launchPolicy === "inside-tmux") {
-    // Already in tmux: launch codex in current pane, HUD in bottom split
+    // Already in tmux: launch kimi in current pane, HUD in bottom split
     const currentPaneId = process.env.TMUX_PANE;
     const staleHudPaneIds = listHudWatchPaneIdsInCurrentWindow(currentPaneId);
     for (const paneId of staleHudPaneIds) {
@@ -1793,10 +1793,10 @@ function runCodex(
     // binary is unavailable so direct launches do not emit noisy ENOENT logs.
     runCodexBlocking(cwd, launchArgs, codexEnvWithNotify);
   } else {
-    // Not in tmux: create a new tmux session with codex + HUD pane
-    const codexCmd = buildTmuxPaneCommand("codex", launchArgs);
+    // Not in tmux: create a new tmux session with kimi + HUD pane
+    const codexCmd = buildTmuxPaneCommand("kimi", launchArgs);
     const detachedWindowsCodexCmd = nativeWindows
-      ? buildWindowsPromptCommand("codex", launchArgs)
+      ? buildWindowsPromptCommand("kimi", launchArgs)
       : null;
     const tmuxSessionId = `omk-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     const sessionName = buildTmuxSessionName(cwd, tmuxSessionId);
@@ -1911,7 +1911,7 @@ function runCodex(
           }
         }
       }
-      // tmux not available or failed, just run codex directly
+      // tmux not available or failed, just run kimi directly
       runCodexBlocking(cwd, launchArgs, codexEnvWithNotify);
     }
   }
