@@ -1,18 +1,18 @@
-# oh-my-codex (OMX)
+# oh-my-kimi (OMK)
 
 <p align="center">
-  <img src="https://yeachan-heo.github.io/oh-my-codex-website/omx-character-nobg.png" alt="oh-my-codex character" width="280">
+  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omx-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
   <br>
   <em>Tu codex no está solo.</em>
 </p>
 
-[![npm version](https://img.shields.io/npm/v/oh-my-codex)](https://www.npmjs.com/package/oh-my-codex)
+[![npm version](https://img.shields.io/npm/v/oh-my-kimi)](https://www.npmjs.com/package/oh-my-kimi)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
 
-> **[Website](https://yeachan-heo.github.io/oh-my-codex-website/)** | **[Documentation](https://yeachan-heo.github.io/oh-my-codex-website/docs.html)** | **[CLI Reference](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#cli-reference)** | **[Workflows](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#workflows)** | **[Guía de integración de OpenClaw](./docs/openclaw-integration.es.md)** | **[GitHub](https://github.com/Yeachan-Heo/oh-my-codex)** | **[npm](https://www.npmjs.com/package/oh-my-codex)**
+> **[Website](https://github.com/wang-h/oh-my-kimi)** | **[Documentation](https://github.com/wang-h/oh-my-kimi#readme)** | **[CLI Reference](https://github.com/wang-h/oh-my-kimi#command-reference)** | **[Workflows](https://github.com/wang-h/oh-my-kimi#recommended-workflows)** | **[Guía de integración de OpenClaw](./docs/openclaw-integration.es.md)** | **[GitHub](https://github.com/wang-h/oh-my-kimi)** | **[npm](https://www.npmjs.com/package/oh-my-kimi)**
 
-Capa de orquestación multiagente para [OpenAI Codex CLI](https://github.com/openai/codex).
+Capa de orquestación multiagente para [Kimi Code CLI](https://moonshotai.github.io/kimi-cli/en/).
 
 ## Novedades en v0.9.0 — Spark Initiative
 
@@ -56,7 +56,7 @@ OMX instala y conecta estas capas:
 
 ```text
 User
-  -> Codex CLI
+  -> Kimi Code CLI
     -> AGENTS.md (cerebro de orquestación)
     -> ~/.codex/prompts/*.md (catálogo de prompts de agentes)
     -> ~/.codex/skills/*/SKILL.md (catálogo de skills)
@@ -167,7 +167,7 @@ Selección de Worker CLI para los workers del equipo:
 
 ```bash
 OMX_TEAM_WORKER_CLI=auto    # predeterminado; usa claude cuando worker --model contiene "claude"
-OMX_TEAM_WORKER_CLI=codex   # forzar workers Codex CLI
+OMX_TEAM_WORKER_CLI=codex   # forzar workers Kimi Code CLI
 OMX_TEAM_WORKER_CLI=claude  # forzar workers Claude CLI
 OMX_TEAM_WORKER_CLI_MAP=codex,codex,claude,claude  # mezcla de CLI por worker (longitud=1 o cantidad de workers)
 OMX_TEAM_AUTO_INTERRUPT_RETRY=0  # opcional: desactivar fallback adaptativo queue->resend
@@ -210,7 +210,7 @@ Ejemplos:
 ## Estructura del proyecto
 
 ```text
-oh-my-codex/
+oh-my-kimi/
   bin/omx.js
   src/
     cli/
@@ -231,8 +231,8 @@ oh-my-codex/
 ## Desarrollo
 
 ```bash
-git clone https://github.com/Yeachan-Heo/oh-my-codex.git
-cd oh-my-codex
+git clone https://github.com/wang-h/oh-my-kimi.git
+cd oh-my-kimi
 npm install
 npm run build
 npm test
@@ -240,11 +240,11 @@ npm test
 
 ## Documentación
 
-- **[Documentación completa](https://yeachan-heo.github.io/oh-my-codex-website/docs.html)** — Guía completa
-- **[Referencia CLI](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#cli-reference)** — Todos los comandos `omx`, flags y herramientas
-- **[Guía de notificaciones](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#notifications)** — Configuración de Discord, Telegram, Slack y webhooks
-- **[Flujos de trabajo recomendados](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#workflows)** — Cadenas de skills probadas en batalla para tareas comunes
-- **[Notas de versión](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#release-notes)** — Novedades en cada versión
+- **[Documentación completa](https://github.com/wang-h/oh-my-kimi#readme)** — Guía completa
+- **[Referencia CLI](https://github.com/wang-h/oh-my-kimi#command-reference)** — Todos los comandos `omx`, flags y herramientas
+- **[Guía de notificaciones](https://github.com/wang-h/oh-my-kimi#notifications)** — Configuración de Discord, Telegram, Slack y webhooks
+- **[Flujos de trabajo recomendados](https://github.com/wang-h/oh-my-kimi#recommended-workflows)** — Cadenas de skills probadas en batalla para tareas comunes
+- **[Notas de versión](https://github.com/wang-h/oh-my-kimi#release-notes)** — Novedades en cada versión
 
 ## Notas
 
@@ -256,7 +256,7 @@ npm test
 
 ## Agradecimientos
 
-Inspirado en [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode), adaptado para Codex CLI.
+Inspirado en [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode), adaptado para Kimi Code CLI.
 
 ## Licencia
 

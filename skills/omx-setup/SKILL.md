@@ -1,11 +1,11 @@
 ---
 name: omx-setup
-description: Setup and configure oh-my-codex using current CLI behavior
+description: Setup and configure oh-my-kimi using current CLI behavior
 ---
 
-# OMX Setup
+# oh-my-kimi Setup
 
-Use this skill when users want to install or refresh oh-my-codex for the **current project plus user-level OMX directories**.
+Use this skill when users want to install or refresh oh-my-kimi for the **current project plus user-level oh-my-kimi directories**.
 
 ## Command
 

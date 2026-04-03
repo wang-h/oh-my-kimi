@@ -1,20 +1,20 @@
-# oh-my-codex (OMX)
+# oh-my-kimi (OMK)
 
 <p align="center">
-  <img src="https://yeachan-heo.github.io/oh-my-codex-website/omx-character-nobg.png" alt="postać oh-my-codex" width="280">
+  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omx-character-spark-initiative.jpg" alt="postać oh-my-kimi" width="280">
   <br>
   <em>Zacznij z Codexem jak zwykle. Gdy projekt urośnie — niech OMX wesprze resztę.</em>
 </p>
 
-[![npm version](https://img.shields.io/npm/v/oh-my-codex)](https://www.npmjs.com/package/oh-my-codex)
+[![npm version](https://img.shields.io/npm/v/oh-my-kimi)](https://www.npmjs.com/package/oh-my-kimi)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
 [![Discord](https://img.shields.io/discord/1452487457085063218?color=5865F2&logo=discord&logoColor=white&label=Discord)](https://discord.gg/PUwSMR9XNk)
 
-**Strona:** https://yeachan-heo.github.io/oh-my-codex-website/
+**Strona:** https://github.com/wang-h/oh-my-kimi
 **Dokumentacja:** [Pierwsze kroki](./docs/getting-started.html) · [Agenty](./docs/agents.html) · [Skille](./docs/skills.html) · [Integracje](./docs/integrations.html) · [Demo](./DEMO.md) · [Przewodnik po OpenClaw](./docs/openclaw-integration.md)
 
-OMX to nakładka na [OpenAI Codex CLI](https://github.com/openai/codex).
+OMX to nakładka na [Kimi Code CLI](https://moonshotai.github.io/kimi-cli/en/).
 
 Codex zostaje silnikiem, który wykonuje pracę. OMX daje mu lepszy kontekst, gotowe role i cykle pracy — żebyś nie zaczynał od zera przy każdej sesji. Konkretnie:
 - lepsza sesja Codexa od pierwszego uruchomienia
@@ -27,7 +27,7 @@ Codex zostaje silnikiem, który wykonuje pracę. OMX daje mu lepszy kontekst, go
 Jeśli chcesz po prostu zacząć:
 
 ```bash
-npm install -g @openai/codex oh-my-codex
+npm install -g oh-my-kimi oh-my-kimi
 omx setup
 omx --madmax --high
 ```
@@ -56,7 +56,7 @@ Jeśli chcesz czystego Codexa bez żadnych dodatków, OMX pewnie nie jest dla Ci
 ### Wymagania
 
 - Node.js 20+
-- Codex CLI: `npm install -g @openai/codex`
+- Kimi Code CLI: `npm install -g oh-my-kimi`
 - Skonfigurowane uwierzytelnianie Codex
 - `tmux` na macOS/Linux — jeśli planujesz używać trybu zespołowego
 - `psmux` na natywnym Windows — jeśli planujesz używać trybu zespołowego
@@ -209,7 +209,7 @@ Jeśli to widzisz:
 
 ## Historia gwiazdek
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Yeachan-Heo/oh-my-codex&type=date&legend=top-left)](https://www.star-history.com/#Yeachan-Heo/oh-my-codex&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=Yeachan-Heo/oh-my-kimi&type=date&legend=top-left)](https://www.star-history.com/#Yeachan-Heo/oh-my-kimi&type=date&legend=top-left)
 
 ## Licencja
 

@@ -209,7 +209,7 @@ Autopilot can be driven by the configurable pipeline orchestrator (`src/pipeline
 sequences stages through a uniform `PipelineStage` interface:
 
 ```
-RALPLAN (consensus planning) -> team-exec (Codex CLI workers) -> ralph-verify (architect verification)
+RALPLAN (consensus planning) -> team-exec (Kimi Code CLI workers) -> ralph-verify (architect verification)
 ```
 
 Pipeline configuration options:
@@ -217,7 +217,7 @@ Pipeline configuration options:
 ```toml
 [omx.autopilot.pipeline]
 maxRalphIterations = 10    # Ralph verification iteration ceiling
-workerCount = 2            # Number of Codex CLI team workers
+workerCount = 2            # Number of Kimi Code CLI team workers
 agentType = "executor"     # Agent type for team workers
 ```
 

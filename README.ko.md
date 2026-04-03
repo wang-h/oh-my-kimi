@@ -1,19 +1,19 @@
-# oh-my-codex (OMX)
+# oh-my-kimi (OMK)
 
 <p align="center">
-  <img src="https://yeachan-heo.github.io/oh-my-codex-website/omx-character-nobg.png" alt="oh-my-codex character" width="280">
+  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omx-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
   <br>
   <em>당신의 codex는 혼자가 아닙니다.</em>
 </p>
 
-[![npm version](https://img.shields.io/npm/v/oh-my-codex)](https://www.npmjs.com/package/oh-my-codex)
+[![npm version](https://img.shields.io/npm/v/oh-my-kimi)](https://www.npmjs.com/package/oh-my-kimi)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
 [![Discord](https://img.shields.io/discord/1452487457085063218?color=5865F2&logo=discord&logoColor=white&label=Discord)](https://discord.gg/PUwSMR9XNk)
 
-> **[Website](https://yeachan-heo.github.io/oh-my-codex-website/)** | **[Documentation](https://yeachan-heo.github.io/oh-my-codex-website/docs.html)** | **[CLI Reference](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#cli-reference)** | **[Workflows](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#workflows)** | **[OpenClaw 통합 가이드](./docs/openclaw-integration.ko.md)** | **[GitHub](https://github.com/Yeachan-Heo/oh-my-codex)** | **[npm](https://www.npmjs.com/package/oh-my-codex)**
+> **[Website](https://github.com/wang-h/oh-my-kimi)** | **[Documentation](https://github.com/wang-h/oh-my-kimi#readme)** | **[CLI Reference](https://github.com/wang-h/oh-my-kimi#command-reference)** | **[Workflows](https://github.com/wang-h/oh-my-kimi#recommended-workflows)** | **[OpenClaw 통합 가이드](./docs/openclaw-integration.ko.md)** | **[GitHub](https://github.com/wang-h/oh-my-kimi)** | **[npm](https://www.npmjs.com/package/oh-my-kimi)**
 
-[OpenAI Codex CLI](https://github.com/openai/codex)를 위한 멀티 에이전트 오케스트레이션 레이어.
+[Kimi Code CLI](https://moonshotai.github.io/kimi-cli/en/)를 위한 멀티 에이전트 오케스트레이션 레이어.
 
 ## v0.9.0 새로운 기능 — Spark Initiative
 
@@ -57,7 +57,7 @@ OMX는 다음 레이어를 설치하고 연결합니다:
 
 ```text
 User
-  -> Codex CLI
+  -> Kimi Code CLI
     -> AGENTS.md (오케스트레이션 브레인)
     -> ~/.codex/prompts/*.md (에이전트 프롬프트 카탈로그)
     -> ~/.codex/skills/*/SKILL.md (스킬 카탈로그)
@@ -168,7 +168,7 @@ Team cleanup now follows one standalone path; legacy linked-Ralph shutdown handl
 
 ```bash
 OMX_TEAM_WORKER_CLI=auto    # 기본값; worker --model에 "claude"가 포함되면 claude 사용
-OMX_TEAM_WORKER_CLI=codex   # Codex CLI 워커 강제
+OMX_TEAM_WORKER_CLI=codex   # Kimi Code CLI 워커 강제
 OMX_TEAM_WORKER_CLI=claude  # Claude CLI 워커 강제
 OMX_TEAM_WORKER_CLI_MAP=codex,codex,claude,claude  # 워커별 CLI 혼합 (길이=1 또는 워커 수)
 OMX_TEAM_AUTO_INTERRUPT_RETRY=0  # 선택: 적응형 queue->resend 폴백 비활성화
@@ -211,7 +211,7 @@ OMX_TEAM_AUTO_INTERRUPT_RETRY=0  # 선택: 적응형 queue->resend 폴백 비활
 ## 프로젝트 구조
 
 ```text
-oh-my-codex/
+oh-my-kimi/
   bin/omx.js
   src/
     cli/
@@ -232,8 +232,8 @@ oh-my-codex/
 ## 개발
 
 ```bash
-git clone https://github.com/Yeachan-Heo/oh-my-codex.git
-cd oh-my-codex
+git clone https://github.com/wang-h/oh-my-kimi.git
+cd oh-my-kimi
 npm install
 npm run build
 npm test
@@ -241,11 +241,11 @@ npm test
 
 ## 문서
 
-- **[전체 문서](https://yeachan-heo.github.io/oh-my-codex-website/docs.html)** — 완전한 가이드
-- **[CLI 레퍼런스](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#cli-reference)** — 모든 `omx` 명령어, 플래그 및 도구
-- **[알림 가이드](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#notifications)** — Discord, Telegram, Slack 및 webhook 설정
-- **[권장 워크플로우](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#workflows)** — 일반적인 작업을 위한 실전 검증된 스킬 체인
-- **[릴리스 노트](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#release-notes)** — 각 버전의 새로운 기능
+- **[전체 문서](https://github.com/wang-h/oh-my-kimi#readme)** — 완전한 가이드
+- **[CLI 레퍼런스](https://github.com/wang-h/oh-my-kimi#command-reference)** — 모든 `omx` 명령어, 플래그 및 도구
+- **[알림 가이드](https://github.com/wang-h/oh-my-kimi#notifications)** — Discord, Telegram, Slack 및 webhook 설정
+- **[권장 워크플로우](https://github.com/wang-h/oh-my-kimi#recommended-workflows)** — 일반적인 작업을 위한 실전 검증된 스킬 체인
+- **[릴리스 노트](https://github.com/wang-h/oh-my-kimi#release-notes)** — 각 버전의 새로운 기능
 
 ## 참고
 
@@ -257,7 +257,7 @@ npm test
 
 ## 감사의 말
 
-[oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode)에서 영감을 받아 Codex CLI용으로 적응하였습니다.
+[oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode)에서 영감을 받아 Kimi Code CLI용으로 적응하였습니다.
 
 ## 라이선스
 

@@ -1,20 +1,20 @@
-# oh-my-codex (OMX)
+# oh-my-kimi (OMK)
 
 <p align="center">
-  <img src="https://yeachan-heo.github.io/oh-my-codex-website/omx-character-nobg.png" alt="oh-my-codex character" width="280">
+  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omx-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
   <br>
   <em>Ξεκινήστε το Codex πιο δυναμικά και αφήστε το OMX να προσθέσει καλύτερα prompts, workflows και runtime υποστήριξη όταν η δουλειά μεγαλώνει.</em>
 </p>
 
-[![npm version](https://img.shields.io/npm/v/oh-my-codex)](https://www.npmjs.com/package/oh-my-codex)
+[![npm version](https://img.shields.io/npm/v/oh-my-kimi)](https://www.npmjs.com/package/oh-my-kimi)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
 [![Discord](https://img.shields.io/discord/1452487457085063218?color=5865F2&logo=discord&logoColor=white&label=Discord)](https://discord.gg/PUwSMR9XNk)
 
-**Ιστοσελίδα:** https://yeachan-heo.github.io/oh-my-codex-website/  
+**Ιστοσελίδα:** https://github.com/wang-h/oh-my-kimi  
 **Τεκμηρίωση:** [Ξεκινώντας](./docs/getting-started.html) · [Agents](./docs/agents.html) · [Skills](./docs/skills.html) · [Ενσωματώσεις](./docs/integrations.html) · [Demo](./DEMO.md) · [Οδηγός OpenClaw](./docs/openclaw-integration.md)
 
-Το OMX είναι ένα workflow layer για το [OpenAI Codex CLI](https://github.com/openai/codex).
+Το OMX είναι ένα workflow layer για το [Kimi Code CLI](https://moonshotai.github.io/kimi-cli/en/).
 
 Διατηρεί το Codex ως μηχανή εκτέλεσης και διευκολύνει τα εξής:
 - να ξεκινάτε μια πιο δυναμική συνεδρία Codex από προεπιλογή
@@ -27,7 +27,7 @@
 Αν θέλετε την προεπιλεγμένη εμπειρία OMX, ξεκινήστε εδώ:
 
 ```bash
-npm install -g @openai/codex oh-my-codex
+npm install -g oh-my-kimi oh-my-kimi
 omx setup
 omx --madmax --high
 ```
@@ -59,7 +59,7 @@ $team 3:executor "execute the approved plan in parallel"
 ### Απαιτήσεις
 
 - Node.js 20+
-- Εγκατεστημένο Codex CLI: `npm install -g @openai/codex`
+- Εγκατεστημένο Kimi Code CLI: `npm install -g oh-my-kimi`
 - Ρυθμισμένη αυθεντικοποίηση Codex
 - `tmux` σε macOS/Linux αν θέλετε αργότερα τον ανθεκτικό team runtime
 - `psmux` σε native Windows αν θέλετε αργότερα τη λειτουργία team για Windows
@@ -216,7 +216,7 @@ omx sparkshell --tmux-pane %12 --tail-lines 400
 
 ## Ιστορικό Αστεριών
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Yeachan-Heo/oh-my-codex&type=date&legend=top-left)](https://www.star-history.com/#Yeachan-Heo/oh-my-codex&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=Yeachan-Heo/oh-my-kimi&type=date&legend=top-left)](https://www.star-history.com/#Yeachan-Heo/oh-my-kimi&type=date&legend=top-left)
 
 ## Άδεια
 

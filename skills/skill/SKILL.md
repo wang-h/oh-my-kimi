@@ -6,7 +6,7 @@ argument-hint: "<command> [args]"
 
 # Skill Management CLI
 
-Meta-skill for managing oh-my-codex skills via CLI-like commands.
+Meta-skill for managing oh-my-kimi skills via CLI-like commands.
 
 ## Subcommands
 
@@ -84,7 +84,7 @@ argument-hint: "<args>"
 ## Examples
 
 ```
-/oh-my-codex:<name> example-arg
+/oh-my-kimi:<name> example-arg
 ```
 
 ## Notes

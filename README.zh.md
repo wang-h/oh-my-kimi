@@ -1,7 +1,7 @@
 # oh-my-kimi (OMK)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omx-character-spark-initiative.jpg" alt="oh-my-codex character" width="280">
+  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omx-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
   <br>
   <em>你的 Kimi 并不孤单。</em>
 </p>
@@ -232,8 +232,8 @@ oh-my-kimi/
 ## 开发
 
 ```bash
-git clone https://github.com/Yeachan-Heo/oh-my-codex.git
-cd oh-my-codex
+git clone https://github.com/wang-h/oh-my-kimi.git
+cd oh-my-kimi
 npm install
 npm run build
 npm test
@@ -241,11 +241,11 @@ npm test
 
 ## 文档
 
-- **[完整文档](https://yeachan-heo.github.io/oh-my-codex-website/docs.html)** — 完整指南
-- **[CLI 参考](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#cli-reference)** — 所有 `omx` 命令、标志和工具
-- **[通知指南](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#notifications)** — Discord、Telegram、Slack 和 webhook 设置
-- **[推荐工作流](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#workflows)** — 用于常见任务的经过实战检验的 skill 链
-- **[发行说明](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#release-notes)** — 每个版本的新功能
+- **[完整文档](https://github.com/wang-h/oh-my-kimi#readme)** — 完整指南
+- **[CLI 参考](https://github.com/wang-h/oh-my-kimi#command-reference)** — 所有 `omx` 命令、标志和工具
+- **[通知指南](https://github.com/wang-h/oh-my-kimi#notifications)** — Discord、Telegram、Slack 和 webhook 设置
+- **[推荐工作流](https://github.com/wang-h/oh-my-kimi#recommended-workflows)** — 用于常见任务的经过实战检验的 skill 链
+- **[发行说明](https://github.com/wang-h/oh-my-kimi#release-notes)** — 每个版本的新功能
 
 ## 备注
 
@@ -257,7 +257,7 @@ npm test
 
 ## 致谢
 
-受 [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) 启发，为 Codex CLI 适配。
+受 [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) 启发，为 Kimi Code CLI 适配。
 
 ## 许可证
 

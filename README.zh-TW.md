@@ -1,19 +1,19 @@
-# oh-my-codex (OMX)
+# oh-my-kimi (OMK)
 
 <p align="center">
-  <img src="https://yeachan-heo.github.io/oh-my-codex-website/omx-character-nobg.png" alt="oh-my-codex character" width="280">
+  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omx-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
   <br>
   <em>你的 Codex，從不孤行。</em>
 </p>
 
-[![npm version](https://img.shields.io/npm/v/oh-my-codex)](https://www.npmjs.com/package/oh-my-codex)
+[![npm version](https://img.shields.io/npm/v/oh-my-kimi)](https://www.npmjs.com/package/oh-my-kimi)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
 [![Discord](https://img.shields.io/discord/1452487457085063218?color=5865F2&logo=discord&logoColor=white&label=Discord)](https://discord.gg/PUwSMR9XNk)
 
-> **[官方網站](https://yeachan-heo.github.io/oh-my-codex-website/)** | **[說明文件](https://yeachan-heo.github.io/oh-my-codex-website/docs.html)** | **[CLI 參考手冊](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#cli-reference)** | **[工作流程](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#workflows)** | **[OpenClaw 整合指南](./docs/openclaw-integration.zh-TW.md)** | **[GitHub](https://github.com/Yeachan-Heo/oh-my-codex)** | **[npm](https://www.npmjs.com/package/oh-my-codex)**
+> **[官方網站](https://github.com/wang-h/oh-my-kimi)** | **[說明文件](https://github.com/wang-h/oh-my-kimi#readme)** | **[CLI 參考手冊](https://github.com/wang-h/oh-my-kimi#command-reference)** | **[工作流程](https://github.com/wang-h/oh-my-kimi#recommended-workflows)** | **[OpenClaw 整合指南](./docs/openclaw-integration.zh-TW.md)** | **[GitHub](https://github.com/wang-h/oh-my-kimi)** | **[npm](https://www.npmjs.com/package/oh-my-kimi)**
 
-[OpenAI Codex CLI](https://github.com/openai/codex) 的多智能體編排層。
+[Kimi Code CLI](https://moonshotai.github.io/kimi-cli/en/) 的多智能體編排層。
 
 ## v0.9.0 新功能 — Spark Initiative
 
@@ -57,7 +57,7 @@ OMX 安裝並串接以下各層：
 
 ```text
 使用者
-  -> Codex CLI
+  -> Kimi Code CLI
     -> AGENTS.md（編排大腦）
     -> ~/.codex/prompts/*.md（代理提示詞目錄）
     -> ~/.codex/skills/*/SKILL.md（技能目錄）
@@ -187,7 +187,7 @@ omx team shutdown <team-name>
 
 ```bash
 OMX_TEAM_WORKER_CLI=auto    # 預設；當 worker --model 包含 "claude" 時使用 claude
-OMX_TEAM_WORKER_CLI=codex   # 強制使用 Codex CLI 工作進程
+OMX_TEAM_WORKER_CLI=codex   # 強制使用 Kimi Code CLI 工作進程
 OMX_TEAM_WORKER_CLI=claude  # 強制使用 Claude CLI 工作進程
 OMX_TEAM_WORKER_CLI_MAP=codex,codex,claude,claude  # 每個工作進程的 CLI 混合（長度為 1 或等於工作進程數量）
 OMX_TEAM_AUTO_INTERRUPT_RETRY=0  # 選用：停用自適應 queue->resend 回退機制
@@ -239,7 +239,7 @@ OMX_TEAM_AUTO_INTERRUPT_RETRY=0  # 選用：停用自適應 queue->resend 回退
 ## 專案結構
 
 ```text
-oh-my-codex/
+oh-my-kimi/
   bin/omx.js
   src/
     cli/
@@ -260,8 +260,8 @@ oh-my-codex/
 ## 開發
 
 ```bash
-git clone https://github.com/Yeachan-Heo/oh-my-codex.git
-cd oh-my-codex
+git clone https://github.com/wang-h/oh-my-kimi.git
+cd oh-my-kimi
 npm install
 npm run lint
 npm run build
@@ -270,11 +270,11 @@ npm test
 
 ## 說明文件
 
-- **[完整說明文件](https://yeachan-heo.github.io/oh-my-codex-website/docs.html)** — 完整指南
-- **[CLI 參考手冊](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#cli-reference)** — 所有 `omx` 指令、旗標與工具
-- **[通知設定指南](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#notifications)** — Discord、Telegram、Slack 及 Webhook 設定
-- **[推薦工作流程](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#workflows)** — 實戰驗證的技能鏈，適用常見任務
-- **[版本發行說明](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#release-notes)** — 每個版本的新功能
+- **[完整說明文件](https://github.com/wang-h/oh-my-kimi#readme)** — 完整指南
+- **[CLI 參考手冊](https://github.com/wang-h/oh-my-kimi#command-reference)** — 所有 `omx` 指令、旗標與工具
+- **[通知設定指南](https://github.com/wang-h/oh-my-kimi#notifications)** — Discord、Telegram、Slack 及 Webhook 設定
+- **[推薦工作流程](https://github.com/wang-h/oh-my-kimi#recommended-workflows)** — 實戰驗證的技能鏈，適用常見任務
+- **[版本發行說明](https://github.com/wang-h/oh-my-kimi#release-notes)** — 每個版本的新功能
 
 ## 附註
 
@@ -286,7 +286,7 @@ npm test
 
 ## 致謝
 
-靈感來自 [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode)，為 Codex CLI 量身改編。
+靈感來自 [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode)，為 Kimi Code CLI 量身改編。
 
 ## 授權條款
 

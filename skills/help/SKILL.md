@@ -1,11 +1,11 @@
 ---
 name: help
-description: Guide on using oh-my-codex plugin
+description: Guide on using oh-my-kimi plugin
 ---
 
-# How OMX Works
+# How oh-my-kimi Works
 
-**You don't need to learn any commands!** OMX enhances Codex CLI with intelligent behaviors that activate automatically.
+**You don't need to learn any commands!** oh-my-kimi enhances Kimi Code CLI with intelligent behaviors that activate automatically.
 
 ## What Happens Automatically
 
@@ -41,7 +41,7 @@ I'll figure out what to stop based on context.
 
 ## First Time Setup
 
-If you haven't configured OMX yet:
+If you haven't configured oh-my-kimi yet:
 
 ```
 /omx-setup
@@ -67,7 +67,7 @@ But now you don't NEED them - everything is automatic.
 
 ## Usage Analysis
 
-Analyze your oh-my-codex usage and get tailored recommendations to improve your workflow.
+Analyze your oh-my-kimi usage and get tailored recommendations to improve your workflow.
 
 > Note: This replaces the former `/learn-about-omc` skill.
 
@@ -87,7 +87,7 @@ TOKEN_FILE="$HOME/.omx/state/token-tracking.jsonl"
 SESSION_FILE=".omx/state/session-history.json"
 CONFIG_FILE="$HOME/.codex/.omx-config.json"
 
-echo "Analyzing OMX Usage..."
+echo "Analyzing oh-my-kimi Usage..."
 echo ""
 
 # Check what data is available
@@ -155,7 +155,7 @@ Format a summary with:
 ### Example Output
 
 ```
-📊 Your OMX Usage Analysis
+📊 Your oh-my-kimi Usage Analysis
 
 TOKEN SUMMARY:
 - Total records: 1,234
@@ -185,15 +185,15 @@ If no data found:
 
 No token tracking found. To enable tracking:
 1. Ensure ~/.omx/state/ directory exists
-2. Run any OMX command to start tracking
+2. Run any oh-my-kimi command to start tracking
 
-Tip: Run /omx-setup to configure OMX properly.
+Tip: Run /omx-setup to configure oh-my-kimi properly.
 ```
 
 ## Need More Help?
 
-- **README**: https://github.com/Yeachan-Heo/oh-my-codex
-- **Issues**: https://github.com/Yeachan-Heo/oh-my-codex/issues
+- **README**: https://github.com/wang-h/oh-my-kimi
+- **Issues**: https://github.com/wang-h/oh-my-kimi/issues
 
 ---
 

@@ -1,19 +1,19 @@
-# oh-my-codex (OMX)
+# oh-my-kimi (OMK)
 
 <p align="center">
-  <img src="https://yeachan-heo.github.io/oh-my-codex-website/omx-character-nobg.png" alt="oh-my-codex character" width="280">
+  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omx-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
   <br>
   <em>Codex của bạn không đơn độc.</em>
 </p>
 
-[![npm version](https://img.shields.io/npm/v/oh-my-codex)](https://www.npmjs.com/package/oh-my-codex)
+[![npm version](https://img.shields.io/npm/v/oh-my-kimi)](https://www.npmjs.com/package/oh-my-kimi)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
 [![Discord](https://img.shields.io/discord/1452487457085063218?color=5865F2&logo=discord&logoColor=white&label=Discord)](https://discord.gg/PUwSMR9XNk)
 
-> **[Website](https://yeachan-heo.github.io/oh-my-codex-website/)** | **[Documentation](https://yeachan-heo.github.io/oh-my-codex-website/docs.html)** | **[CLI Reference](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#cli-reference)** | **[Workflows](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#workflows)** | **[Hướng dẫn tích hợp OpenClaw](./docs/openclaw-integration.vi.md)** | **[GitHub](https://github.com/Yeachan-Heo/oh-my-codex)** | **[npm](https://www.npmjs.com/package/oh-my-codex)**
+> **[Website](https://github.com/wang-h/oh-my-kimi)** | **[Documentation](https://github.com/wang-h/oh-my-kimi#readme)** | **[CLI Reference](https://github.com/wang-h/oh-my-kimi#command-reference)** | **[Workflows](https://github.com/wang-h/oh-my-kimi#recommended-workflows)** | **[Hướng dẫn tích hợp OpenClaw](./docs/openclaw-integration.vi.md)** | **[GitHub](https://github.com/wang-h/oh-my-kimi)** | **[npm](https://www.npmjs.com/package/oh-my-kimi)**
 
-Lớp điều phối đa tác nhân cho [OpenAI Codex CLI](https://github.com/openai/codex).
+Lớp điều phối đa tác nhân cho [Kimi Code CLI](https://moonshotai.github.io/kimi-cli/en/).
 
 ## Điểm mới trong v0.9.0 — Spark Initiative
 
@@ -57,7 +57,7 @@ OMX cài đặt và kết nối các lớp sau:
 
 ```text
 User
-  -> Codex CLI
+  -> Kimi Code CLI
     -> AGENTS.md (bộ não điều phối)
     -> ~/.codex/prompts/*.md (danh mục prompt tác nhân)
     -> ~/.codex/skills/*/SKILL.md (danh mục skill)
@@ -168,7 +168,7 @@ Chọn Worker CLI cho worker của đội:
 
 ```bash
 OMX_TEAM_WORKER_CLI=auto    # mặc định; sử dụng claude khi worker --model chứa "claude"
-OMX_TEAM_WORKER_CLI=codex   # ép buộc worker Codex CLI
+OMX_TEAM_WORKER_CLI=codex   # ép buộc worker Kimi Code CLI
 OMX_TEAM_WORKER_CLI=claude  # ép buộc worker Claude CLI
 OMX_TEAM_WORKER_CLI_MAP=codex,codex,claude,claude  # hỗn hợp CLI theo worker (độ dài=1 hoặc số worker)
 OMX_TEAM_AUTO_INTERRUPT_RETRY=0  # tùy chọn: tắt fallback thích ứng queue->resend
@@ -211,7 +211,7 @@ Ví dụ:
 ## Cấu trúc dự án
 
 ```text
-oh-my-codex/
+oh-my-kimi/
   bin/omx.js
   src/
     cli/
@@ -232,8 +232,8 @@ oh-my-codex/
 ## Phát triển
 
 ```bash
-git clone https://github.com/Yeachan-Heo/oh-my-codex.git
-cd oh-my-codex
+git clone https://github.com/wang-h/oh-my-kimi.git
+cd oh-my-kimi
 npm install
 npm run build
 npm test
@@ -241,11 +241,11 @@ npm test
 
 ## Tài liệu
 
-- **[Tài liệu đầy đủ](https://yeachan-heo.github.io/oh-my-codex-website/docs.html)** — Hướng dẫn hoàn chỉnh
-- **[Tham chiếu CLI](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#cli-reference)** — Tất cả lệnh `omx`, cờ và công cụ
-- **[Hướng dẫn thông báo](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#notifications)** — Cài đặt Discord, Telegram, Slack và webhook
-- **[Quy trình công việc khuyến nghị](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#workflows)** — Chuỗi skill đã thử nghiệm thực chiến cho các tác vụ phổ biến
-- **[Ghi chú phát hành](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#release-notes)** — Tính năng mới trong mỗi phiên bản
+- **[Tài liệu đầy đủ](https://github.com/wang-h/oh-my-kimi#readme)** — Hướng dẫn hoàn chỉnh
+- **[Tham chiếu CLI](https://github.com/wang-h/oh-my-kimi#command-reference)** — Tất cả lệnh `omx`, cờ và công cụ
+- **[Hướng dẫn thông báo](https://github.com/wang-h/oh-my-kimi#notifications)** — Cài đặt Discord, Telegram, Slack và webhook
+- **[Quy trình công việc khuyến nghị](https://github.com/wang-h/oh-my-kimi#recommended-workflows)** — Chuỗi skill đã thử nghiệm thực chiến cho các tác vụ phổ biến
+- **[Ghi chú phát hành](https://github.com/wang-h/oh-my-kimi#release-notes)** — Tính năng mới trong mỗi phiên bản
 
 ## Ghi chú
 
@@ -257,7 +257,7 @@ npm test
 
 ## Lời cảm ơn
 
-Lấy cảm hứng từ [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode), được điều chỉnh cho Codex CLI.
+Lấy cảm hứng từ [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode), được điều chỉnh cho Kimi Code CLI.
 
 ## Giấy phép
 
