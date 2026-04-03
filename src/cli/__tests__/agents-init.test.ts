@@ -78,8 +78,8 @@ describe('omx agents-init', () => {
 
       assert.match(rootAgents, /OMX:AGENTS-INIT:MANAGED/);
       assert.match(rootAgents, /<!-- AUTONOMY DIRECTIVE — DO NOT REMOVE -->/);
-      assert.match(rootAgents, /<!-- END AUTONOMY DIRECTIVE -->\n\n# oh-my-codex - Intelligent Multi-Agent Orchestration/);
-      assert.match(rootAgents, /# oh-my-codex - Intelligent Multi-Agent Orchestration/);
+      assert.match(rootAgents, /<!-- END AUTONOMY DIRECTIVE -->\n\n# oh-my-kimi - Intelligent Multi-Agent Orchestration/);
+      assert.match(rootAgents, /# oh-my-kimi - Intelligent Multi-Agent Orchestration/);
       assert.match(rootAgents, /\.\/\.codex/);
       assert.match(srcAgents, /<!-- Parent: ..\/AGENTS\.md -->/);
       assert.match(srcAgents, /`index\.ts`/);

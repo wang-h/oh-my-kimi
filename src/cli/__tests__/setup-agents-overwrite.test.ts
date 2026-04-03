@@ -120,7 +120,7 @@ describe('omx setup AGENTS refresh behavior', () => {
       assert.match(output, /Generated AGENTS\.md in project root\./);
       assert.match(output, /agents_md: updated=1, unchanged=0, backed_up=1, skipped=0, removed=0/);
       assert.match(agentsContent, /^<!-- AUTONOMY DIRECTIVE — DO NOT REMOVE -->/);
-      assert.match(agentsContent, /# oh-my-codex - Intelligent Multi-Agent Orchestration/);
+      assert.match(agentsContent, /# oh-my-kimi - Intelligent Multi-Agent Orchestration/);
       assert.doesNotMatch(agentsContent, /# old agents file/);
 
       const backupsRoot = join(wd, '.omx', 'backups', 'setup');
@@ -159,9 +159,10 @@ describe('omx setup AGENTS refresh behavior', () => {
       });
 
       const agentsContent = await readFile(join(wd, 'AGENTS.md'), 'utf-8');
+      const providerHome = existsSync(join(wd, '.kimi', 'config.toml')) ? join(wd, '.kimi') : join(wd, '.codex');
       const expectedContext = resolveAgentsModelTableContext(
-        await readFile(join(wd, '.codex', 'config.toml'), 'utf-8'),
-        { codexHomeOverride: join(wd, '.codex') },
+        await readFile(join(providerHome, 'config.toml'), 'utf-8'),
+        { codexHomeOverride: providerHome },
       );
 
       assert.match(output, /Refreshed AGENTS\.md model capability table in project root\./);

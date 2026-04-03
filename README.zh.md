@@ -1,19 +1,19 @@
-# oh-my-codex (OMX)
+# oh-my-kimi (OMK)
 
 <p align="center">
-  <img src="https://yeachan-heo.github.io/oh-my-codex-website/omx-character-nobg.png" alt="oh-my-codex character" width="280">
+  <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omx-character-spark-initiative.jpg" alt="oh-my-codex character" width="280">
   <br>
-  <em>你的 codex 并不孤单。</em>
+  <em>你的 Kimi 并不孤单。</em>
 </p>
 
-[![npm version](https://img.shields.io/npm/v/oh-my-codex)](https://www.npmjs.com/package/oh-my-codex)
+[![GitHub repo](https://img.shields.io/badge/GitHub-wang--h%2Foh--my--kimi-black)](https://github.com/wang-h/oh-my-kimi)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
 [![Discord](https://img.shields.io/discord/1452487457085063218?color=5865F2&logo=discord&logoColor=white&label=Discord)](https://discord.gg/PUwSMR9XNk)
 
-> **[Website](https://yeachan-heo.github.io/oh-my-codex-website/)** | **[Documentation](https://yeachan-heo.github.io/oh-my-codex-website/docs.html)** | **[CLI Reference](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#cli-reference)** | **[Workflows](https://yeachan-heo.github.io/oh-my-codex-website/docs.html#workflows)** | **[OpenClaw 集成指南](./docs/openclaw-integration.zh.md)** | **[GitHub](https://github.com/Yeachan-Heo/oh-my-codex)** | **[npm](https://www.npmjs.com/package/oh-my-codex)**
+> **[GitHub](https://github.com/wang-h/oh-my-kimi)** | **[入门文档](./docs/getting-started.html)** | **[兼容性说明](./docs/oh-my-kimi-v1-compatibility.md)** | **[OpenClaw 集成指南](./docs/openclaw-integration.zh.md)**
 
-[OpenAI Codex CLI](https://github.com/openai/codex) 的多智能体编排层。
+面向 **Kimi Code CLI** 的多智能体编排层，`omk` 是主命令名，`omx` 目前保留为兼容别名。
 
 ## v0.9.0 新特性 — Spark Initiative
 
@@ -28,7 +28,7 @@ Spark Initiative 是一次强化 OMX 原生探索与检查路径的版本发布�
 
 ## 首次会话
 
-在 Codex 内部：
+在 Kimi 内部：
 
 ```text
 $deep-interview "clarify the auth change"
@@ -37,12 +37,12 @@ $ralph "carry the approved plan to completion"
 $team 3:executor "execute the approved plan in parallel"
 ```
 
-从终端：
+从终端（推荐使用 `omk`）：
 
 ```bash
-omx team 4:executor "parallelize a multi-module refactor"
-omx team status <team-name>
-omx team shutdown <team-name>
+omk team 4:executor "parallelize a multi-module refactor"
+omk team status <team-name>
+omk team shutdown <team-name>
 ```
 
 ## 推荐工作流
@@ -57,29 +57,29 @@ OMX 安装并连接以下层：
 
 ```text
 User
-  -> Codex CLI
+  -> Kimi Code CLI
     -> AGENTS.md (编排大脑)
-    -> ~/.codex/prompts/*.md (代理 prompt 目录)
-    -> ~/.codex/skills/*/SKILL.md (skill 目录)
-    -> ~/.codex/config.toml (功能、通知、MCP)
-    -> .omx/ (运行时状态、记忆、计划、日志)
+    -> ~/.kimi/agents/ 与 skills/prompts（运行时入口）
+    -> ~/.kimi/config.toml / MCP / 插件配置
+
+
 ```
 
 ## 主要命令
 
 ```bash
-omx                # 启动 Codex（在 tmux 中附带 HUD）
-omx setup          # 按作用域安装 prompt/skill/config + 项目 .omx + 作用域专属 AGENTS.md
-omx doctor         # 安装/运行时诊断
-omx doctor --team  # Team/swarm 诊断
-omx team ...       # 启动/状态/恢复/关闭 tmux 团队 worker
-omx status         # 显示活动模式
-omx cancel         # 取消活动执行模式
-omx reasoning <mode> # low|medium|high|xhigh
-omx tmux-hook ...  # init|status|validate|test
-omx hooks ...      # init|status|validate|test（插件扩展工作流）
-omx hud ...        # --watch|--json|--preset
-omx help
+omk                # 启动 Kimi（在 tmux 中附带 HUD）
+omk setup          # 按作用域安装 prompt/skill/config + 项目 .omx + 作用域专属 AGENTS.md
+omk doctor         # 安装/运行时诊断
+omk doctor --team  # Team/swarm 诊断
+omk team ...       # 启动/状态/恢复/关闭 tmux 团队 worker
+omk status         # 显示活动模式
+omk cancel         # 取消活动执行模式
+omk reasoning <mode> # low|medium|high|xhigh
+omk tmux-hook ...  # init|status|validate|test
+omk hooks ...      # init|status|validate|test（插件扩展工作流）
+omk hud ...        # --watch|--json|--preset
+omk help
 ```
 
 ## Hooks 扩展（附加表面）
@@ -106,7 +106,7 @@ OMX 现在包含用于插件脚手架和验证的 `omx hooks`。
 --scope <user|project>  # 仅用于 setup
 ```
 
-`--madmax` 映射到 Codex `--dangerously-bypass-approvals-and-sandbox`。
+`--madmax` 会映射到当前运行时的危险绕过模式；仅在可信/隔离环境中使用。
 仅在可信/外部沙箱环境中使用。
 
 ### MCP workingDirectory 策略（可选加固）
@@ -134,8 +134,8 @@ export OMX_MCP_WORKDIR_ROOTS="/path/to/project:/path/to/another-root"
 控制：
 
 ```bash
-OMX_BYPASS_DEFAULT_SYSTEM_PROMPT=0 omx     # 禁用 AGENTS.md 注入
-OMX_MODEL_INSTRUCTIONS_FILE=/path/to/instructions.md omx
+OMX_BYPASS_DEFAULT_SYSTEM_PROMPT=0 omk     # 禁用 AGENTS.md 注入
+OMX_MODEL_INSTRUCTIONS_FILE=/path/to/instructions.md omk
 ```
 
 ## 团队模式
@@ -151,24 +151,24 @@ start -> assign scoped lanes -> monitor -> verify terminal tasks -> shutdown
 操作命令：
 
 ```bash
-omx team <args>
-omx team status <team-name>
-omx team resume <team-name>
-omx team shutdown <team-name>
+omk team <args>
+omk team status <team-name>
+omk team resume <team-name>
+omk team shutdown <team-name>
 ```
 
 重要规则：除非中止，否则不要在任务仍处于 `in_progress` 状态时关闭。
 
 ### Team shutdown policy
 
-Use `omx team shutdown <team-name>` after the team reaches a terminal state.
+Use `omk team shutdown <team-name>` after the team reaches a terminal state.
 Team cleanup now follows one standalone path; legacy linked-Ralph shutdown handling is no longer a separate public workflow.
 
 团队 worker 的 Worker CLI 选择：
 
 ```bash
 OMX_TEAM_WORKER_CLI=auto    # 默认；当 worker --model 包含 "claude" 时使用 claude
-OMX_TEAM_WORKER_CLI=codex   # 强制 Codex CLI worker
+OMX_TEAM_WORKER_CLI=kimi    # 如后续支持可改为 Kimi worker；当前仍以兼容层为主
 OMX_TEAM_WORKER_CLI=claude  # 强制 Claude CLI worker
 OMX_TEAM_WORKER_CLI_MAP=codex,codex,claude,claude  # 每个 worker 的 CLI 混合（长度=1 或 worker 数量）
 OMX_TEAM_AUTO_INTERRUPT_RETRY=0  # 可选：禁用自适应 queue->resend 回退
@@ -211,7 +211,7 @@ OMX_TEAM_AUTO_INTERRUPT_RETRY=0  # 可选：禁用自适应 queue->resend 回退
 ## 项目结构
 
 ```text
-oh-my-codex/
+oh-my-kimi/
   bin/omx.js
   src/
     cli/

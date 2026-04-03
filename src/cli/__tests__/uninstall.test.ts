@@ -43,14 +43,14 @@ function buildOmxConfig(): string {
     '# oh-my-codex top-level settings (must be before any [table])',
     'notify = ["node", "/path/to/notify-hook.js"]',
     'model_reasoning_effort = "high"',
-    'developer_instructions = "You have oh-my-codex installed."',
+    'developer_instructions = "You have oh-my-kimi installed."',
     '',
     '[features]',
     'multi_agent = true',
     'child_agents_md = true',
     '',
     '# ============================================================',
-    '# oh-my-codex (OMX) Configuration',
+    '# oh-my-kimi (OMK) Configuration',
     '# Managed by omx setup - manual edits preserved on next setup',
     '# ============================================================',
     '',
@@ -91,7 +91,7 @@ function buildOmxConfig(): string {
     'status_line = ["model-with-reasoning", "git-branch"]',
     '',
     '# ============================================================',
-    '# End oh-my-codex',
+    '# End oh-my-kimi',
     '',
   ].join('\n');
 }
@@ -103,7 +103,7 @@ function buildConfigWithSeededModelContext(): string {
     '# oh-my-codex top-level settings (must be before any [table])',
     'notify = ["node", "/path/to/notify-hook.js"]',
     'model_reasoning_effort = "high"',
-    'developer_instructions = "You have oh-my-codex installed."',
+    'developer_instructions = "You have oh-my-kimi installed."',
     'model = "gpt-5.4"',
     'model_context_window = 1000000',
     'model_auto_compact_token_limit = 900000',
@@ -113,7 +113,7 @@ function buildConfigWithSeededModelContext(): string {
     'child_agents_md = true',
     '',
     '# ============================================================',
-    '# oh-my-codex (OMX) Configuration',
+    '# oh-my-kimi (OMK) Configuration',
     '# Managed by omx setup - manual edits preserved on next setup',
     '# ============================================================',
     '',
@@ -123,7 +123,7 @@ function buildConfigWithSeededModelContext(): string {
     'enabled = true',
     '',
     '# ============================================================',
-    '# End oh-my-codex',
+    '# End oh-my-kimi',
     '',
   ].join('\n');
 }
@@ -136,7 +136,7 @@ function buildMixedConfig(): string {
     '# oh-my-codex top-level settings (must be before any [table])',
     'notify = ["node", "/path/to/notify-hook.js"]',
     'model_reasoning_effort = "high"',
-    'developer_instructions = "You have oh-my-codex installed."',
+    'developer_instructions = "You have oh-my-kimi installed."',
     '',
     '[features]',
     'multi_agent = true',
@@ -148,7 +148,7 @@ function buildMixedConfig(): string {
     'args = ["--flag"]',
     '',
     '# ============================================================',
-    '# oh-my-codex (OMX) Configuration',
+    '# oh-my-kimi (OMK) Configuration',
     '# Managed by omx setup - manual edits preserved on next setup',
     '# ============================================================',
     '',
@@ -180,7 +180,7 @@ function buildMixedConfig(): string {
     'status_line = ["model-with-reasoning"]',
     '',
     '# ============================================================',
-    '# End oh-my-codex',
+    '# End oh-my-kimi',
     '',
   ].join('\n');
 }
@@ -203,7 +203,7 @@ describe('omx uninstall', () => {
 
       // Config should NOT have been modified
       const config = await readFile(join(codexDir, 'config.toml'), 'utf-8');
-      assert.match(config, /oh-my-codex \(OMX\) Configuration/);
+      assert.match(config, /oh-my-kimi \(OMK\) Configuration/);
     } finally {
       await rm(wd, { recursive: true, force: true });
     }
@@ -310,7 +310,7 @@ describe('omx uninstall', () => {
 
       // Config should NOT have been modified
       const config = await readFile(join(codexDir, 'config.toml'), 'utf-8');
-      assert.match(config, /oh-my-codex \(OMX\) Configuration/);
+      assert.match(config, /oh-my-kimi \(OMK\) Configuration/);
       assert.match(config, /omx_state/);
     } finally {
       await rm(wd, { recursive: true, force: true });
@@ -398,7 +398,7 @@ describe('omx uninstall', () => {
       assert.match(res.stdout, /Uninstall summary/);
       assert.match(res.stdout, /MCP servers: omx_state, omx_memory, omx_code_intel, omx_trace/);
       assert.match(res.stdout, /Agent entries: 1/);
-      assert.match(res.stdout, /TUI status line section/);
+      assert.doesNotMatch(res.stdout, /TUI status line section/);
       assert.match(res.stdout, /Top-level keys/);
       assert.match(res.stdout, /Feature flags/);
     } finally {
@@ -489,7 +489,7 @@ describe('omx uninstall', () => {
           + 'IF BLOCKED, TRY AN ALTERNATIVE APPROACH. ONLY ASK WHEN TRULY AMBIGUOUS OR DESTRUCTIVE.\n'
           + '<!-- END AUTONOMY DIRECTIVE -->\n'
           + '<!-- omx:generated:agents-md -->\n'
-          + '# oh-my-codex - Intelligent Multi-Agent Orchestration\n',
+          + '# oh-my-kimi - Intelligent Multi-Agent Orchestration\n',
       );
 
       const res = runOmx(wd, ['uninstall', '--keep-config'], { HOME: home });
