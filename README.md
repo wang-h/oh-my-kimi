@@ -9,7 +9,7 @@
 [![GitHub repo](https://img.shields.io/badge/GitHub-wang--h%2Foh--my--kimi-black)](https://github.com/wang-h/oh-my-kimi)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
-[![Discord](https://img.shields.io/discord/1452487457085063218?color=5865F2&logo=discord&logoColor=white&label=Discord)](https://discord.gg/PUwSMR9XNk)
+
 
 **GitHub:** https://github.com/wang-h/oh-my-kimi  
 **Website:** https://wang-h.github.io/oh-my-kimi-website/  
@@ -133,15 +133,22 @@ Most users should think of OMK as **better task routing + better workflow + bett
 
 These are useful, but they are not the main onboarding path.
 
-### Team runtime
+### Team Mode
 
-Use the team runtime when you specifically need durable tmux/worktree coordination, not as the default way to begin using OMK.
+For high-throughput parallel work, use Team mode. OMK now leverages **Kimi's native multi-agent (In-Session)** capability by default.
+
+#### Execution Modes:
+
+1. **Native Mode (Default)**: Uses `spawn_agent` within the current Kimi session. Recommended for standard parallel tasks.
+2. **Tmux Mode (`--tmux`)**: Launches independent worker sessions in separate tmux panes. Best for large-scale work requiring durable workers or separate worktrees.
+
+#### Commands:
 
 ```bash
-omk team 3:executor "fix the failing tests with verification"
-omk team status <team-name>
-omk team resume <team-name>
-omk team shutdown <team-name>
+$team "task"                  # Native parallel execution (Recommended)
+$team --tmux "massive task"    # Legacy tmux-based parallel workers
+omk team status <team-name>    # Monitor tmux workers (tmux-only)
+omk team shutdown <team-name>  # Cleanup tmux workers (tmux-only)
 ```
 
 ### Setup, doctor, and HUD

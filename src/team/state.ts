@@ -96,7 +96,7 @@ export interface WorkerInfo {
   name: string; // "worker-1"
   index: number; // tmux window index (1-based)
   role: string; // agent type
-  worker_cli?: 'codex' | 'claude' | 'gemini';
+  worker_cli?: 'kimi' | 'codex' | 'claude' | 'gemini';
   assigned_tasks: string[]; // task IDs
   pid?: number;
   pane_id?: string;

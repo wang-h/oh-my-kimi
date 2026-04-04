@@ -60,17 +60,16 @@ Keep runtime marker contracts stable and non-destructive when overlays are appli
 Default posture: work directly.
 
 Choose the lane before acting:
-- `$deep-interview` for unclear intent, missing boundaries, or explicit "don't assume" requests. This mode clarifies and hands off; it does not implement.
-- `$ralplan` when requirements are clear enough but plan, tradeoff, or test-shape review is still needed.
-- `$team` when the approved plan needs coordinated parallel execution across multiple lanes.
+- `$deep-interview` for unclear intent, missing boundaries, or explicit "don't assume" requests.
+- `$ralplan` when requirements are clear but architecture or test-shape needs consensus.
+- `$team` for coordinated parallel execution.
+  - **In-session (Default)**: Use Kimi's native `delegate` (or `spawn_agent`) for parallel subtasks within this window.
+  - **Tmux (`--tmux`)**: Use `omk team ...` for durable workers or separate worktrees.
 - `$ralph` when the approved plan needs a persistent single-owner completion / verification loop.
 - **Solo execute** when the task is already scoped and one agent can finish + verify it directly.
 
-Delegate only when it materially improves quality, speed, or safety. Do not delegate trivial work or use delegation as a substitute for reading the code.
-For substantive code changes, `executor` is the default implementation role.
-Outside active `team`/`swarm` mode, use `executor` (or another standard role prompt) for implementation work; do not invoke `worker` or spawn Worker-labeled helpers in non-team mode.
-Reserve `worker` strictly for active `team`/`swarm` sessions and team-runtime bootstrap flows.
-Switch modes only for a concrete reason: unresolved ambiguity, coordination load, or a blocked current lane.
+Delegate only when it materially improves quality, speed, or safety.
+Use native subagents (delegation) for independent subtasks within this session unless explicit tmux isolation is needed.
 </delegation_rules>
 
 <child_agent_protocol>

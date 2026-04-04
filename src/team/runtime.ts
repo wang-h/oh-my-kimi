@@ -1142,7 +1142,7 @@ function spawnPromptWorker(
   workerCwd: string,
   launchArgs: string[],
   workerEnv: Record<string, string>,
-  workerCli: 'codex' | 'claude' | 'gemini',
+  workerCli: 'kimi' | 'codex' | 'claude' | 'gemini',
   initialPrompt?: string,
 ): ChildProcessByStdio<Writable, null, null> {
   const processSpec = buildWorkerProcessLaunchSpec(
@@ -1214,7 +1214,7 @@ export function resolveWorkerLaunchArgsFromEnv(
 function resolveEffectiveWorkerCliForStartupLog(
   resolvedLaunchArgs: string[],
   env: NodeJS.ProcessEnv,
-): 'codex' | 'claude' | 'gemini' {
+): 'kimi' | 'codex' | 'claude' | 'gemini' {
   const rawCliMap = String(env.OMK_TEAM_WORKER_CLI_MAP ?? '').trim();
   if (rawCliMap !== '') {
     const entries = rawCliMap
@@ -1226,11 +1226,12 @@ function resolveEffectiveWorkerCliForStartupLog(
         ...env,
         OMK_TEAM_WORKER_CLI: 'auto',
       });
-      const resolvedMap = entries.map((entry): 'codex' | 'claude' | 'gemini' | null => {
+      const resolvedMap = entries.map((entry): 'kimi' | 'codex' | 'claude' | 'gemini' | null => {
         if (entry === 'auto') return autoCli;
-        if (entry === 'codex' || entry === 'claude' || entry === 'gemini') return entry;
+        if (entry === 'kimi' || entry === 'codex' || entry === 'claude' || entry === 'gemini') return entry;
         return null;
       });
+      if (resolvedMap.every((entry) => entry === 'kimi')) return 'kimi';
       if (resolvedMap.every((entry) => entry === 'claude')) return 'claude';
       if (resolvedMap.every((entry) => entry === 'gemini')) return 'gemini';
       if (resolvedMap.some((entry) => entry === 'codex')) return 'codex';
@@ -2749,7 +2750,7 @@ async function dispatchCriticalInboxInstruction(params: {
     return { ok: true, transport: 'hook', reason: 'hook_receipt_delivered', request_id: queued.request_id };
   }
   const requiresObservedStartupEvidence = requireWorkerStartupEvidence === true
-    && (workerCli === 'claude' || workerCli === 'codex');
+    && (workerCli === 'claude' || workerCli === 'codex' || workerCli === 'kimi');
   let startupEvidence: WorkerStartupEvidence = 'none';
   if (receipt?.status === 'notified') {
     if (!requiresObservedStartupEvidence) {

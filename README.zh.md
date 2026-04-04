@@ -9,7 +9,7 @@
 [![GitHub repo](https://img.shields.io/badge/GitHub-wang--h%2Foh--my--kimi-black)](https://github.com/wang-h/oh-my-kimi)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
-[![Discord](https://img.shields.io/discord/1452487457085063218?color=5865F2&logo=discord&logoColor=white&label=Discord)](https://discord.gg/PUwSMR9XNk)
+
 
 > **[GitHub](https://github.com/wang-h/oh-my-kimi)** | **[入门文档](./docs/getting-started.html)** | **[兼容性说明](./docs/oh-my-kimi-v1-compatibility.md)** | **[OpenClaw 集成指南](./docs/openclaw-integration.zh.md)**
 
@@ -146,29 +146,23 @@ OMK_MODEL_INSTRUCTIONS_FILE=/path/to/instructions.md omk
 
 ## 团队模式
 
-对于受益于并行 worker 的大规模工作，使用团队模式。
+对于受益于并行 worker 的大规模工作，使用团队模式。OMK 现已支持 Kimi 原生并行，不再强制依赖 tmux。
 
-生命周期：
+### 两种执行模式：
 
-```text
-start -> assign scoped lanes -> monitor -> verify terminal tasks -> shutdown
-```
+1. **原生模式 (默认)**：在当前 Kimi 会话中通过 `spawn_agent` 直接启动子智能体。所有输出保留在当前窗口，适合标准并行任务。
+2. **Tmux 模式 (`--tmux`)**：在独立的 tmux 面板中启动 worker。适合需要独立工作区 (Worktrees) 或极长运行时间的超大规模任务。
 
-操作命令：
+### 操作命令：
 
 ```bash
-omk team <args>
-omk team status <team-name>
-omk team resume <team-name>
-omk team shutdown <team-name>
+$team "任务描述"             # 使用原生并行（推荐）
+$team --tmux "大型重构任务"   # 使用传统 tmux 模式
+omk team status <team-name>  # 仅用于 tmux 模式的状态查询
+omk team shutdown <team-name> # 仅用于 tmux 模式的关闭
 ```
 
-重要规则：除非中止，否则不要在任务仍处于 `in_progress` 状态时关闭。
-
-### Team shutdown policy
-
-Use `omk team shutdown <team-name>` after the team reaches a terminal state.
-Team cleanup now follows one standalone path; legacy linked-Ralph shutdown handling is no longer a separate public workflow.
+注意：原生模式下，Leader 智能体会自动协调子任务并集成结果，无需手动管理面板。
 
 团队 worker 的 Worker CLI 选择：
 

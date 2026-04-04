@@ -54,7 +54,7 @@ const GEMINI_APPROVAL_MODE_YOLO = 'yolo';
 const OMK_LEADER_NODE_PATH_ENV = 'OMK_LEADER_NODE_PATH';
 const OMK_LEADER_CLI_PATH_ENV = 'OMK_LEADER_CLI_PATH';
 
-export type TeamWorkerCli = 'codex' | 'claude' | 'gemini';
+export type TeamWorkerCli = 'kimi' | 'codex' | 'claude' | 'gemini';
 type TeamWorkerCliMode = 'auto' | TeamWorkerCli;
 export type TeamWorkerLaunchMode = 'interactive' | 'prompt';
 
@@ -456,8 +456,8 @@ function hasModelInstructionsOverride(args: string[]): boolean {
 function normalizeTeamWorkerCliMode(raw: string | undefined, sourceEnv: string = OMK_TEAM_WORKER_CLI_ENV): TeamWorkerCliMode {
   const normalized = String(raw ?? 'auto').trim().toLowerCase();
   if (normalized === '' || normalized === 'auto') return 'auto';
-  if (normalized === 'codex' || normalized === 'claude' || normalized === 'gemini') return normalized;
-  throw new Error(`Invalid ${sourceEnv} value "${raw}". Expected: auto, codex, claude, gemini`);
+  if (normalized === 'kimi' || normalized === 'codex' || normalized === 'claude' || normalized === 'gemini') return normalized;
+  throw new Error(`Invalid ${sourceEnv} value "${raw}". Expected: auto, kimi, codex, claude, gemini`);
 }
 
 export function resolveTeamWorkerLaunchMode(
@@ -499,7 +499,8 @@ function resolveTeamWorkerCliFromLaunchArgs(launchArgs: string[] = []): TeamWork
   const model = extractModelOverride(launchArgs);
   if (model && /claude/i.test(model)) return 'claude';
   if (model && /gemini/i.test(model)) return 'gemini';
-  return 'codex';
+  if (model && /kimi/i.test(model)) return 'kimi';
+  return 'kimi';
 }
 
 export function resolveTeamWorkerCliPlan(
@@ -527,7 +528,7 @@ export function resolveTeamWorkerCliPlan(
   if (entries.length === 0 || entries.every((part) => part.length === 0)) {
     throw new Error(
       `Invalid ${OMK_TEAM_WORKER_CLI_MAP_ENV} value "${env[OMK_TEAM_WORKER_CLI_MAP_ENV]}". `
-        + `Expected comma-separated values: auto|codex|claude|gemini.`,
+        + `Expected comma-separated values: auto|kimi|codex|claude|gemini.`,
     );
   }
   if (entries.some((part) => part.length === 0)) {
@@ -552,6 +553,11 @@ export function resolveTeamWorkerCliPlan(
 
 export function translateWorkerLaunchArgsForCli(workerCli: TeamWorkerCli, args: string[], initialPrompt?: string): string[] {
   if (workerCli === 'codex') return [...args];
+  if (workerCli === 'kimi') {
+    void args;
+    void initialPrompt;
+    return [];
+  }
   if (workerCli === 'gemini') {
     const model = extractModelOverride(args);
     const geminiModel = model && /gemini/i.test(model) ? model : null;
@@ -603,7 +609,7 @@ export function assertTeamWorkerCliBinaryAvailable(
   if (existsImpl(workerCli)) return;
   throw new Error(
     `Selected team worker CLI "${workerCli}" is not available on PATH. `
-      + `Install "${workerCli}" or set ${OMK_TEAM_WORKER_CLI_ENV}=codex|claude|gemini.`,
+      + `Install "${workerCli}" or set ${OMK_TEAM_WORKER_CLI_ENV}=kimi|codex|claude|gemini.`,
   );
 }
 
@@ -1126,7 +1132,7 @@ export function buildWorkerSubmitPlan(
     shouldInterrupt: strategy === 'interrupt',
     queueFirstRound: workerCli === 'codex' && queueRequested,
     rounds: 6,
-    submitKeyPressesPerRound: workerCli === 'claude' ? 1 : 2,
+    submitKeyPressesPerRound: workerCli === 'claude' || workerCli === 'kimi' ? 1 : 2,
     allowAdaptiveRetry: workerCli === 'codex' && allowAdaptiveRetry,
   };
 }
