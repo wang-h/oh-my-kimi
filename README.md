@@ -1,5 +1,10 @@
 # oh-my-kimi (OMK)
 
+> [!IMPORTANT]
+> **Which edition should I use?**
+> - **🐍 [Python Edition](https://github.com/wang-h/oh-my-kimi-python) (Recommended)**: Best for AI researchers and algorithm engineers. Deep integration with Kimi-CLI Python environment.
+> - **📦 NPM Edition (Current)**: Best for full-stack developers and users who prefer Node.js toolchains.
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omk-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
   <br>

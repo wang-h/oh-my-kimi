@@ -22,9 +22,11 @@ export const LEGACY_PROVIDER_HOME_DIRNAME = ".codex";
 
 /** Canonical provider home directory (~/.kimi/) with legacy CODEX_HOME fallback. */
 export function providerHome(): string {
+  const primaryHome = join(homedir(), PRIMARY_PROVIDER_HOME_DIRNAME);
+  const legacyHome = join(homedir(), LEGACY_PROVIDER_HOME_DIRNAME);
   return process.env[PRIMARY_PROVIDER_HOME_ENV]
     || process.env[LEGACY_PROVIDER_HOME_ENV]
-    || join(homedir(), PRIMARY_PROVIDER_HOME_DIRNAME);
+    || (existsSync(primaryHome) ? primaryHome : legacyHome);
 }
 
 /** Legacy Codex home directory (~/.codex/) or CODEX_HOME. */
@@ -49,7 +51,11 @@ export function providerAgentsDir(providerHomeDir?: string): string {
 
 /** Project-level provider root (.kimi/). */
 export function projectProviderRootDir(projectRoot?: string): string {
-  return join(projectRoot || process.cwd(), PRIMARY_PROVIDER_PROJECT_DIRNAME);
+  const root = projectRoot || process.cwd();
+  const primaryProjectDir = join(root, PRIMARY_PROVIDER_PROJECT_DIRNAME);
+  return existsSync(primaryProjectDir)
+    ? primaryProjectDir
+    : join(root, LEGACY_PROVIDER_HOME_DIRNAME);
 }
 
 /** Project-level provider native agents directory (.kimi/agents/). */
@@ -98,12 +104,12 @@ export function projectCodexAgentsDir(projectRoot?: string): string {
 
 /** Legacy user-level skills directory ($CODEX_HOME/skills, defaults to ~/.codex/skills/). */
 export function userSkillsDir(): string {
-  return join(codexHome(), "skills");
+  return providerUserSkillsDir();
 }
 
 /** Legacy project-level skills directory (.codex/skills/). */
 export function projectSkillsDir(projectRoot?: string): string {
-  return join(projectRoot || process.cwd(), LEGACY_PROVIDER_HOME_DIRNAME, "skills");
+  return projectProviderSkillsDir(projectRoot);
 }
 
 export type InstalledSkillScope = "project" | "user";

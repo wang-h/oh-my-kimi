@@ -1,5 +1,10 @@
 # oh-my-kimi (OMK)
 
+> [!IMPORTANT]
+> **我该使用哪个版本？**
+> - **🐍 [Python 原生版](https://github.com/wang-h/oh-my-kimi-python) (推荐)**: 适合 AI 研究员、算法工程师。与 Kimi-CLI Python 环境深度集成。
+> - **📦 NPM 混合版 (当前)**: 适合全栈开发者和偏好 Node.js 工具链的用户。
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/wang-h/oh-my-kimi/main/docs/shared/omk-character-spark-initiative.jpg" alt="oh-my-kimi character" width="280">
   <br>
